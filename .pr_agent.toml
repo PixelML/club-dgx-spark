@@ -1,0 +1,21 @@
+# Per-repo overrides for PixelML pr-agent. See:
+# https://qodo-merge-docs.qodo.ai/usage-guide/configuration_options/
+
+[pr_reviewer]
+require_tests_review = false
+require_estimate_effort_to_review = true
+num_max_findings = 8
+extra_instructions = """
+This repository is the platform-wide knowledge base for DGX Spark (GB10)
+experiments, hosting concise comparison tables, common tooling guidance, and
+links into model-family repositories. Focus on factual accuracy, safe
+power/thermal handling guidance, and reproducibility of published recipes.
+Flag missing measured/inferred labels on benchmark claims and missing links
+into model-family repos for detailed experiment results.
+"""
+
+[ignore]
+glob = [
+  "reports/**",
+  "**/*.lock",
+]
