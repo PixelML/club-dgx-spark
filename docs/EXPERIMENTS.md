@@ -8,6 +8,8 @@ Status labels describe the evidence level, not whether a recipe will work for yo
 
 ## Recipe status matrix
 
+Full-platform depth including context, memory, quality-evidence, and energy/cost columns: [COVERAGE-MATRIX.md](COVERAGE-MATRIX.md).
+
 | Model family | Public repository | Quantization | Runtime | Topology | Context | Evidence status | Key measured result | Blocker |
 |---|---|---|---|---|---|---|---|---|
 | GLM-5.3-Flash | [GLM-5.3-Flash-NVFP4-Dual-DGX-Spark](https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark) | NVFP4 (ModelOpt), FP8 E4M3 KV | vLLM + Ray TP=2 | 2× DGX Spark | 262K | **Measured** | 27–68 aggregate decode tok/s (×1–×8); 1,277–1,372 uncached prefill input tok/s | None for main profile |

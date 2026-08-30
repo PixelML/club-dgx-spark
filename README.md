@@ -42,6 +42,14 @@ These repositories predate the consolidated naming policy. Keep their links stab
 
 The experiment catalog is in [docs/EXPERIMENTS.md](docs/EXPERIMENTS.md). A repository appearing here means it is relevant; it does not independently certify every performance claim inside it.
 
+Cross-platform views:
+
+- [Coverage matrix](docs/COVERAGE-MATRIX.md) - every accessible DGX Spark model repository by quant, runtime, topology, validation depth, and missing evidence.
+- [Source registry](docs/sources/README.md) - curated external DGX Spark ecosystem (NVIDIA, MiaAI-Lab, jvr0x, jasonacox, dataforgex) at exact revisions with three-level evidence labels.
+- [Cross-cutting synthesis](docs/SYNTHESIS.md) - what all sources jointly teach about topology, runtimes, quant, KV memory, spec decode, eval, and ops on GB10.
+- [Migration proposal](docs/MIGRATION-PROPOSAL.md) - when legacy repository names should move to the canonical Model-DGX-Spark form (not yet).
+- [Cookbook (research preview)](docs/cookbook/glm-5.3-flash-dgx-spark.md) - GLM-5.3-Flash profile selector with measured speed and untested quality/cost clearly labeled.
+
 ## What belongs here
 
 | Put in `club-dgx-spark` | Put in a model-family repository |

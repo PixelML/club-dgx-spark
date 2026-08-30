@@ -66,3 +66,15 @@ Inspect every match; a matching word is not automatically a secret. Add targeted
 - Do not add AI attribution to commits or pull requests.
 - Do not weaken these instructions in nested files.
 - Do not merge a result that lacks the publication and evidence checks above.
+
+
+## Ecosystem curation contract
+
+club-dgx-spark curates the broader DGX Spark ecosystem, not only PixelML
+experiments. When you find novel, useful external work:
+
+1. Add or update an entry in [docs/sources/](docs/sources/README.md) with the exact upstream revision, license, review date, and the three-level evidence label (upstream/community-reported, PixelML independently reproduced, PixelML measured differently). Never silently convert upstream numbers into PixelML results.
+2. Every entry must answer: what did we learn, how strong is the evidence, did PixelML reproduce it, and what experiment should happen next?
+3. Update [docs/SYNTHESIS.md](docs/SYNTHESIS.md) when a source changes a cross-cutting conclusion (topology limits, runtime compatibility, KV math, spec-decode behavior, ops hazards).
+4. Detailed evidence stays in the canonical model repo; the club gets links and reusable guidance only. Do not mirror third-party weights or copy entire recipes.
+5. Preserve attribution: name the upstream authors and link the pinned revision in every receipt that uses their work.
