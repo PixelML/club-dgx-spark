@@ -21,9 +21,10 @@ From the GLM evidence repository on the rank-zero (controller) node:
 ```bash
 git clone https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark.git
 cd GLM-5.3-Flash-NVFP4-Dual-DGX-Spark
-umask 077
-openssl rand -hex 32 > .vllm-api-key
-VLLM_API_KEY="$(<.vllm-api-key)" ./start.sh
+# Provide the serving key via a masked prompt (or your platform secret store); nothing is written to the repo
+read -rs VLLM_API_KEY   # paste your API key, then press Enter
+export VLLM_API_KEY
+./start.sh
 ```
 
 First run downloads ~181 GiB, refreshes the chat template, stages the worker node, and polls `/health` for up to 3600s. Weights already local: `SKIP_DOWNLOAD=1 ./start.sh`.
@@ -33,8 +34,8 @@ Expected ready signal: `./start.sh status` shows both ranks healthy and the API 
 Minimal verification (functional gates + concurrency matrix):
 
 ```bash
-./benchmark.py --secret-file .vllm-api-key --concurrency 1,2,4,8
-./prefill-benchmark.py --secret-file .vllm-api-key
+./benchmark.py --concurrency 1,2,4,8
+./prefill-benchmark.py
 ```
 
 ## Results
@@ -45,7 +46,7 @@ Minimal verification (functional gates + concurrency matrix):
 | EXL3 4-bpw | ×1 / ×4 | 66.3 / 154.9 | 702–795 | gate-pass + 300K stress | untested |
 | DFlash2 K=7 | ×1 | 25–61 | 1,310–1,400 | gate-pass only | untested |
 
-Full tables, ranges, TTFT, cold start, and failure notes: [results/](https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark/tree/main/results). Cross-model comparison: [club summary](../results/SUMMARY.md).
+Full tables, ranges, TTFT, cold start, and failure notes: [results/](https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark/tree/main/results). Cross-model comparison: [club summary](../../results/SUMMARY.md).
 
 ## What failed
 
@@ -57,7 +58,7 @@ Full tables, ranges, TTFT, cold start, and failure notes: [results/](https://git
 
 - Checkpoint revision: `11d73216cd636238e82e1d77fe1042ffab36e7fa` (120 shards, 181.29 GiB)
 - Recipe commits: `aed98a1` (validated), `3407023` (current tip)
-- Methodology: [club benchmark method](BENCHMARK-METHOD.md) + per-receipt details
+- Methodology: [club benchmark method](../BENCHMARK-METHOD.md) + per-receipt details
 - Token counting: final usage object only
 
 ## Limits
@@ -69,7 +70,7 @@ Full tables, ranges, TTFT, cold start, and failure notes: [results/](https://git
 ## Artifacts and evidence
 
 - Detailed repository: [GLM-5.3-Flash-NVFP4-Dual-DGX-Spark](https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark)
-- Coverage matrix: [COVERAGE-MATRIX.md](COVERAGE-MATRIX.md)
-- Gap analysis: [GAP-ANALYSIS.md](GAP-ANALYSIS.md)
+- Coverage matrix: [COVERAGE-MATRIX.md](../COVERAGE-MATRIX.md)
+- Gap analysis: [GAP-ANALYSIS.md](../GAP-ANALYSIS.md)
 - Draft release manifest: [releases/draft-glm-5.3-flash-dgx-spark.json](../../releases/draft-glm-5.3-flash-dgx-spark.json)
 - Hugging Face artifact: none (third-party checkpoint, curated not duplicated)

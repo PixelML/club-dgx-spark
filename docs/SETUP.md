@@ -45,10 +45,11 @@ Both work. rsync is faster at steady state (local NVMe read); SSHFS avoids a dis
 
 ## EarlyOOM (DGX Spark specific)
 
-Disable earlyoom before loading large models. The near-UMA memory model means vLLM/Ray can exceed the threshold during model load and trigger a premature OOM kill.
+Stop the authorized earlyoom service around large model loads and restart it afterward. The near-UMA memory model means vLLM/Ray can exceed the threshold during model load and trigger a premature OOM kill.
 
 ```bash
-sudo systemctl disable --now earlyoom
+sudo systemctl stop earlyoom      # before load, if authorized
+sudo systemctl start earlyoom     # restore after load settles
 ```
 
 Restore it after the workload if the node is shared.

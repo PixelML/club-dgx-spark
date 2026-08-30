@@ -6,7 +6,7 @@
   "title": "GLM-5.3-Flash NVFP4 two-node DGX Spark serving recipe",
   "canonical_model": "GLM-5.3-Flash",
   "platform": "DGX-Spark",
-  "github_repo": "PixelML/GLM-5.3-Flash-DGX-Spark",
+  "github_repo": "PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark",
   "github_revision": "3407023e0b8109a1dd12e8a5544e106ca6912afe",
   "sources": [
     {
@@ -17,7 +17,7 @@
   ],
   "huggingface_artifacts": [],
   "gates_not_yet_passed": [
-    "github_repo uses the legacy name PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark; canonical name proposed in docs/MIGRATION-PROPOSAL.md and awaiting owner approval",
+    "canonical repository name proposed in docs/MIGRATION-PROPOSAL.md is awaiting owner approval; this manifest intentionally stays draft",
     "candidate evaluation block: no scored quality suite yet",
     "candidate claims for cost, energy, and single-node operation",
     "cookbook lives in the club repository as a research preview; a candidate release requires committed model-repo results plus a validated cookbook source path"
@@ -26,7 +26,7 @@
     {
       "classification": "measured",
       "text": "GLM-5.3-Flash NVFP4 on two DGX Spark nodes (vLLM TP=2, 262K context): 27-68 aggregate decode tok/s at x1-x8 concurrency, 1,277-1,372 uncached prefill tok/s, with TTFT, memory, and cold-start receipts in the model repository.",
-      "evidence_url": "https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark/tree/main/results"
+      "evidence_url": "https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark/tree/3407023e0b8109a1dd12e8a5544e106ca6912afe/results"
     },
     {
       "classification": "untested",

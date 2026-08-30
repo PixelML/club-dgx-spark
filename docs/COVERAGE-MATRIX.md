@@ -15,7 +15,7 @@ Column key: Q-evidence = quality/correctness evidence beyond coherence. E/cost =
 | Step-3.7-Flash | [Step-3.7-Flash-NVFP4-Dual-DGX-Spark](https://github.com/PixelML/Step-3.7-Flash-NVFP4-Dual-DGX-Spark) | NVFP4 | vLLM (no-Ray) TP=2 | 2× Spark | — | recipe published | **Untested** | **Untested** | **Untested** | None | Recipe-only |
 | Hy3-295B | [Hy3-NVFP4-Dual-DGX-Spark](https://github.com/PixelML/Hy3-NVFP4-Dual-DGX-Spark) | NVFP4/W4A16 (MARLIN) | vLLM + Ray TP=2 | 2× Spark | — | recipe published | **Community-reported** upstream only | **Untested** | **Untested** | None | Recipe-only |
 | Inkling-Small | [Inkling-Small-NVFP4-Dual-DGX-Spark](https://github.com/PixelML/Inkling-Small-NVFP4-Dual-DGX-Spark) | NVFP4, FP4 MX block16 KV | SGLang + DSpark spec | 2× Spark | 1M | recipe published | **Untested** | **Untested** | **Untested** | None | Recipe-only |
-| GLM EXL3 (upstream MiaAI) | [GLM-5.3-Flash-EXL3-2x-DGX-Sparks](https://github.com/MiaAI-Lab/GLM-5.3-Flash-EXL3-2x-DGX-Sparks) @ 79f10b9 | EXL3/TR3 4-bpw, FP8 ds_mla KV, DFlash2 k=7 | vLLM TP2 (pinned 487ecf187, ExLlamaV3 c5d9c657, CUDA 13.0 sm_121a) | 2× Spark | 1M | full scripts + 11 tests | **Community-reported**: 62.9 x1 / 146.5 agg x4; KLD panel 4bpw 0.0246 nats; prefix-cache ~90% reuse | 18.67 GiB KV pool | KLD weights-level (external) | None — gap | Upstream; our lane vendors bd7f55e |
+| GLM EXL3 (upstream MiaAI) | [GLM-5.3-Flash-EXL3-2x-DGX-Sparks](https://github.com/MiaAI-Lab/GLM-5.3-Flash-EXL3-2x-DGX-Sparks/tree/79f10b91f84779b2b1ff2c9327b1a5847cd97f70) @ `79f10b91f84779b2b1ff2c9327b1a5847cd97f70` | EXL3/TR3 4-bpw, FP8 ds_mla KV, DFlash2 k=7 | vLLM TP2 (pinned 487ecf187, ExLlamaV3 c5d9c657, CUDA 13.0 sm_121a) | 2× Spark | 1M | full scripts + 11 tests | **Community-reported**: 62.9 x1 / 146.5 agg x4; KLD panel 4bpw 0.0246 nats; prefix-cache ~90% reuse | 18.67 GiB KV pool | KLD weights-level (external) | None — gap | Upstream; our public lane pins `3407023e0b8109a1dd12e8a5544e106ca6912afe` |
 
 
 ## Platform-level coverage (not per model)
@@ -38,4 +38,4 @@ Column key: Q-evidence = quality/correctness evidence beyond coherence. E/cost =
 2. Label every recipe's quality evidence as gate-level, not scored accuracy (done in matrix above).
 3. Publish this matrix so untested combinations are visible before anyone schedules GPU time.
 4. Ecosystem sources beyond PixelML: [source registry](sources/README.md) with exact revisions and evidence levels.
-4. Track SparkQuant-Lab (local commit `dca8259`) as the quality-layer plan: streamed-BF16 vs NVFP4 KL-divergence + capability + agentic layers; it is not yet a PixelML public repository.
+5. Track SparkQuant-Lab (local commit `dca8259`) as the quality-layer plan: streamed-BF16 vs NVFP4 KL-divergence + capability + agentic layers; it is not yet a PixelML public repository.

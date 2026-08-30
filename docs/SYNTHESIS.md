@@ -10,7 +10,7 @@ receipt exists), **community-reported** (upstream, not re-measured), or
 | Topology | Status | What we know | Evidence |
 |---|---|---|---|
 | 1x Spark | community-reported | DS4F-0731 EXL3 3bpw fits single-node with 384k ctx, 44-47 tok/s structured, DSpark K5 (MiaAI one-node repo) | community-reported |
-| 2x Spark TP2 | measured | Best-covered: GLM NVFP4, GLM EXL3, Qwen3.8 SGLang all PixelML-measured on Apollo pair | PixelML receipts |
+| 2x Spark TP2 | measured | Best-covered: GLM NVFP4, GLM EXL3, Qwen3.8 SGLang all PixelML-measured on the two-node DGX Spark pair | PixelML receipts |
 | 3x Spark TP3 | community-reported | GLM-5.2 NVFP4+AQLM 380k ctx ~21 tok/s; only triple recipe found | community-reported |
 | 1M context | community-reported + PixelML 300k stress | EXL3 1M pool 1.75x; DS4F 2.49M pool; our 300k stress passed | mixed |
 
@@ -86,7 +86,7 @@ to the receipt template, then compute cost-per-task once quality layer lands.
 
 ## Monitoring and failure recovery
 
-- earlyoom on DGX Spark SIGTERMs vLLM/Ray under memory pressure - disable before serving large models (community, hit repeatedly).
+- earlyoom on DGX Spark SIGTERMs vLLM/Ray under memory pressure - stop the authorized service around model loads and restart it afterward rather than disabling it permanently (community, hit repeatedly).
 - sparkDash (MIT) is the reference fleet dashboard; adopt its vLLM health metric set (KV %, queues, TTFT p95, prefix cache, MTP accept).
 - Kit-specific bring-up hazards: NIC names differ per pair; NCCL GID index can be all-zero on one node; >=105.9 GiB free needed at util 0.87; MNBT=2048 prefill guard on GB10 indexer topk.
 - Never interrupt a degraded head container waiting on a dead peer - diagnose read-only first (PixelML ops rule).

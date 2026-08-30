@@ -45,10 +45,12 @@ This is the known-good configuration in the GLM-5.3-Flash recipe. CUDA graphs ar
 
 **Root cause**: DGX Spark's unified memory means RSS spikes during model load; earlyoom interprets this as a system threat.
 
-**Fix**: Disable earlyoom before launch:
+**Fix**: Stop the authorized earlyoom service around model load, then restart it afterward (scoped and reversible):
 
 ```bash
-sudo systemctl disable --now earlyoom
+sudo systemctl stop earlyoom      # before launch, if authorized
+# ... run the load ...
+sudo systemctl start earlyoom     # restore afterward
 ```
 
 ## Speculative decoding reduces throughput
