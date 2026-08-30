@@ -8,7 +8,7 @@ GLM-5.3-Flash NVFP4 serves from two DGX Spark nodes with vLLM TP=2, with indepen
 
 | Goal | Hardware | Artifact | Runtime | Topology | Validation | Notes |
 |---|---|---|---|---|---|---|
-| Balanced serving | 2× Spark | GLM-5.3-Flash-NVFP4 @ 11d7321 | vLLM + Ray TP=2 | 2 nodes | Measured | 27–68 agg tok/s ×1–×8; 7 streams is the no-queue sweet spot |
+| Balanced serving | 2× Spark | GLM-5.3-Flash-NVFP4 @ `11d73216cd636238e82e1d77fe1042ffab36e7fa` | vLLM + Ray TP=2 | 2 nodes | Measured | 27–68 agg tok/s ×1–×8; 7 streams is the no-queue sweet spot |
 | Max context | 2× Spark | EXL3/TR3 4-bpw + FP8 KV | vLLM + Ray TP=2 | 2 nodes | Measured | 900K context; 66.3 single / 154.9 agg ×4; eval-only draft license |
 | Faster drafting | 2× Spark | NVFP4 + DFlash2 K=7 | vLLM + Ray TP=2 | 2 nodes | Measured | 25–61 tok/s; acceptance is prompt-shape dependent (31–91%) |
 | Single Spark | 1× Spark | any | any | 1 node | **Untested** | 181 GiB checkpoint; hypothesis: does not fit — see gap analysis |
@@ -46,7 +46,7 @@ Minimal verification (functional gates + concurrency matrix):
 | EXL3 4-bpw | ×1 / ×4 | 66.3 / 154.9 | 702–795 | gate-pass + 300K stress | untested |
 | DFlash2 K=7 | ×1 | 25–61 | 1,310–1,400 | gate-pass only | untested |
 
-Full tables, ranges, TTFT, cold start, and failure notes: [results/](https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark/tree/main/results). Cross-model comparison: [club summary](../../results/SUMMARY.md).
+Full tables, ranges, TTFT, cold start, and failure notes: [results/](https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark/tree/3407023e0b8109a1dd12e8a5544e106ca6912afe/results). Cross-model comparison: [club summary](../../results/SUMMARY.md).
 
 ## What failed
 
@@ -57,7 +57,7 @@ Full tables, ranges, TTFT, cold start, and failure notes: [results/](https://git
 ## Reproduce the evaluation
 
 - Checkpoint revision: `11d73216cd636238e82e1d77fe1042ffab36e7fa` (120 shards, 181.29 GiB)
-- Recipe commits: `aed98a1` (validated), `3407023` (current tip)
+- Recipe commits: `aed98a13ca75140d2691cc5c651ea5817d9a3e44` (validated), `3407023e0b8109a1dd12e8a5544e106ca6912afe` (reviewed tip)
 - Methodology: [club benchmark method](../BENCHMARK-METHOD.md) + per-receipt details
 - Token counting: final usage object only
 

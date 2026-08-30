@@ -1,6 +1,9 @@
 # First-time DGX Spark setup
 
-Derived from the verified dual-node recipes in this organization. Every step here is required by at least one measured recipe; no untested shortcuts are included.
+Derived from the dual-node recipes in this organization. Steps marked measured
+come from the GLM and Qwen lanes (pinned receipts in their repositories);
+Step/Hy3/Inkling steps are recipe-documented and untested by PixelML. No
+unmeasured shortcut is presented as validated.
 
 ## Hardware baseline
 
@@ -9,7 +12,7 @@ Derived from the verified dual-node recipes in this organization. Every step her
 | 2× NVIDIA DGX Spark (GB10, SM121, 128 GiB UMA each) | All current recipes use tensor-parallel 2 across two nodes |
 | Direct ConnectX-7 QSFP cable between nodes | NCCL/RoCE interconnect; Wi-Fi or an external switch is not validated |
 | ~200 GiB free NVMe per node | 181 GiB is the largest verified checkpoint; add headroom for KV and logs |
-| Same Linux username, UID, and GID on both nodes | Required by SSHFS model-cache sharing and rsync scripts |
+| Same Linux username, UID, and GID on both nodes | Required by SSHFS model-cache sharing (recipe-documented); rsync scripts tolerate differing identities |
 
 ## Node software
 
@@ -21,7 +24,10 @@ Derived from the verified dual-node recipes in this organization. Every step her
 
 ## Networking
 
-All dual-node recipes use a direct CX7 QSFP cable with RoCE. NCCL must be pinned to the CX7 interfaces; the on-board Ethernet cannot carry NCCL traffic without hanging.
+The measured GLM and Qwen lanes use a direct CX7 QSFP cable with RoCE, and the
+remaining recipe-documented lanes assume the same path. NCCL must be pinned to
+the CX7 interfaces; the on-board Ethernet cannot carry NCCL traffic without
+hanging (measured: GLM/Qwen; assumed: Step/Hy3/Inkling).
 
 Key NCCL environment variables used across recipes:
 

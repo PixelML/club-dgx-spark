@@ -10,7 +10,7 @@ Upstream: [MiaAI-Lab/GLM-5.3-Flash-EXL3-2x-DGX-Sparks](https://github.com/MiaAI-
 | EXL3/TR3 4bpw weights | [brandonmusic/GLM-5.3-Flash-tr3-4bpw](https://huggingface.co/brandonmusic/GLM-5.3-Flash-tr3-4bpw/tree/5ab363a8dcf6405955fd5f99671e01a1c9fb124b) snapshot `5ab363a8dcf6405955fd5f99671e01a1c9fb124b` (byte-identical mirror at Mia-AiLab) | ShapleyMCG License 1.0 (HF license:other) |
 | Base model | [zai-org/GLM-5.3-Flash](https://huggingface.co/zai-org/GLM-5.3-Flash/tree/04c4e9e95c5da8862dced7e5056455116f83a7e0) snapshot `04c4e9e95c5da8862dced7e5056455116f83a7e0` | MIT (upstream terms) |
 | DFlash2 k=7 draft | [incoai/GLM-5.3-Flash-DFlash2](https://huggingface.co/incoai/GLM-5.3-Flash-DFlash2/tree/dc77ff1c99eeb2df044ee3d4f0094eb033fee410) snapshot `dc77ff1c99eeb2df044ee3d4f0094eb033fee410` (~2.3 GiB BF16) | CC BY-NC-ND 4.0 (research/eval) |
-| KLD panel | malaiwah HF discussion (weights-level, not overlay) | community-reported |
+| KLD panel | [malaiwah HF discussion #1](https://huggingface.co/brandonmusic/GLM-5.3-Flash-tr3-4bpw/discussions/1) (weights-level, not overlay) | community-reported |
 
 PixelML vendors and attributes; it does not mirror weights or claim the
 measurements below as its own.
@@ -33,15 +33,15 @@ measurements below as its own.
 | Cold/warm TTFT | x1 719ms warm; x2 6.62s; x4 6.30s | Our receipts have TTFT tables | Align TTFT definitions with upstream for comparability |
 | Prefix caching | Block-aligned 3584-token pages; ~90% reuse on 8k follow-ups; MNBT=2048 best | Not measured by PixelML | Port tests/bench_prefix_cache.py protocol |
 | Long-context prefill | 256k cold 263s; 300k 319s; ~941-975 tok/s | Our stress test passed at 300k | Add cold-prefill ladder receipt |
-| Vision / tools / reasoning | Vision on (image+video, skip-MM-profile), GLM tool parser, reasoning parser with stop suppression | Gates passed in our receipts | Combine into one eval profile with fixed seeds |
+| Vision / tools / reasoning | Vision on (image+video, skip-MM-profile), GLM tool parser, reasoning parser with stop suppression | Tools/reasoning gates passed (**measured**); vision mixed - throughput gates passed but one image gate failed under memory pressure during revalidation (**measured differently**) | Combine into one eval profile with fixed seeds |
 | Reproducible tests | 11 test files + 2 benches upstream | Our lane adds concurrency/prefill benches | Cross-run upstream suite on our pair |
 | Operational hardening | NIC-name vars, GID-index preflight, >=105.9 GiB free check, MNBT guard | Kit-specific adjustments documented in our lane | Fold NIC/GID preflight into club SETUP.md |
-| Quality evidence | Weights-level KLD panel (4bpw 0.0246 vs FP8 0.0246 nats, ~54% bytes); externally reported | None scored by PixelML | SparkQuant-Lab capability + fidelity layers |
+| Quality evidence | Weights-level KLD panel (4bpw 0.0246 vs FP8 0.0246 nats, ~54% bytes); externally reported | None scored by PixelML | Capability + fidelity layers planned in [EVAL-METHODOLOGY-GAP.md](EVAL-METHODOLOGY-GAP.md) |
 | Energy / cost per success | Not measured upstream or by us | Gap for everyone | Add power sampling to template receipt |
 
 ## What PixelML can do with this
 
 1. **Link**: cite upstream revision `79f10b91f84779b2b1ff2c9327b1a5847cd97f70` in every EXL3 receipt (do now, no GPU).
 2. **Independently reproduce**: MNBT=2048 cold-prefill ladder + prefix-cache bench on our pair (GPU, ~2-4h, after cluster availability and workload-conflict checks).
-3. **Carefully adapt**: thinking-on/off axis and Pass^k framing into SparkQuant-Lab (no GPU).
+3. **Carefully adapt**: thinking-on/off axis and Pass^k framing into the future quality layers (no GPU; see [EVAL-METHODOLOGY-GAP.md](EVAL-METHODOLOGY-GAP.md)).
 4. **Not ours to claim**: KLD panel, upstream tok/s - they stay community-reported unless we re-measure.

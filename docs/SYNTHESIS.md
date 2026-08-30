@@ -25,7 +25,7 @@ likely does not fit.
 - vLLM no-Ray TP2 works for Step-3.7 recipe; **untested** by PixelML.
 - SGLang TP2 works for Qwen3.8 after SM121 QSA kernel fixes; **measured** (our lane) and community-reported (upstream 64/117 tok/s).
 - llama.cpp/GGUF path is the community default for 27-35B single-node agents; **community-reported**.
-- Do-not-repeat failures (all community-reported, several hit by us): SGLang FlashInfer DSA rejects SM121; TileLang DSA exceeds GB10 smem; TRITON_ATTN in speculative config collapses EXL3 acceptance; bf16 or NVFP4 KV on sparse-MLA path unsupported.
+- Do-not-repeat failures, each labeled: SGLang FlashInfer DSA rejects SM121 (**measured**, GLM lane); TileLang DSA exceeds GB10 smem (**community-reported**); TRITON_ATTN in speculative config collapses EXL3 acceptance (**community-reported**); bf16 or NVFP4 KV on the sparse-MLA path unsupported (**community-reported**).
 
 ## Quantization and precision
 
@@ -61,11 +61,14 @@ prompt class (structured/prose/code), never a single blended number.
 
 ## Multimodal
 
-GLM vision tower works on both lanes but first-compile needs UMA headroom;
-skip-MM-profiling is required on GB10; video placeholder alignment patch
-needed (all community + our gate receipts). Image+video limits: 4 images /
-1 video per prompt. Clients silently strip attachments when the model is not
-marked vision-capable - a measured operational gotcha.
+GLM vision passed image/video gates in the throughput runs, but the pinned
+revalidation receipt records a **mixed/unstable image-gate failure** under
+memory pressure - treat vision as conditionally working, not validated.
+First-compile needs UMA headroom; skip-MM-profiling is required on GB10; video
+placeholder alignment patch needed (**community-reported** for the patches,
+**measured** for the gate outcomes). Image+video limits: 4 images / 1 video per
+prompt. Clients silently strip attachments when the model is not marked
+vision-capable (**measured**, operational gotcha).
 
 ## Evaluation methodology
 
@@ -75,7 +78,7 @@ marked vision-capable - a measured operational gotcha.
 4. Token counting from final usage object only (PixelML standard).
 5. Separate acceptance by prompt class.
 6. Safety category gate: cap ratings when safety scores below threshold (tool-eval-bench pattern).
-7. Our gap: no scored quality layer exists for any PixelML DGX recipe; SparkQuant-Lab dca8259 is the plan.
+7. Our gap: no scored quality layer exists for any PixelML DGX recipe; the recorded plan is [EVAL-METHODOLOGY-GAP.md](EVAL-METHODOLOGY-GAP.md).
 
 ## Performance, energy, cost
 

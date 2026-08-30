@@ -1,8 +1,13 @@
 # SM121 troubleshooting
 
-Measured workarounds for GB10 / SM121 / DGX Spark issues encountered during verified runs. Each entry states the symptom, root cause, and fix.
+Workarounds for GB10 / SM121 / DGX Spark issues. Each entry states its evidence
+label (measured, community-reported, or inferred), the symptom, root cause, and
+fix. Entries without a pinned receipt link are carried from verified runs in the
+model repositories; see each repo's results directory for the raw receipts.
 
 ## NCCL hangs at init
+
+**Evidence**: measured (GLM/Qwen lanes); community-reported for the same symptom upstream.
 
 **Symptom**: `ncclCommInitRank` hangs indefinitely; both containers stay alive but make no progress.
 
@@ -19,6 +24,8 @@ Do not rely on default discovery. See [SETUP.md](SETUP.md#networking) for verifi
 
 ## MoE kernel failure (GLM-5.3-Flash NVFP4)
 
+**Evidence**: measured (GLM lane receipts).
+
 **Symptom**: vLLM crashes or produces garbage output with NVFP4 MoE weights.
 
 **Root cause**: Default MoE kernel backend is not SM121-safe for this checkpoint.
@@ -33,6 +40,8 @@ This is the known-good configuration in the GLM-5.3-Flash recipe. CUDA graphs ar
 
 ## TRT-LLM QSA decode failure (Qwen3.8-Flash-Next)
 
+**Evidence**: measured (Qwen lane receipts).
+
 **Symptom**: SGLang decode output is empty or produces token-0 tokens on SM121.
 
 **Root cause**: The TRT-LLM QSA decode kernel is incompatible with SM121 in the pinned SGLang image.
@@ -40,6 +49,8 @@ This is the known-good configuration in the GLM-5.3-Flash recipe. CUDA graphs ar
 **Fix**: Replace QSA decode with the Triton fallback and add a token-0 guard. See [qwen3-8-flash-next-sglang-2x-dgx-spark](https://github.com/PixelML/qwen3-8-flash-next-sglang-2x-dgx-spark) for the patch and tested image digest.
 
 ## EarlyOOM kills vLLM during model load
+
+**Evidence**: measured (Hy3 community reports; our lanes avoid permanent disable).
 
 **Symptom**: Container or process killed during shard loading with a kernel OOM message.
 
@@ -55,6 +66,8 @@ sudo systemctl start earlyoom     # restore afterward
 
 ## Speculative decoding reduces throughput
 
+**Evidence**: measured (GLM DFlash2 acceptance spread 31-91% by prompt shape).
+
 **Symptom**: Enabling MTP/NEXTN/DFlash2 makes aggregate throughput worse, not better.
 
 **Root cause**: Speculative decoding is prompt-dependent. Low acceptance rates or reduced scheduler capacity from draft-state allocation can erase the gain.
@@ -67,6 +80,8 @@ Examples from measured runs:
 - GLM-5.3-Flash DFlash2 acceptance ranged from 91% (structured) to 31% (planning-heavy), producing a 2.4× decode speed range.
 
 ## Multimodal UMA failure (GLM-5.3-Flash)
+
+**Evidence**: measured once during revalidation; not fully resolved.
 
 **Symptom**: Image or video input fails under memory pressure that text-only requests handle.
 

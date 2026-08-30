@@ -7,8 +7,8 @@ Compared against the club's practical mission, ranked by user impact, evidence r
 | Area | Where | Evidence |
 |---|---|---|
 | Dual-node LLM inference (TP=2) | All five model repos | Measured (GLM, Qwen) or recipe-published (Step, Hy3, Inkling) |
-| Speculative decoding (MTP/NEXTN/DFlash2/DSpark) | GLM, Qwen, Inkling | Measured |
-| Multimodal input (image, video) | GLM, Qwen | Measured (GLM tool/image/video gates; Qwen image VQA) |
+| Speculative decoding (MTP/NEXTN/DFlash2/DSpark) | GLM, Qwen (measured); Inkling (recipe-documented, untested) | Measured for GLM DFlash2/EXL3 and Qwen NEXTN; untested for Inkling DSpark |
+| Multimodal input (image, video) | GLM, Qwen | Measured with mixed results: GLM image/video gates passed in throughput runs but one image gate failed during revalidation under memory pressure; Qwen image VQA passed. See pinned receipts. |
 | Tool calling / OpenAI-compatible API | GLM, Qwen, Step, Hy3, Inkling | Measured (GLM, Qwen); recipe-documented (rest) |
 | Uncached prefill benchmarking | GLM, Qwen | Measured |
 | SM121 kernel workarounds | Qwen (Triton fallback), GLM (Marlin MoE + eager) | Measured |

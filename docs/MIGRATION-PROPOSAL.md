@@ -32,12 +32,14 @@ Proposed sequence when triggered (owner-approved, each step verified):
 4. Mark the old path superseded **only after** the replacement contains all evidence and redirects resolve.
 5. Never rewrite or delete history.
 
-## SparkQuant-Lab
+## Quality-layer evaluation repository (unpublished)
 
-SparkQuant-Lab (local commit `dca8259`, not yet a public PixelML repository) is the quality-layer plan for GLM-5.3-Flash vs Qwen3.8-Flash-Next quantization fidelity. When published, its evidence splits by the same topology:
+An internal quality-layer plan for GLM-5.3-Flash vs Qwen3.8-Flash-Next
+quantization fidelity is unpublished; its public methodology is recorded in
+[EVAL-METHODOLOGY-GAP.md](EVAL-METHODOLOGY-GAP.md). If it is published, its evidence splits by the same topology:
 
 - GLM fidelity evidence → the GLM DGX-Spark evidence repository.
 - Qwen fidelity evidence → the Qwen DGX-Spark evidence repository.
-- Reusable harness/methodology → SparkQuant-Lab as a `PixelML/<Domain>-Eval`-style evaluation repository, named at publication time.
+- Reusable harness/methodology → a future PixelML evaluation repository, named at publication time.
 
 Nothing is renamed or superseded for it today.
