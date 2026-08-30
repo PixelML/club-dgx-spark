@@ -10,17 +10,17 @@ Upstream: [MiaAI-Lab/GLM-5.3-Flash-EXL3-2x-DGX-Sparks](https://github.com/MiaAI-
 | EXL3/TR3 4bpw weights | [brandonmusic/GLM-5.3-Flash-tr3-4bpw](https://huggingface.co/brandonmusic/GLM-5.3-Flash-tr3-4bpw/tree/5ab363a8dcf6405955fd5f99671e01a1c9fb124b) snapshot `5ab363a8dcf6405955fd5f99671e01a1c9fb124b` (byte-identical mirror at Mia-AiLab) | ShapleyMCG License 1.0 (HF license:other) |
 | Base model | [zai-org/GLM-5.3-Flash](https://huggingface.co/zai-org/GLM-5.3-Flash/tree/04c4e9e95c5da8862dced7e5056455116f83a7e0) snapshot `04c4e9e95c5da8862dced7e5056455116f83a7e0` | MIT (upstream terms) |
 | DFlash2 k=7 draft | [incoai/GLM-5.3-Flash-DFlash2](https://huggingface.co/incoai/GLM-5.3-Flash-DFlash2/tree/dc77ff1c99eeb2df044ee3d4f0094eb033fee410) snapshot `dc77ff1c99eeb2df044ee3d4f0094eb033fee410` (~2.3 GiB BF16) | CC BY-NC-ND 4.0 (research/eval) |
-| KLD panel | [malaiwah HF discussion #1](https://huggingface.co/brandonmusic/GLM-5.3-Flash-tr3-4bpw/discussions/1) (weights-level, not overlay) | community-reported |
+| KLD panel | [malaiwah HF discussion #1, comment #6a9144846b0bdba943bfe86f](https://huggingface.co/brandonmusic/GLM-5.3-Flash-tr3-4bpw/discussions/1#6a9144846b0bdba943bfe86f) (weights-level, not overlay) | community-reported |
 
 PixelML vendors and attributes; it does not mirror weights or claim the
 measurements below as its own.
 
 ## Runtime pins
 
-- Image: ghcr.io/miaai-lab/glm-5.3-flash-2x-dgx-sparks:exl3, FROM vllm/vllm-openai:glm53-flash-arm64-cu130 (arm64, CUDA 13.0)
-- vLLM pin: 487ecf187; ExLlamaV3 pin: c5d9c657 (0.0.43) exposing fused exl3_moe
+- Image: ghcr.io/miaai-lab/glm-5.3-flash-2x-dgx-sparks:exl3, FROM vllm/vllm-openai:glm53-flash-arm64-cu130 (arm64, CUDA 13.0) — mutable tag; digest not yet pinned
+- vLLM pin: [487ecf187d3dfe74d2cf6119a92881dba403c219](https://github.com/vllm-project/vllm/commit/487ecf187d3dfe74d2cf6119a92881dba403c219); ExLlamaV3 pin: [c5d9c657966ffeeaa9353f0cc899f18629da4a13](https://github.com/turboderp-org/exllamav3/commit/c5d9c657966ffeeaa9353f0cc899f18629da4a13) (0.0.43) exposing fused exl3_moe
 - Target: sm_121a cubins, TORCH_CUDA_ARCH_LIST=12.1a
-- Two source-exact vLLM XGrammar backports: #52805 (12f64b39) and #53046 (c6e19b3)
+- Two source-exact vLLM XGrammar backports: [#52805](https://github.com/vllm-project/vllm/pull/52805/commits/12f64b39d29282437e35be9aa5db432fb2a1a6e6) ([12f64b39d29282437e35be9aa5db432fb2a1a6e6](https://github.com/vllm-project/vllm/commit/12f64b39d29282437e35be9aa5db432fb2a1a6e6)) and [#53046](https://github.com/vllm-project/vllm/pull/53046/commits/c6e19b3be24338759a443e03c8325d76da9ee202) ([c6e19b3be24338759a443e03c8325d76da9ee202](https://github.com/vllm-project/vllm/commit/c6e19b3be24338759a443e03c8325d76da9ee202))
 
 ## Requested gap rows
 

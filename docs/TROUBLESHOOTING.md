@@ -2,12 +2,12 @@
 
 Workarounds for GB10 / SM121 / DGX Spark issues. Each entry states its evidence
 label (measured, community-reported, or inferred), the symptom, root cause, and
-fix. Entries without a pinned receipt link are carried from verified runs in the
-model repositories; see each repo's results directory for the raw receipts.
+fix, with a commit-pinned receipt or patch link for every measured entry.
 
 ## NCCL hangs at init
 
 **Evidence**: measured (GLM/Qwen lanes); community-reported for the same symptom upstream.
+**Receipts**: [GLM lane @ `3407023e`](https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark/tree/3407023e0b8109a1dd12e8a5544e106ca6912afe/results) · [Qwen lane @ `682504be`](https://github.com/PixelML/qwen3-8-flash-next-sglang-2x-dgx-spark/tree/682504bec9e7e99206212f4e172b7ec823e4605c/results)
 
 **Symptom**: `ncclCommInitRank` hangs indefinitely; both containers stay alive but make no progress.
 
@@ -16,8 +16,10 @@ model repositories; see each repo's results directory for the raw receipts.
 **Fix**: Pin NCCL to the CX7 interface and HCA:
 
 ```bash
-export NCCL_SOCKET_IFNAME=<cx7-interface>
-export NCCL_IB_HCA=<roce-interface>
+CX7_IFNAME="${CX7_IFNAME:?run ip link here and set the CX7 port name}"
+ROCE_HCA="${ROCE_HCA:?run ibstat here and set the RoCE HCA name}"
+export NCCL_SOCKET_IFNAME="$CX7_IFNAME"
+export NCCL_IB_HCA="$ROCE_HCA"
 ```
 
 Do not rely on default discovery. See [SETUP.md](SETUP.md#networking) for verification steps.
@@ -25,6 +27,7 @@ Do not rely on default discovery. See [SETUP.md](SETUP.md#networking) for verifi
 ## MoE kernel failure (GLM-5.3-Flash NVFP4)
 
 **Evidence**: measured (GLM lane receipts).
+**Receipt**: [GLM lane @ `3407023e`](https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark/tree/3407023e0b8109a1dd12e8a5544e106ca6912afe/results)
 
 **Symptom**: vLLM crashes or produces garbage output with NVFP4 MoE weights.
 
@@ -41,6 +44,7 @@ This is the known-good configuration in the GLM-5.3-Flash recipe. CUDA graphs ar
 ## TRT-LLM QSA decode failure (Qwen3.8-Flash-Next)
 
 **Evidence**: measured (Qwen lane receipts).
+**Receipt + patch**: [qwen3-8-flash-next-sglang-2x-dgx-spark @ `682504be`](https://github.com/PixelML/qwen3-8-flash-next-sglang-2x-dgx-spark/tree/682504bec9e7e99206212f4e172b7ec823e4605c)
 
 **Symptom**: SGLang decode output is empty or produces token-0 tokens on SM121.
 
@@ -50,7 +54,7 @@ This is the known-good configuration in the GLM-5.3-Flash recipe. CUDA graphs ar
 
 ## EarlyOOM kills vLLM during model load
 
-**Evidence**: measured (Hy3 community reports; our lanes avoid permanent disable).
+**Evidence**: community-reported (Hy3 upstream reports; not reproduced in a PixelML lane).
 
 **Symptom**: Container or process killed during shard loading with a kernel OOM message.
 
@@ -67,6 +71,7 @@ sudo systemctl start earlyoom     # restore afterward
 ## Speculative decoding reduces throughput
 
 **Evidence**: measured (GLM DFlash2 acceptance spread 31-91% by prompt shape).
+**Receipts**: [GLM DFlash2 @ `3407023e`](https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark/tree/3407023e0b8109a1dd12e8a5544e106ca6912afe/results) · [Qwen NEXTN @ `682504be`](https://github.com/PixelML/qwen3-8-flash-next-sglang-2x-dgx-spark/tree/682504bec9e7e99206212f4e172b7ec823e4605c/results)
 
 **Symptom**: Enabling MTP/NEXTN/DFlash2 makes aggregate throughput worse, not better.
 
@@ -82,6 +87,7 @@ Examples from measured runs:
 ## Multimodal UMA failure (GLM-5.3-Flash)
 
 **Evidence**: measured once during revalidation; not fully resolved.
+**Receipt**: [GLM revalidation @ `3407023e`](https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark/tree/3407023e0b8109a1dd12e8a5544e106ca6912afe/results)
 
 **Symptom**: Image or video input fails under memory pressure that text-only requests handle.
 

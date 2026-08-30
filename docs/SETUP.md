@@ -32,11 +32,18 @@ hanging (measured: GLM/Qwen; assumed: Step/Hy3/Inkling).
 Key NCCL environment variables used across recipes:
 
 ```bash
-export NCCL_SOCKET_IFNAME=enp1s0f1np1
-export NCCL_IB_HCA=rocep1s0f1
+# On each node, resolve its own names first:
+#   ip link show          # find the CX7 Ethernet port (PCI-derived name)
+#   ibdev2netdev          # map that port to its RoCE HCA
+CX7_IFNAME="${CX7_IFNAME:?set from ip link on this node}"
+ROCE_HCA="${ROCE_HCA:?set from ibdev2netdev on this node}"
+export NCCL_SOCKET_IFNAME="$CX7_IFNAME"
+export NCCL_IB_HCA="$ROCE_HCA"
 ```
 
-The exact interface names may differ per system — verify with `ip link show` and `ibdev2netdev` on each node before launching.
+Interface and HCA names are PCI-derived and vary between systems — never copy
+them from another node or repository; resolve them independently on each node
+before launching.
 
 Ray may use private IP aliases between nodes; NCCL cannot. Always let NCCL discover the CX7 link via the pinned interface names.
 

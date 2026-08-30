@@ -31,7 +31,7 @@
     {
       "classification": "untested",
       "text": "No scored quality suite, energy/power, cost-per-task, or single-node profile exists for any GLM-5.3-Flash DGX Spark recipe; selector rows for those goals must stay labeled untested.",
-      "evidence_url": "https://github.com/PixelML/club-dgx-spark/pull/2/files"
+      "evidence_url": "https://github.com/PixelML/club-dgx-spark/blob/codex/consolidate-dgx-recipes/docs/COVERAGE-MATRIX.md"
     }
   ]
 }

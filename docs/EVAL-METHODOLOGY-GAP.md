@@ -14,10 +14,11 @@ agentic-suite results, and no cost-per-successful-task calculation.
 ## Planned methodology (not yet run)
 
 1. **Fidelity layer**: KL-divergence between a quantized checkpoint and its BF16
-   reference on identical prompts, using an unmodified upstream harness at a
-   pinned revision. The plan self-samples test prompts from the candidate
-   endpoint, splits them with the reference tokenizer, and measures both
-   per-window and aggregate divergence.
+   reference on identical prompts. Harness source selection is **unresolved**;
+   the chosen upstream harness must be pinned by full commit at run time. The
+   plan self-samples test prompts from the candidate endpoint, splits them with
+   the reference tokenizer, and measures both per-window and aggregate
+   divergence.
 2. **Capability layer**: deterministic tool-calling scenarios with pass/partial/
    fail scoring and a safety-capped rating, following the upstream
    tool-eval-bench pattern (69 deterministic scenarios plus 15 opt-in Hard Mode

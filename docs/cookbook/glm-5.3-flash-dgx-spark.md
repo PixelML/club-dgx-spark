@@ -2,7 +2,7 @@
 
 GLM-5.3-Flash NVFP4 serves from two DGX Spark nodes with vLLM TP=2, with independently measured decode, uncached prefill, tool-call, and multimodal gates. This page is a **research preview** selector for practitioners who already own two Sparks; it is not claim-ready for a quality or cost recommendation.
 
-> **Validation:** measured (speed + functional gates) · quality/cost: untested · **Updated:** 2026-08-30 · **Evidence:** [GLM DGX-Spark repository](https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark)
+> **Validation:** measured (speed + functional gates) · quality/cost: untested · **Updated:** 2026-08-30 · **Evidence:** [GLM DGX-Spark receipts @ `3407023e`](https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark/tree/3407023e0b8109a1dd12e8a5544e106ca6912afe/results)
 
 ## Choose a profile
 
@@ -21,6 +21,7 @@ From the GLM evidence repository on the rank-zero (controller) node:
 ```bash
 git clone https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark.git
 cd GLM-5.3-Flash-NVFP4-Dual-DGX-Spark
+git checkout --detach 3407023e0b8109a1dd12e8a5544e106ca6912afe
 # Provide the serving key via a masked prompt (or your platform secret store); nothing is written to the repo
 read -rs VLLM_API_KEY   # paste your API key, then press Enter
 export VLLM_API_KEY
@@ -58,6 +59,7 @@ Full tables, ranges, TTFT, cold start, and failure notes: [results/](https://git
 
 - Checkpoint revision: `11d73216cd636238e82e1d77fe1042ffab36e7fa` (120 shards, 181.29 GiB)
 - Recipe commits: `aed98a13ca75140d2691cc5c651ea5817d9a3e44` (validated), `3407023e0b8109a1dd12e8a5544e106ca6912afe` (reviewed tip)
+- Multimodal caveat: image/video gates passed in the throughput runs, but one image gate failed under memory pressure during revalidation — treat vision as conditionally working, not validated.
 - Methodology: [club benchmark method](../BENCHMARK-METHOD.md) + per-receipt details
 - Token counting: final usage object only
 
@@ -69,7 +71,7 @@ Full tables, ranges, TTFT, cold start, and failure notes: [results/](https://git
 
 ## Artifacts and evidence
 
-- Detailed repository: [GLM-5.3-Flash-NVFP4-Dual-DGX-Spark](https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark)
+- Detailed repository: [GLM-5.3-Flash-NVFP4-Dual-DGX-Spark @ `3407023e`](https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark/tree/3407023e0b8109a1dd12e8a5544e106ca6912afe)
 - Coverage matrix: [COVERAGE-MATRIX.md](../COVERAGE-MATRIX.md)
 - Gap analysis: [GAP-ANALYSIS.md](../GAP-ANALYSIS.md)
 - Draft release manifest: [releases/draft-glm-5.3-flash-dgx-spark.json](../../releases/draft-glm-5.3-flash-dgx-spark.json)
