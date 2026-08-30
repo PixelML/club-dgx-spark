@@ -6,16 +6,50 @@ require_tests_review = false
 require_estimate_effort_to_review = true
 num_max_findings = 8
 extra_instructions = """
-This repository is the platform-wide knowledge base for DGX Spark (GB10)
-experiments, hosting concise comparison tables, common tooling guidance, and
-links into model-family repositories. Focus on factual accuracy, safe
-power/thermal handling guidance, and reproducibility of published recipes.
-Flag missing measured/inferred labels on benchmark claims and missing links
-into model-family repos for detailed experiment results.
+This public repository is the platform-wide knowledge base for DGX Spark
+experiments. It should contain concise comparisons, common guidance, and links
+to detailed model-family repositories. AGENTS.md is the publication, routing,
+evidence, and safety contract.
+
+When reviewing, prioritize these repository-specific risks:
+
+1. Publication boundary. Treat any exposure prohibited by AGENTS.md as a
+BLOCKER, including credentials, private infrastructure identifiers, raw logs,
+personal data, restricted model artifacts, and private-repository history.
+Review filenames and linked artifacts as well as prose.
+
+2. Evidence quality. Claims in README.md and docs/EXPERIMENTS.md must label
+measured, inferred, community-reported, and untested results. Flag numbers or
+compatibility conclusions without pinned public sources, workload shape,
+hardware/topology, software/model revisions, quantization, sample count, and
+redacted receipts.
+
+3. Repository routing. docs/REPOSITORY-STRATEGY.md and results/README.md define
+the split between this platform index and model-family repositories. Flag
+duplicated full recipes, quant-specific repository proliferation, missing
+backlinks, or summaries that do not match their detailed source.
+
+4. Safety. Hardware, thermal, power, storage, networking, and workload advice
+must state preconditions, non-conflict checks, and abort thresholds. Flag
+commands that can reboot nodes, change system state, or interrupt workloads
+without explicit authorization and rollback guidance.
+
+5. Reproducibility and pinning. Commands and citations must use immutable
+commits, model revisions, images, and evidence links where a moving reference
+could change the result. Flag mutable main/latest references presented as exact
+evidence and community recipes presented as locally reproduced.
+
+6. Documentation hygiene. Require valid relative links, consistent terminology,
+compact platform-level conclusions, and explicit negative results. Flag stale
+status claims, invented measurements, ambiguous units, and prose that hides
+whether a result was actually reproduced.
 """
 
-[ignore]
-glob = [
-  "reports/**",
-  "**/*.lock",
-]
+[pr_description]
+extra_instructions = """
+The PR description should state:
+- which platform guidance, experiment index, or result summary changed;
+- whether each new claim is measured, inferred, community-reported, or untested;
+- the immutable public source and receipt for technical or performance claims;
+- the safety and publication-boundary checks run before publishing.
+"""
