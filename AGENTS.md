@@ -29,6 +29,7 @@ Do not copy private repository history or raw live-state dumps. Reconstruct publ
 - Preserve negative results and incompatibilities with the exact tested boundary.
 - Count generated tokens from the final usage object, never from stream-event count.
 - Never invent measurements, versions, citations, or successful tests.
+- Do not publish a new measured benchmark as an index row alone. Add a runnable `recipes/<model-runtime>/reproduce.ipynb` with immutable pins, clean recorded outputs, structured source data, a generated chart, and an editable final `curl` request.
 
 ## Infrastructure safety
 
@@ -45,6 +46,7 @@ Before every commit, push, release, or pull request:
 3. Check for large files, binaries, archives, model weights, dumps, and unsafe symlinks.
 4. Review relevant Git history when content came from another repository or live machine.
 5. Verify claims have redacted evidence and primary-source links.
+6. Run `python3 scripts/validate_recipe_notebooks.py` when a recipe or benchmark result changes.
 
 Suggested checks:
 

@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "title": "Qwen3.8-Flash-Next NVFP4 on 2 x DGX Spark",
+  "status": "measured",
+  "hardware": "2 x DGX Spark, one GB10 per node, TP=2 over direct RoCE",
+  "model": "PixelML/Qwen3.8-Flash-Next-NVFP4-Dual-DGX-Spark",
+  "model_revision": "b80180e371f13348ec49641a6e66999e7854b179",
+  "runtime_pin": "PixelML/qwen3-8-flash-next-sglang-2x-dgx-spark@682504bec9e7e99206212f4e172b7ec823e4605c; lmsysorg/sglang@sha256:12d3392bdc8be8d35e9a95f191df6aef99c5114bdbefd41bfdc7e760e6d25ec1",
+  "notebook": "reproduce.ipynb",
+  "chart": "assets/performance.png",
+  "results": ["results/summary.csv"],
+  "evidence": "https://github.com/PixelML/qwen3-8-flash-next-sglang-2x-dgx-spark/tree/682504bec9e7e99206212f4e172b7ec823e4605c"
+}

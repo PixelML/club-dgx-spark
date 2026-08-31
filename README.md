@@ -10,6 +10,12 @@ This repository is the platform-wide index for our DGX Spark experiments. It con
 - links to detailed model-family experiment repositories;
 - LLM, image, video, training, and distributed workload coverage.
 
+## Run a measured recipe
+
+The club is a runnable catalog, not only an index. Each new measured result includes a folder under [`recipes/`](recipes/README.md) with a clean executed notebook, immutable pins, structured results, and a generated chart. The notebook proceeds from configuration and per-node safety checks to node-local model preparation, service startup, benchmark, and an editable final `curl` that prints the model response and final API usage.
+
+Start with the [Qwen3.8-Flash-Next NVFP4 dual-Spark notebook](recipes/qwen3.8-flash-next-sglang/reproduce.ipynb).
+
 ## Repository structure
 
 Use a hybrid organization:
@@ -55,7 +61,7 @@ Cross-platform views:
 | Put in `club-dgx-spark` | Put in a model-family repository |
 |---|---|
 | platform setup and shared tooling | complete launch/build recipes |
-| concise verified result summaries | raw redacted benchmark artifacts |
+| runnable canonical notebooks and concise verified result summaries | raw redacted benchmark artifacts |
 | cross-model comparison tables | all quantization/runtime attempts |
 | common failure and recovery lessons | model-specific patches and scripts |
 | links and status tracking | detailed positive and negative results |
