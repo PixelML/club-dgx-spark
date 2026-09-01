@@ -11,6 +11,7 @@ credentials*
 *.core
 core.*
 results/raw/
+!recipes/**/results/*.csv
 *.safetensors
 *.gguf
 *.pt

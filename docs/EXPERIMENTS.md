@@ -2,6 +2,8 @@
 
 Status labels describe the evidence level, not whether a recipe will work for you.
 
+Runnable notebooks with clean measured outputs live in [`recipes/`](../recipes/README.md). A measured catalog row is incomplete until it has a corresponding notebook or is explicitly labeled compatibility-only/untested.
+
 - **Measured**: PixelML independently produced benchmark or correctness evidence on its own hardware.
 - **Untested**: recipe is published but PixelML has no independent hardware receipt yet.
 - **Community-reported**: figures are quoted from the upstream author and not re-measured by PixelML.

@@ -1,0 +1,23 @@
+{
+  "title": "Qwen3.8-Flash-Next on 2 × DGX Spark",
+  "subtitle": "NVFP4 · SGLang · TP=2 · NEXTN/MTP · client-observed usage accounting",
+  "panels": [
+    {
+      "title": "Generation throughput",
+      "y_label": "aggregate output tok/s",
+      "metric": "decode",
+      "x_prefix": "c",
+      "series_label": "NEXTN/MTP"
+    },
+    {
+      "title": "Uncached prefill",
+      "y_label": "client-observed input tok/s",
+      "metric": "prefill",
+      "x_divisor": 1024,
+      "x_suffix": "K",
+      "series_label": "median-rate sample",
+      "color": "#F2B84B"
+    }
+  ],
+  "footer": "MEASURED 2026-08-26/27 · fixed 192-token decode · unique-prefix prefill · final API usage counts"
+}
