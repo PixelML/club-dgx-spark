@@ -27,6 +27,7 @@ Validate before publication:
 python3 scripts/validate_recipe_notebooks.py
 python3 scripts/render_recipe_chart.py \
   --spec recipes/qwen3.8-flash-next-sglang/chart-spec.json \
+  --data recipes/qwen3.8-flash-next-sglang/results/summary.csv \
   --output recipes/qwen3.8-flash-next-sglang/assets/performance.png
 ```
 

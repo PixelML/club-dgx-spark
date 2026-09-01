@@ -1,8 +1,8 @@
-metric,x,completion_tokens,wall_or_ttft_seconds,tok_s,range_low_tok_s,range_high_tok_s
-decode,1,192,4.038,47.54,,
-decode,4,750,8.567,87.55,,
-decode,8,1536,9.711,158.17,,
-decode,16,3072,11.156,275.37,,
-prefill,1046,1,0.4524,2327.78,2281.64,2384.69
-prefill,4103,1,1.4924,2758.65,2622.26,2959.58
-prefill,16471,1,5.5729,2960.12,2940.77,2960.96
+metric,x,request_count,sample_count,prompt_tokens,completion_tokens,duration_seconds,tok_s,range_low_tok_s,range_high_tok_s,token_basis
+decode,1,1,1,,192,4.038,47.54,,,final usage.completion_tokens / level wall time
+decode,4,4,1,,750,8.567,87.55,,,final usage.completion_tokens / level wall time
+decode,8,8,1,,1536,9.711,158.17,,,final usage.completion_tokens / level wall time
+decode,16,16,1,,3072,11.156,275.37,,,final usage.completion_tokens / level wall time
+prefill,1024,1,3,1053,1,0.4524,2327.78,2281.64,2384.69,final usage.prompt_tokens / client TTFT (median-rate sample)
+prefill,4096,1,3,4117,1,1.4924,2758.65,2622.26,2959.58,final usage.prompt_tokens / client TTFT (median-rate sample)
+prefill,16384,1,3,16407,1,5.5427,2960.12,2940.77,2960.96,final usage.prompt_tokens / client TTFT (median-rate sample)

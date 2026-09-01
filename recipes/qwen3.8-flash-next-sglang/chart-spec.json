@@ -5,18 +5,18 @@
     {
       "title": "Generation throughput",
       "y_label": "aggregate output tok/s",
-      "x": ["c1", "c4", "c8", "c16"],
-      "series": [
-        {"label": "NEXTN/MTP", "values": [47.54, 87.55, 158.17, 275.37]}
-      ]
+      "metric": "decode",
+      "x_prefix": "c",
+      "series_label": "NEXTN/MTP"
     },
     {
       "title": "Uncached prefill",
       "y_label": "client-observed input tok/s",
-      "x": ["1K", "4K", "16K"],
-      "series": [
-        {"label": "median prefill", "values": [2327.78, 2758.65, 2960.12], "color": "#F2B84B"}
-      ]
+      "metric": "prefill",
+      "x_divisor": 1024,
+      "x_suffix": "K",
+      "series_label": "median-rate sample",
+      "color": "#F2B84B"
     }
   ],
   "footer": "MEASURED 2026-08-26/27 · fixed 192-token decode · unique-prefix prefill · final API usage counts"

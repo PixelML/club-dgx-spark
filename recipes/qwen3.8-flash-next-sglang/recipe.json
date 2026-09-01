@@ -8,6 +8,6 @@
   "runtime_pin": "PixelML/qwen3-8-flash-next-sglang-2x-dgx-spark@682504bec9e7e99206212f4e172b7ec823e4605c; lmsysorg/sglang@sha256:12d3392bdc8be8d35e9a95f191df6aef99c5114bdbefd41bfdc7e760e6d25ec1",
   "notebook": "reproduce.ipynb",
   "chart": "assets/performance.png",
-  "results": ["results/summary.csv"],
+  "results": ["results/recorded-run.json", "results/summary.csv"],
   "evidence": "https://github.com/PixelML/qwen3-8-flash-next-sglang-2x-dgx-spark/tree/682504bec9e7e99206212f4e172b7ec823e4605c"
 }

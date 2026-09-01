@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Render a PixelML recipe chart from a small committed JSON specification."""
+"""Render a PixelML recipe chart from validated committed result rows."""
 
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 from pathlib import Path
 
@@ -18,6 +19,35 @@ GRID = "#2A3950"
 TEXT = "#F7FAFC"
 MUTED = "#A9B4C4"
 ACCENTS = ["#32D4A4", "#F2B84B", "#6EA8FE", "#F2789F"]
+
+
+def panel_from_rows(panel: dict, rows: list[dict[str, str]]) -> dict:
+    """Builds one display panel without accepting values from the style spec."""
+    metric_rows = [row for row in rows if row.get("metric") == panel["metric"]]
+    if not metric_rows:
+        raise ValueError(f"summary has no rows for metric {panel['metric']}")
+    values = [float(row["tok_s"]) for row in metric_rows]
+    if any(value <= 0 for value in values):
+        raise ValueError(f"metric {panel['metric']} contains non-positive tok/s")
+
+    divisor = float(panel.get("x_divisor", 1))
+    labels = []
+    for row in metric_rows:
+        x_value = float(row["x"]) / divisor
+        label = f"{x_value:g}"
+        labels.append(f"{panel.get('x_prefix', '')}{label}{panel.get('x_suffix', '')}")
+    return {
+        "title": panel["title"],
+        "y_label": panel["y_label"],
+        "x": labels,
+        "series": [
+            {
+                "label": panel["series_label"],
+                "values": values,
+                "color": panel.get("color", ACCENTS[0]),
+            }
+        ],
+    }
 
 
 def font(size: int, bold: bool = False) -> ImageFont.ImageFont:
@@ -82,10 +112,15 @@ def draw_panel(draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int], panel:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--spec", required=True, type=Path)
+    parser.add_argument("--data", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
 
     spec = json.loads(args.spec.read_text(encoding="utf-8"))
+    with args.data.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+    if not rows:
+        raise SystemExit("summary data is empty")
     image = Image.new("RGB", (WIDTH, HEIGHT), BACKGROUND)
     draw = ImageDraw.Draw(image)
 
@@ -93,7 +128,7 @@ def main() -> None:
     draw.text((46, 66), spec["title"], font=font(34, True), fill=TEXT)
     draw.text((46, 112), spec["subtitle"], font=font(17), fill=MUTED)
 
-    panels = spec["panels"]
+    panels = [panel_from_rows(panel, rows) for panel in spec["panels"]]
     gap = 20
     margin = 46
     panel_top = 160
