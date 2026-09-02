@@ -1,0 +1,56 @@
+{
+  "captured_utc": "2026-09-02T08:31:43Z",
+  "request": {
+    "model": "apollo-deepseek-v4-flash-vision-exp",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Reply with exactly one word: the color of a clear daytime sky."
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 200
+  },
+  "response": {
+    "id": "chatcmpl-851d1686687a75fe",
+    "object": "chat.completion",
+    "created": 1788337903,
+    "model": "apollo-deepseek-v4-flash-vision-exp",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "blue",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": "The user asks to reply with exactly one word: the color of a clear daytime sky. The answer is \"blue\". Need to output exactly one word."
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": null,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.25.2.dev0+g752a3a504.d20260714-tp2-6a9f4136",
+    "usage": {
+      "prompt_tokens": 110,
+      "total_tokens": 144,
+      "completion_tokens": 34,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "multimodal_tokens": null
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  },
+  "wall_time_s": 0.832
+}

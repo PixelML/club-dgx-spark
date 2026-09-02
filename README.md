@@ -60,6 +60,21 @@ Cross-platform views:
 | common failure and recovery lessons | model-specific patches and scripts |
 | links and status tracking | detailed positive and negative results |
 
+## Notebooks
+
+Each row links one executed Jupyter notebook, top to bottom, with committed
+outputs. The schema and the `LIVE`-replay convention are in
+[notebooks/README.md](notebooks/README.md).
+
+| Date | Experiment | Headline | Notebook |
+|---|---|---|---|
+| 2026-09-02 | DeepSeek-V4-Flash-Vision-Exp, 2x DGX Spark, vLLM TP=2 | 10/10 golden vision fixtures pass keyword match; C1 31.9 tok/s and TTFT 0.323 s live re-measured today | [notebooks/2026-09-02-deepseek-v4-flash-vision-exp-2node-tp2-vllm.ipynb](notebooks/2026-09-02-deepseek-v4-flash-vision-exp-2node-tp2-vllm.ipynb) |
+
+Detailed evidence for this checkpoint on this hardware lives in
+[DeepSeek-V4-Flash-Vision-Exp-DGX-Spark](https://github.com/PixelML/DeepSeek-V4-Flash-Vision-Exp-DGX-Spark);
+this notebook links back to it and adds a fresh live re-measurement plus a
+reproducible end-to-end vision demo.
+
 ## Publication safety
 
 This is a public repository. Read [AGENTS.md](AGENTS.md) before adding live-system evidence. Do not publish credentials, private network details, hostnames, hardware identifiers, customer data, or unredacted logs.
