@@ -46,6 +46,28 @@ unless they want the failure history.
    and limitations, and links to the evidence source. Long narrative
    belongs here, not in sections 1 to 3.
 
+## The hero cell
+
+The very first cell in the notebook is a markdown hero, and it holds
+nothing else:
+
+- A one-line title naming the model and the topology (for example
+  "DeepSeek-V4-Flash-Vision-Exp on 2x DGX Spark").
+- A four-row metrics table with units: decode at concurrency 1, best
+  aggregate throughput, prefill, and TTFT. Mark each row's source
+  (live, this notebook or canonical, merged main) if the numbers come
+  from different runs.
+- For a vision notebook, the demo preview image (a relative path into
+  `results/<experiment>/demo/`) with the model's own three-sentence
+  description underneath it as the vision proof.
+- The launch command or the pinned-revision pull command, as one code
+  line.
+- One line of links: the evidence repository and the model's page or
+  collection.
+
+Everything else — pins, protocol, full tables, reproduce steps, and the
+appendix — stays below the hero cell, starting with section 1.
+
 ## The LIVE flag
 
 Each notebook has a status cell near the top with a `LIVE` flag.

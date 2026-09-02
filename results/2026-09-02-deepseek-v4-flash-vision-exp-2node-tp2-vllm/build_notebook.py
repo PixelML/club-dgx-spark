@@ -21,13 +21,44 @@ def code(src):
 
 
 # ---------------------------------------------------------------------
+# Hero cell — first cell, nothing but title, headline metrics, demo proof,
+# pull command, and one link line. Everything else lives further down.
+# ---------------------------------------------------------------------
+md("""# DeepSeek-V4-Flash-Vision-Exp on 2x DGX Spark
+
+| Metric | Value | Source |
+|---|---|---|
+| Decode, c=1 | 31.9 tok/s | live, this notebook |
+| Best aggregate throughput | 112.7 tok/s @ c=6 | canonical, merged main |
+| Prefill | 1,789 tok/s | canonical, merged main |
+| TTFT | 0.323 s | live, this notebook |
+
+![Rendered voxel diorama](../results/2026-09-02-deepseek-v4-flash-vision-exp-2node-tp2-vllm/demo/preview.png)
+
+The model's own three-sentence description of the screenshot above, sent
+back to it as vision input: "This image displays a 3D isometric voxel
+diorama set against a dark blue background, featuring a flat, green
+square terrain. The scene is populated with miniature blocky structures,
+including a central tan building complex, scattered trees, and various
+small yellow and orange supply crates. Text overlays at the top and
+bottom label the scene as 'WESTERN FRONT - VOXEL DIORAMA' and highlight
+features like 'dynamic destruction' and 'logistics.'"
+
+```bash
+huggingface-cli download deepseek-ai/DeepSeek-V4-Flash-Vision-Exp --revision 86f746b36186f0e567729a5c06a8c918caba82a9
+```
+
+Evidence: [PixelML/DeepSeek-V4-Flash-Vision-Exp-DGX-Spark](https://github.com/PixelML/DeepSeek-V4-Flash-Vision-Exp-DGX-Spark) · Checkpoint: [deepseek-ai/DeepSeek-V4-Flash-Vision-Exp](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp)""")
+
+# ---------------------------------------------------------------------
 # Title + status cell
 # ---------------------------------------------------------------------
-md("""# DeepSeek-V4-Flash-Vision-Exp — 2x DGX Spark, vLLM TP=2
+md("""## DeepSeek-V4-Flash-Vision-Exp — 2x DGX Spark, vLLM TP=2
 
 Executed notebook. Every cell output below is committed; see
 `notebooks/README.md` for the section order and the `LIVE` flag
-convention.""")
+convention. Pins, protocol, and the full results follow below; the demo
+in the hero cell above is repeated with its full pipeline in Section 3.""")
 
 code('''# --- Status cell -------------------------------------------------------
 # LIVE = False replays the committed receipts under results/<experiment>/.
