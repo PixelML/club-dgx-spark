@@ -262,20 +262,28 @@ code('''display(Image(filename="../assets/charts/2026-09-02-deepseek-v4-flash-vi
 md("""## 3. Demo — "Try it"
 
 One live request, full pipeline: send a long, open-ended creative-coding
-prompt (temperature 0.7, `max_tokens=8000`, reasoning allowed), extract
-the single HTML file from the response, render it headless with
-Playwright/Chromium at 1280x720 (8 s settle time, CDN scripts allowed),
-display the rendered screenshot inline, then send that screenshot back to
-the model as an image and ask it to describe the scene. This closes the
-loop: vision-in on real generated content, not a canned fixture.
+prompt, extract the single HTML file from the response, render it
+headless with Playwright/Chromium at 1280x720 (8 s settle time, CDN
+scripts allowed), display the rendered screenshot inline, then send that
+screenshot back to the model as an image and ask it to describe the
+scene. This closes the loop: vision-in on real generated content, not a
+canned fixture.
 
-**Result today: the diorama did not finish rendering** — the model used
-most of its token budget on reasoning before the HTML was cut off. The
-pipeline below still ran end to end and is reported exactly as it came
-back, per the notebook's negative-result policy.""")
+**First attempt failed** (`max_tokens=8000`, reasoning left on, no system
+message): the model spent its whole token budget on reasoning and the
+HTML was cut off before it finished. That failure, with its exact
+numbers, is recorded in the Appendix rather than hidden.
+
+**Second attempt succeeded.** Three changes fixed it: `max_tokens` raised
+to 32000, reasoning suppressed on the request
+(`chat_template_kwargs: {"thinking": false}`), and a system message
+telling the model to return only one HTML file in a single fence. The
+request then finished cleanly (`finish_reason: stop`), and the result
+below is that successful run.""")
 
 code('''demo_receipt = load_receipt("demo/demo_receipt.json")
 print("prompt (truncated):", demo_receipt["prompt"][:200], "...")
+print("request params:", demo_receipt["request_params"])
 print("wall time (s):", demo_receipt["wall_time_s"])
 print("usage:", demo_receipt["usage"])
 print("finish_reason:", demo_receipt["finish_reason"])
@@ -286,17 +294,12 @@ print("html_blocks_found:", demo_receipt["html_blocks_found"])
 print("render_ok (Playwright did not crash):", demo_receipt["render_ok"], demo_receipt.get("render_error") or "")
 ''')
 
-md("""**Plain result: the HTML did not finish.** `finish_reason` is
-`length` — the model spent 27,466 characters of its `reasoning` field
-planning the scene and had only 955 characters of `content` left inside
-the 8,000-token budget, so the extracted HTML file is a truncated code
-fence, not a working diorama. Playwright loaded the file without
-crashing, but the page shows only the literal text of the unclosed code
-fence on a blank background. This is a real, reproducible limitation of
-sending a single non-streaming 8,000-token request to a model whose
-default profile spends most of its budget on chain-of-thought before
-writing output — the same behavior noted for the golden text corpus in
-section 2. The full raw HTML is committed as evidence of exactly what
+md("""**Plain result: the HTML finished.** `finish_reason` is `stop`, not
+`length` — with reasoning suppressed, the model spent zero characters on
+a hidden reasoning field and wrote the complete 19,997-character response
+straight into content, giving a 20,001-byte HTML file. Playwright loaded
+the file, ran its WebGL scene, and rendered a full frame after the 8 s
+settle time. The full raw HTML is committed as evidence of exactly what
 came back.""")
 
 code('''# The full generated HTML file is at results/<experiment>/demo/ww1-voxel-diorama.html.
@@ -306,7 +309,7 @@ print(f"{len(html_src)} characters, {len(html_src.splitlines())} lines")
 print(html_src[:400])
 ''')
 
-md("### Rendered screenshot\n\nWhatever Playwright actually captured, shown as-is.")
+md("### Rendered screenshot\n\nWhat Playwright actually captured, shown as-is.")
 
 code('''display(Image(filename=os.path.join(RESULTS_DIR, "demo", "preview.png")))
 ''')
@@ -315,9 +318,9 @@ md("""### Vision proof: the model describes what it actually rendered
 
 The screenshot above is sent back to the same endpoint as an image, with
 the prompt "Describe what you see in this scene in three sentences."
-This is still a valid vision-in proof on real generated content — the
-model correctly reports a near-blank page with a stray code-fence marker,
-rather than hallucinating the diorama it intended to build.""")
+This is a vision-in proof on real generated content, not a canned
+fixture — the model reports the scene it can actually see in the
+screenshot.""")
 
 code('''vision_proof = load_receipt("demo/vision_proof.json")
 print("wall time (s):", vision_proof["wall_time_s"])
@@ -421,6 +424,31 @@ merged. As of this notebook, that PR remains **draft, unmerged**, pending
 the purge confirmation and a fresh independent review — which is why this
 notebook's TL;DR keeps the normalized row separate and labeled
 "PR pending" rather than folding it into the canonical row.
+
+### Demo attempt 1: reasoning ate the token budget
+
+The first "Try it" run used `temperature=0.7`, `max_tokens=8000`, no
+system message, and left reasoning enabled. Recorded numbers from that
+run, kept as evidence rather than overwritten:
+
+- `wall_time_s`: 171.861
+- `usage.completion_tokens`: 8000 (the full budget)
+- `finish_reason`: `length` (cut off, not a clean stop)
+- `reasoning_chars`: 27466
+- `content_chars`: 955
+- `extracted_html_bytes`: 955 (a truncated code fence, not a working
+  page)
+- `render_ok`: true (Playwright did not crash, but the page showed only
+  the literal unclosed fence text on a blank background)
+
+Files are preserved under `results/<experiment>/demo/` with an
+`_attempt1_failed` suffix: `demo_receipt_attempt1_failed.json`,
+`ww1-voxel-diorama_attempt1_failed.html`,
+`preview_attempt1_failed.png`, `vision_proof_attempt1_failed.json`. The
+fix (Section 3): raise `max_tokens` to 32000, suppress reasoning with
+`chat_template_kwargs: {"thinking": false}`, and add a system message
+constraining the output to one HTML fence. That combination produced the
+clean `finish_reason: stop` result shown in Section 3.
 
 ### DSpark k sweep
 

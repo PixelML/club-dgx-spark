@@ -27,15 +27,31 @@ PROMPT = (
     "this done but make sure I can paste it all into a single HTML file "
     "and open it in Chrome."
 )
+SYSTEM_PROMPT = "Return only one complete HTML file in a single ```html fence. No explanation."
 
+# Attempt 1 (max_tokens=8000, reasoning left on, no system message) spent
+# 27,466 characters of its reasoning field before the 8,000-token budget
+# ran out and the HTML was cut off at 955 bytes. Kept as
+# demo_receipt_attempt1_failed.json / ww1-voxel-diorama_attempt1_failed.html
+# / preview_attempt1_failed.png / vision_proof_attempt1_failed.json.
+# Attempt 2 disables reasoning at the request level
+# (chat_template_kwargs.thinking=false, confirmed empirically against this
+# endpoint: /v1/chat/completions returns message.reasoning=null and
+# finish_reason=stop for a trivial prompt with this flag set), raises the
+# budget to 32,000 tokens, and adds a system message asking for exactly one
+# fenced HTML block.
 t0 = time.time()
 payload = {
     "model": MODEL,
-    "messages": [{"role": "user", "content": PROMPT}],
+    "messages": [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": PROMPT},
+    ],
     "temperature": 0.7,
-    "max_tokens": 8000,
+    "max_tokens": 32000,
+    "chat_template_kwargs": {"thinking": False},
 }
-r = requests.post(f"{BASE}/chat/completions", json=payload, timeout=600)
+r = requests.post(f"{BASE}/chat/completions", json=payload, timeout=1200)
 r.raise_for_status()
 resp = r.json()
 dt = time.time() - t0
@@ -64,7 +80,7 @@ with open(html_path, "w") as f:
 receipt = {
     "captured_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
     "prompt": PROMPT,
-    "request_params": {"temperature": 0.7, "max_tokens": 8000},
+    "request_params": {"temperature": 0.7, "max_tokens": 32000, "chat_template_kwargs": {"thinking": False}, "system_message": SYSTEM_PROMPT},
     "wall_time_s": round(dt, 3),
     "usage": usage,
     "finish_reason": resp["choices"][0].get("finish_reason"),
@@ -119,7 +135,8 @@ if os.path.exists(preview_path):
             ],
         }],
         "temperature": 0,
-        "max_tokens": 300,
+        "max_tokens": 500,
+        "chat_template_kwargs": {"thinking": False},
     }
     vt0 = time.time()
     vr = requests.post(f"{BASE}/chat/completions", json=vision_payload, timeout=180)

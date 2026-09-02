@@ -1,29 +1,25 @@
 {
-  "captured_utc": "2026-09-02T08:48:26Z",
+  "captured_utc": "2026-09-02T08:36:50Z",
   "prompt": "Design and create a voxel diorama of an active world-war-one warzone. Make it detailed, impressive, and varied, and use colorful voxels. Make the scene feel intricate with great attention to detail. Make the scene feel animated and interactive, with realistic destruction physics, soldier combat, and logistics. Include various different vehicles, land, air, and sea. Use webGL and whatever libraries to get this done but make sure I can paste it all into a single HTML file and open it in Chrome.",
   "request_params": {
     "temperature": 0.7,
-    "max_tokens": 32000,
-    "chat_template_kwargs": {
-      "thinking": false
-    },
-    "system_message": "Return only one complete HTML file in a single ```html fence. No explanation."
+    "max_tokens": 8000
   },
-  "wall_time_s": 90.576,
+  "wall_time_s": 171.861,
   "usage": {
-    "prompt_tokens": 124,
-    "total_tokens": 5909,
-    "completion_tokens": 5785,
+    "prompt_tokens": 200,
+    "total_tokens": 8200,
+    "completion_tokens": 8000,
     "prompt_tokens_details": {
       "cached_tokens": 0,
       "multimodal_tokens": null
     }
   },
-  "finish_reason": "stop",
-  "reasoning_chars": 0,
-  "content_chars": 19997,
+  "finish_reason": "length",
+  "reasoning_chars": 27466,
+  "content_chars": 955,
   "html_blocks_found": 1,
-  "extracted_html_bytes": 20001,
+  "extracted_html_bytes": 955,
   "html_path": "demo/ww1-voxel-diorama.html",
   "render_ok": true,
   "render_error": null
