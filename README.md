@@ -50,6 +50,10 @@ Cross-platform views:
 - [Migration proposal](docs/MIGRATION-PROPOSAL.md) - when legacy repository names should move to the canonical Model-DGX-Spark form (not yet).
 - [Cookbook (research preview)](docs/cookbook/glm-5.3-flash-dgx-spark.md) - GLM-5.3-Flash profile selector with measured speed and untested quality/cost clearly labeled.
 
+## Hugging Face
+
+Curated, verified artifacts from this club: [PixelML/club-dgx-spark: verified on DGX Spark (GB10)](https://huggingface.co/collections/PixelML/club-dgx-spark-verified-on-dgx-spark-gb10-6a97c6b97ebd12f082dac6ca).
+
 ## What belongs here
 
 | Put in `club-dgx-spark` | Put in a model-family repository |
