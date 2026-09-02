@@ -1,0 +1,71 @@
+{
+  "receipt_type": "cold start, functional gates, MTP behavior, coding-agent regression, vision UMA failure, SGLang rejection",
+  "experiment": "2026-08-27-glm-5.3-flash-nvfp4-2node",
+  "measured_date_utc": "2026-08-27",
+  "evidence_label": "measured",
+  "source": {
+    "repo": "PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark",
+    "revision": "3407023e0b8109a1dd12e8a5544e106ca6912afe",
+    "files": [
+      "results/UPSTREAM-2026-08-27.md",
+      "results/UPSTREAM-2026-08-27-REVALIDATION.md"
+    ],
+    "license": "MIT"
+  },
+  "cold_start": {
+    "head_launch_to_api_ready_s": 918,
+    "head_launch_to_api_ready_human": "15 minutes 18 seconds",
+    "rank0_model_load_s": 676.17,
+    "rank0_model_load_gib": 91.23,
+    "engine_profile_kv_warmup_s": 133.79,
+    "note": "JIT and FlashInfer caches persist in a Docker volume; subsequent starts reuse compiled artifacts"
+  },
+  "functional_gates_validation_pass": [
+    {"gate": "low-effort coding", "result": "pass", "detail": "complete Python binary-search implementation, finish_reason=stop, 90 output tokens, 2.715 s"},
+    {"gate": "high-effort reasoning", "result": "pass", "detail": "reasoning separated from the final $60 answer"},
+    {"gate": "automatic tool routing", "result": "pass", "detail": "emitted exactly get_weather"},
+    {"gate": "image description", "result": "pass", "detail": "generated solid-red PNG returned 'Red'"},
+    {"gate": "OpenCodex via local CLIProxy alias", "result": "pass", "detail": "GLM_LOCAL_OK (local alias) and GLM_PUBLIC_OK (public proxy alias)"},
+    {"gate": "container stability", "result": "pass", "detail": "both rank containers running, restart count 0 after the full test matrix"}
+  ],
+  "functional_gates_revalidation_final_pass": [
+    {"gate": "low-effort coding", "result": "pass", "detail": "90 tokens in 2.711 s = 33.2 client-observed e2e output tok/s"},
+    {"gate": "high-effort reasoning", "result": "pass", "detail": "correct $60 final answer with separated reasoning"},
+    {"gate": "automatic tool routing", "result": "pass", "detail": "emitted exactly get_weather"},
+    {"gate": "image description", "result": "FAIL", "detail": "HTTP 500; Ray node-memory monitor killed TP0 and vLLM shut down (see vision_uma_failure)"}
+  ],
+  "mtp_behavior": {
+    "draft_acceptance_range_pct": [47, 73],
+    "mean_accepted_length_range_tokens": [2.7, 3.9],
+    "note": "varies by workload and concurrency; why three-run medians and ranges are published"
+  },
+  "coding_agent_regression": {
+    "harness": "fresh ephemeral OpenCodex run through the local proxy alias, read-only local tools, no delegation",
+    "input_tokens": 111106,
+    "cached_input_tokens": 0,
+    "output_tokens": 4002,
+    "command_executions_exit_zero": true,
+    "repeated_punctuation_loop": false,
+    "bonus_finding": "independently found a real recipe bug (benchmark.py defaulted to port 8889 while the public recipe serves on 8888)"
+  },
+  "vision_uma_failure": {
+    "status": "nondeterministic failure at the tested memory margin; not production-safe",
+    "trigger": "first 32x32 image request on the final pre-restart functional pass",
+    "node_memory_bytes": 124136656896,
+    "ray_95pct_threshold_bytes": 124130050048,
+    "over_threshold_bytes": 6606848,
+    "sequence": "Ray killed the TP0 worker, then vLLM shut down (HTTP 500 at the gate)",
+    "root_cause": "Ray node-memory monitor, not a malformed model response or CUDA kernel error",
+    "nondeterminism": "an image smoke test passed on a prior start; the path is not production-safe at this margin",
+    "mitigation": "vision is opt-in via --include-vision; lower GPU_MEM_UTIL or pin a smaller KV cache for multimodal production"
+  },
+  "sglang_rejection": {
+    "status": "negative result; vLLM SM90-path recipe selected instead",
+    "attempted": "official SGLang path, TP=2/EP=2, online ModelOpt NVFP4, FP8 KV, available SM120/SM121 sparse-MLA backend",
+    "weight_load_s": 1880.41,
+    "first_decode_error": "packed SM120 GLM kernel requires qk_rope_head_dim=64 and query dimension 576; GLM-5.3 is NoPE with qk_rope_head_dim=0 and query dimension 512",
+    "tensorrt_llm_dsa": "rejected SM121",
+    "tilelang_dsa": "exceeded GB10's allowed dynamic shared memory",
+    "resolution": "vLLM patch routes SM121 through the SM90 NoPE sparse-MLA + FA2 implementation"
+  }
+}

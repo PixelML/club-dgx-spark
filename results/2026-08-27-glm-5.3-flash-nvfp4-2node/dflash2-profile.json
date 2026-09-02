@@ -1,0 +1,64 @@
+{
+  "receipt_type": "DFlash2 K=7 profile on the same NVFP4 target checkpoint (separate draft model)",
+  "experiment": "2026-08-27-glm-5.3-flash-nvfp4-2node",
+  "measured_date_utc": "2026-08-28",
+  "evidence_label": "measured",
+  "source": {
+    "repo": "PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark",
+    "revision": "3407023e0b8109a1dd12e8a5544e106ca6912afe",
+    "files": ["results/UPSTREAM-2026-08-28-DFLASH2.md"],
+    "license": "MIT"
+  },
+  "license_warning": "DFlash2 draft (incoai/GLM-5.3-Flash-DFlash2) is CC BY-NC-ND 4.0: evaluation only",
+  "config": {
+    "target_revision": "11d73216cd636238e82e1d77fe1042ffab36e7fa",
+    "dflash2_revision": "7d74cdd881ed7e32c31175984a67823127b66cfe",
+    "image_digest": "sha256:4def0ef644cb2e9814136dcffd5e385e21bc594f48f3b292234051904abe85a6",
+    "topology": "2x DGX Spark, GB10/SM121, TP2 over direct CX7 RoCE",
+    "speculative": "DFlash2 K=7, text-only draft, no CUDA graphs",
+    "context_max_num_seqs": 6,
+    "kv": "3 GiB per rank -> 310,292-token pool; FP8 E4M3",
+    "execution": "eager"
+  },
+  "cold_start": {
+    "head_target_shard_load": "12m10s",
+    "draft_load_s": 6.75,
+    "engine_profile_kv_jit_warmup": "4m50s",
+    "worker_start_to_api_healthy": "~21m32s",
+    "model_memory_gib_per_rank": 90.67
+  },
+  "decode_concurrency": {
+    "protocol": "two waves per concurrency, 400-token planning-heavy code/reasoning prompts, unique salts, temperature 0, client-observed",
+    "rows": [
+      {"concurrency": 1, "aggregate_tok_s": 24.72, "mean_stream_decode_tok_s": 25.28, "mean_ttft_s": 0.337, "draft_acceptance_pct": 30.7, "failures": 0},
+      {"concurrency": 2, "aggregate_tok_s": 30.94, "mean_stream_decode_tok_s": 19.88, "mean_ttft_s": 3.825, "draft_acceptance_pct": 32.4, "failures": 0},
+      {"concurrency": 4, "aggregate_tok_s": 38.54, "mean_stream_decode_tok_s": 17.50, "mean_ttft_s": 6.533, "draft_acceptance_pct": 32.3, "failures": 0}
+    ]
+  },
+  "prompt_shape_sensitivity": {
+    "protocol": "three warmed single-stream runs per row, temperature 0",
+    "rows": [
+      {"shape": "count 1->200", "median_decode_tok_s": 61.34, "median_e2e_tok_s": 59.58, "median_ttft_s": 0.312, "draft_acceptance_pct": 91.0, "note": "450 tokens each run; reproduces the linked recipe's ~60.6 tok/s structured result"},
+      {"shape": "code only", "median_decode_tok_s": 42.55, "median_e2e_tok_s": 41.37, "median_ttft_s": 0.359, "draft_acceptance_pct": 61.1, "note": "500 tokens each run"},
+      {"shape": "alphabet x8", "median_decode_tok_s": 35.77, "median_e2e_tok_s": 29.93, "median_ttft_s": 0.333, "draft_acceptance_pct": 47.4, "note": "unreliable stop length (54-94 tokens); not a headline number"}
+    ]
+  },
+  "uncached_prefill": {
+    "protocol": "unique-prefix, one-output-token requests; three measured samples per size after calibration and warmup",
+    "rows": [
+      {"target_tokens": 1024, "median_prompt_tokens": 1030, "median_ttft_s": 0.789, "median_input_tok_s": 1313.42, "range": [1298, 1329]},
+      {"target_tokens": 4096, "median_prompt_tokens": 4176, "median_ttft_s": 2.974, "median_input_tok_s": 1403.84, "range": [1394, 1404]},
+      {"target_tokens": 16384, "median_prompt_tokens": 16417, "median_ttft_s": 12.480, "median_input_tok_s": 1315.46, "range": [1172, 1320]}
+    ]
+  },
+  "functional_gates": [
+    {"gate": "exact response", "result": "pass"},
+    {"gate": "get_weather tool call", "result": "pass"},
+    {"gate": "code generation with type hints/assertions", "result": "pass"},
+    {"gate": "25-character repetition-loop regex", "result": "pass"},
+    {"gate": "CLIProxy /v1/models alias present", "result": "pass"},
+    {"gate": "CLIProxy chat reasoning_effort=high", "result": "pass"},
+    {"gate": "OpenCodex default model = local alias", "result": "pass"}
+  ],
+  "attribution": "DFlash2 vLLM/SM121 port and methodology: tonyd2wild/GLM-5.3-Flash-NVFP4-DFlash2-2x-DGX-Spark; block-diffusion draft: incoai/GLM-5.3-Flash-DFlash2"
+}

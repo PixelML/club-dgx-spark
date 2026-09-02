@@ -82,6 +82,7 @@ outputs. The schema and the `LIVE`-replay convention are in
 | Date | Experiment | Headline | Notebook |
 |---|---|---|---|
 | 2026-08-26 | Qwen3.8-Flash-Next NVFP4, 2x DGX Spark, SGLang TP=2 | Backfilled from evidence-repo receipts: 47.54 tok/s @ c=1 up to 275.37 tok/s @ c=16 aggregate decode (NEXTN/MTP, 3 steps); uncached prefill 2,960.12 tok/s at 16K prompt; text, tool-call, and vision functional checks pass | [notebooks/2026-08-26-qwen3-8-flash-next-nvfp4-2node-sglang.ipynb](notebooks/2026-08-26-qwen3-8-flash-next-nvfp4-2node-sglang.ipynb) |
+| 2026-08-27 | GLM-5.3-Flash NVFP4, 2x DGX Spark, vLLM TP=2 | Backfilled from evidence-repo receipts: 82.12 tok/s aggregate @ c=7 and 26.55 tok/s @ c=1 (medians of 3, measured 2026-08-27); uncached prefill 1,277–1,372 input tok/s; all text gates pass; vision fails under UMA pressure; quality untested | [notebooks/2026-08-27-glm-5.3-flash-nvfp4-2node-tp2-vllm.ipynb](notebooks/2026-08-27-glm-5.3-flash-nvfp4-2node-tp2-vllm.ipynb) |
 | 2026-09-02 | DeepSeek-V4-Flash-Vision-Exp, 2x DGX Spark, vLLM TP=2 | 10/10 golden vision fixtures pass keyword match; C1 31.9 tok/s and TTFT 0.323 s live re-measured today | [notebooks/2026-09-02-deepseek-v4-flash-vision-exp-2node-tp2-vllm.ipynb](notebooks/2026-09-02-deepseek-v4-flash-vision-exp-2node-tp2-vllm.ipynb) |
 
 Detailed evidence for the Qwen3.8-Flash-Next checkpoint on this hardware
@@ -90,6 +91,12 @@ lives in
 @ `682504bec9e7e99206212f4e172b7ec823e4605c`; this notebook is a backfill
 replay of those receipts and adds no new measurements. Sanitized receipts:
 [results/2026-08-26-qwen3-8-flash-next-nvfp4-sglang-2node/](results/2026-08-26-qwen3-8-flash-next-nvfp4-sglang-2node/).
+
+Detailed evidence for the GLM-5.3-Flash checkpoint on this hardware lives in
+[GLM-5.3-Flash-NVFP4-Dual-DGX-Spark](https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark)
+@ `3407023e0b8109a1dd12e8a5544e106ca6912afe`; this notebook is a backfill
+replay of those receipts and adds no new measurements. Sanitized receipts and
+the redaction log: [results/2026-08-27-glm-5.3-flash-nvfp4-2node/](results/2026-08-27-glm-5.3-flash-nvfp4-2node/README.md).
 
 Detailed evidence for the DeepSeek-V4-Flash-Vision-Exp checkpoint on this
 hardware lives in

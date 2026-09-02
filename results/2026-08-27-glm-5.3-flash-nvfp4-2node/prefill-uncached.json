@@ -1,0 +1,30 @@
+{
+  "receipt_type": "uncached prefill, NVFP4 + MTP-4 profile",
+  "experiment": "2026-08-27-glm-5.3-flash-nvfp4-2node",
+  "measured_date_utc": "2026-08-27",
+  "evidence_label": "measured",
+  "source": {
+    "repo": "PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark",
+    "revision": "3407023e0b8109a1dd12e8a5544e106ca6912afe",
+    "files": ["results/UPSTREAM-2026-08-27-REVALIDATION.md"],
+    "license": "MIT"
+  },
+  "protocol": {
+    "harness": "prefill-benchmark.py; prompt calibrated against the API-reported token count",
+    "cache_policy": "every sample begins with a unique randomized prefix (uncached)",
+    "output_tokens_per_request": 1,
+    "metric": "prompt tokens / client TTFT (includes HTTP, tokenization, queueing, prefill, first decode step)",
+    "repetitions_per_row": 3,
+    "run_seed": 1787822600564263149
+  },
+  "rows": [
+    {"target_tokens": 1024, "median_actual_prompt_tokens": 1048, "median_ttft_s": 0.8206, "median_input_tok_s": 1276.65, "range": [1274.69, 1288.94]},
+    {"target_tokens": 4096, "median_actual_prompt_tokens": 4131, "median_ttft_s": 3.0105, "median_input_tok_s": 1371.87, "range": [1364.91, 1372.45]},
+    {"target_tokens": 16384, "median_actual_prompt_tokens": 16553, "median_ttft_s": 12.167, "median_input_tok_s": 1362.75, "range": [1349.84, 1363.53]}
+  ],
+  "cache_counters": {
+    "prefix_cache_queries_after_all_work": 142694,
+    "prefix_cache_hits": 0,
+    "cached_prompt_tokens": 0
+  }
+}

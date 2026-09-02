@@ -1,0 +1,44 @@
+{
+  "receipt_type": "tested configuration pins for the NVFP4 + MTP-4 dual-Spark deployment",
+  "experiment": "2026-08-27-glm-5.3-flash-nvfp4-2node",
+  "measured_date_utc": "2026-08-27",
+  "source": {
+    "repo": "PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark",
+    "revision": "3407023e0b8109a1dd12e8a5544e106ca6912afe",
+    "files": ["README.md", "results/UPSTREAM-2026-08-27.md", "results/UPSTREAM-2026-08-27-REVALIDATION.md"],
+    "license": "MIT"
+  },
+  "pins": {
+    "model": "LibertAIDAI/GLM-5.3-Flash-NVFP4",
+    "model_revision": "11d73216cd636238e82e1d77fe1042ffab36e7fa",
+    "checkpoint": "120 shards, 181.29 GiB",
+    "upstream_recipe_commit": "aed98a13ca75140d2691cc5c651ea5817d9a3e44",
+    "runtime": "vLLM 0.1.dev20051+g487ecf187",
+    "ray": "TP=2 (Ray; serving layer Ray 2.58.0 per the upstream README, community-visible image layer)",
+    "flashinfer": "0.6.18.dev20260819",
+    "nccl": "2.30.7",
+    "topology": "2 nodes, one GB10 GPU (SM121, 128 GiB UMA) per node, TP=2 over a direct CX7 RoCE link",
+    "kernels": "patched SM90 sparse-MLA + FA2 on SM121; Marlin weight-only NVFP4 MoE; FlashInfer CUTLASS NVFP4 dense GEMM",
+    "quantization": "ModelOpt NVFP4 (routed experts ~97% of params; rest BF16)",
+    "kv_cache": "fp8_e4m3, 8.5 GiB, 431,157 total KV-cache tokens",
+    "speculative_decode": "MTP, 4 draft tokens",
+    "context": "262,144",
+    "scheduler": "max-num-seqs=8, block-size=2304",
+    "memory_budget": "GPU_MEM_UTIL=0.84 (0.90 fails the free-mem check), enforce-eager, skip-mm-profiling",
+    "power_mode": "not captured in receipts"
+  },
+  "quality_eval_status": {
+    "label": "untested",
+    "note": "no scored accuracy/quality evidence exists for this checkpoint on DGX Spark; the PixelML fidelity-eval scaffold (exllamav3 qbench, NVFP4 vs FP8 reference) passed its arm64 build + import smoke on 2026-08-31 but the full qbench run had not been executed as of that receipt",
+    "source_repo": "PixelML/GLM-5.3-Flash-DGX-Spark-Eval",
+    "source_revision": "b81f7eca052d0f81a831527bbf7a6b3ce8b49d0b",
+    "build_receipt": {
+      "date_utc": "2026-08-31",
+      "status": "PASS (build + import); full qbench run not yet executed",
+      "exllamav3_rev": "0c49587a7c235e6303a6bbedc8b665272ad3a2ea",
+      "driver": "580.173.02",
+      "cuda": "13.0",
+      "torch": "2.13.0+cu130"
+    }
+  }
+}
