@@ -1,0 +1,30 @@
+{
+  "captured_utc": "2026-09-02T08:31:43Z",
+  "prompt": "Write a detailed technical explanation of how speculative decoding works in large language model inference, covering the draft model, verification, and acceptance rate.",
+  "max_tokens": 400,
+  "runs": [
+    {
+      "rep": 0,
+      "latency_s": 12.547,
+      "completion_tokens": 400,
+      "finish_reason": "length",
+      "tok_per_s": 31.88
+    },
+    {
+      "rep": 1,
+      "latency_s": 13.344,
+      "completion_tokens": 400,
+      "finish_reason": "length",
+      "tok_per_s": 29.97
+    },
+    {
+      "rep": 2,
+      "latency_s": 11.849,
+      "completion_tokens": 400,
+      "finish_reason": "length",
+      "tok_per_s": 33.76
+    }
+  ],
+  "median_latency_s": 12.547,
+  "median_tok_per_s": 31.88
+}

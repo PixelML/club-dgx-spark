@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>voxel diorama · WW1 warzone</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        #info {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.6);
+            color: #f0e6d2;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 14px;
+            letter-spacing: 1px;
+            backdrop-filter: blur(4px);
+            border: 1px solid #b85e3a;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            pointer-events: none;
+            z-index: 100;
+            font-weight: 500;
+        }
+        #status {
+            position: absolute;
+            bottom: 18px;
+            right: 18px;
+            background: #1e2a2ecc;
+            color: #d9c9a3;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            backdrop-filter: blur(4px);
+            border: 1px solid #6a7a5c;
+            letter-spacing: 0.5px;
+            z-index: 100;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">⚔️ WESTERN FRONT · VOXEL DIORAMA ⚔️</div>
+    <div id="status">🔥 dynamic destruction · logistics · air/land/sea</div>
+
+    <!-- three.js and auxiliary libraries -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+        // --- setup scene ---
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x2a2e3b);
+        scene.fog = new THREE.FogExp2(0x2a2e3b, 0.008);
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 500);
+        camera.position.set(28, 22, 38);
+        camera.lookAt(0, 4, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        document.body.appendChild(renderer.domElement);
+
+        // controls
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.08;
+        controls.maxPolarAngle = Math.PI / 2.2;
+        controls.minDistance = 12;
+        controls.maxDistance = 70;
+        controls.target.set(0, 6, 0);
+
+        // lighting
+        const hemiLight = new THREE.HemisphereLight(0xcfd8e8, 0x4a3e2e, 0.9);
+        scene.add(hemiLight);
+
+        const dirLight = new THREE.DirectionalLight(0xfff2d8, 1.2);
+        dirLight.position.set(15, 25, 10);
+        dirLight.castShadow = true;
+        dirLight.receiveShadow = true;
+        dirLight.shadow.mapSize.width = 1024;
+        dirLight.shadow.mapSize.height = 1024;
+        const d = 30;
+        dirLight.shadow.camera.left = -d;
+        dirLight.shadow.camera.right = d;
+        dirLight.shadow.camera.top = d;
+        dirLight.shadow.camera.bottom = -d;
+        dirLight.shadow.camera.near = 1;
+        dirLight.shadow.camera.far = 50;
+        scene.add(dirLight);
+
+        const fillLight = new THREE.PointLight(0xe08b5a, 0.6, 40);
+        fillLight.position.set(-8, 6, 12);
+        scene.add(fillLight);
+
+        // ground plane (voxel style with subtle checker)
+        const groundGeo = new THREE.BoxGeometry(42, 0.5, 42);
+        const groundMat = new THREE.MeshStandardMaterial({ color: 0x4a5a3a, roughness: 0.9, emissive: 0x0a0a0a });
+        const ground = new THREE.Mesh(groundGeo, groundMat);
+        ground.position.y = -0.25;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        // add scattered voxel tiles on ground for detail (colorful)
+        for (let i = 0; i < 250; i++) {
+            const tileGeo = new THREE.BoxGeometry(0.45, 0.12, 0.45);
+            const clr = new THREE.Color().setHSL(Math.random() * 0.15 + 0.08, 0.6, 0.3 + Math.random() * 0.3);
+            const tileMat = new THREE.MeshStandardMaterial({ color: clr, roughness: 0.8 });
+            const tile = new THREE.Mesh(tileGeo, tileMat);
+            const x = (Math.random() - 0.5) * 40;
+            const z = (Math.random() - 0.5) * 40;
+            tile.position.set(x, 0.06, z);
+            tile.castShadow = true;
+            tile.receiveShadow = true;
+            scene.add(tile);
+        }
+
+        // --- helper: create voxel / cube ---
+        function addVoxel(x, y, z, color, size = 0.5, emissive = 0x000000) {
+            const geo = new THREE.BoxGeometry(size, size, size);
+            const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.6, emissive });
+            const cube = new THREE.Mesh(geo, mat);
+            cube.position.set(x, y, z);
+            cube.castShadow = true;
+            cube.receiveShadow = true;
+            scene.add(cube);
+            return cube;
+        }
+
+        // --- world war one themed structures ---
+
+        // 1. central trench / bunker (layered voxels)
+        for (let i = -5; i <= 5; i++) {
+            for (let j = -2; j <= 2; j++) {
+                if (Math.abs(j) === 2 && Math.abs(i) > 3) continue; // opening
+                const color = (Math.abs(i) % 2 === 0) ? 0x72614a : 0x8a6e4e;
+                addVoxel(i * 0.8, 0.5, j * 0.8 + 2, color, 0.9);
+            }
+        }
+        // sandbags row
+        for (let k = -4; k <= 4; k++) {
+            addVoxel(k * 0.8, 1.1, 5.2, 0xc2a36b, 0.6);
+            addVoxel(k * 0.8, 1.1, -1.2, 0xb08d5e, 0.6);
+        }
+
+        // 2. tank (land vehicle)
+        function createTank(x, z) {
+            const tankGroup = new THREE.Group();
+            // hull
+            const hullMat = new THREE.MeshStandardMaterial({ color: 0x657a45, roughness: 0.7 });
+            const hull = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.6, 1.4), hullMat);
+            hull.position.y = 0.5;
+            hull.castShadow = true;
+            tankGroup.add(hull);
+            // turret
+            const turretMat = new THREE.MeshStandardMaterial({ color: 0x4f5f3f });
+            const turret = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.55, 0.9), turretMat);
+            turret.position.set(0.2, 1.15, 0);
+            turret.castShadow = true;
+            tankGroup.add(turret);
+            // barrel
+            const barrelMat = new THREE.MeshStandardMaterial({ color: 0x3a3a3a });
+            const barrel = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.15, 0.15), barrelMat);
+            barrel.position.set(1.1, 1.2, 0);
+            barrel.castShadow = true;
+            tankGroup.add(barrel);
+            // tracks
+            const trackMat = new THREE.MeshStandardMaterial({ color: 0x2b2b2b });
+            const leftTrack = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.35, 0.4), trackMat);
+            leftTrack.position.set(0, 0.35, 0.9);
+            tankGroup.add(leftTrack);
+            const rightTrack = leftTrack.clone();
+            rightTrack.position.z = -0.9;
+            tankGroup.add(rightTrack);
+            tankGroup.position.set(x, 0.25, z);
+            return tankGroup;
+        }
+
+        const tank1 = createTank(4, -4);
+        scene.add(tank1);
+        const tank2 = createTank(-5, 3.5);
+        scene.add(tank2);
+
+        // 3. warplane (air) - biplane style
+        function createPlane(x, y, z) {
+            const planeGroup = new THREE.Group();
+            const bodyMat = new THREE.MeshStandardMaterial({ color: 0xc9a86a });
+            const body = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.5, 0.5), bodyMat);
+            body.position.y = 0;
+            planeGroup.add(body);
+            // wings
+            const wingMat = new THREE.MeshStandardMaterial({ color: 0xaa8d5f });
+            const wing1 = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.1, 2.2), wingMat);
+            wing1.position.set(0.2, 0.4, 0);
+            planeGroup.add(wing1);
+            const wing2 = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.1, 1.8), wingMat);
+            wing2.position.set(-0.5, -0.2, 0);
+            planeGroup.add(wing2);
+            // tail
+            const tailMat = new THREE.MeshStandardMaterial({ color: 0xa5834b });
+            const tail = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.4, 0.6), tailMat);
+            tail.position.set(-1.2, 0.1, 0);
+            planeGroup.add(tail);
+            // propeller
+            const propMat = new THREE.MeshStandardMaterial({ color: 0x3b3b3b });
+            const prop = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.7, 0.1), propMat);
+            prop.position.set(1.2, 0.2, 0);
+            planeGroup.add(prop);
+            planeGroup.position.set(x, y, z);
+            return planeGroup;
+        }
+
+        const plane1 = createPlane(-8, 8, -7);
+        scene.add(plane1);
+        const plane2 = createPlane(7, 10, -10);
+        scene.add(plane2);
+
+        // 4. naval ship (sea)
+        function createShip(x, z) {
+            const shipGroup = new THREE.Group();
+            const hullMat = new THREE.MeshStandardMaterial({ color: 0x5d6b7a });
+            const hull = new THREE.Mesh(new THREE.BoxGeometry(3.0, 0.8, 1.2), hullMat);
+            hull.position.y = 0.6;
+            shipGroup.add(hull);
+            const deckMat = new THREE.MeshStandardMaterial({ color: 0x8b7355 });
+            const deck = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.2, 1.0), deckMat);
+            deck.position.y = 1.1;
+            shipGroup.add(deck);
+            // bridge
+            const bridgeMat = new THREE.MeshStandardMaterial({ color: 0x9c7e5a });
+            const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.7, 0.6), bridgeMat);
+            bridge.position.set(-0.6, 1.7, 0);
+            shipGroup.add(bridge);
+            // smoke stack
+            const smokeMat = new THREE.MeshStandardMaterial({ color: 0x4d4d4d });
+            const stack = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.8, 0.5), smokeMat);
+            stack.position.set(0.2, 1.9, 0);
+            shipGroup.add(stack);
+            shipGroup.position.set(x, 0.4, z);
+            return shipGroup;
+        }
+
+        const ship1 = createShip(-12, -10);
+        scene.add(ship1);
+        const ship2 = createShip(14, -12);
+        scene.add(ship2);
+
+        // 5. artillery pieces
+        function createArtillery(x, z) {
+            const artGroup = new THREE.Group();
+            const baseMat = new THREE.MeshStandardMaterial({ color: 0x7a6a4e });
+            const base = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.4, 1.2), baseMat);
+            base.position.y = 0.4;
+            artGroup.add(base);
+            const barrelMat = new THREE.MeshStandardMaterial({ color: 0x3e3e3e });
+            const barrel = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.2, 0.2), barrelMat);
+            barrel.position.set(0.6, 0.9, 0);
+            barrel.rotation.z = -0.1;
+            artGroup.add(barrel);
+            artGroup.position.set(x, 0.3, z);
+            return artGroup;
+        }
+
+        const art1 = createArtillery(-3, -7);
+        scene.add(art1);
+        const art2 = createArtillery(6, -8);
+        scene.add(art2);
+
+        // 6. barbed wire posts (colorful voxels)
+        for (let i = 0; i < 60; i++) {
+            const x = (Math.random() - 0.5) * 35;
+            const z = (Math.random() - 0.5) * 35;
+            if (Math.abs(x) < 5 && Math.abs(z) < 5) continue; // keep center clear
+            const color = new THREE.Color().setHSL(0.1 + Math.random() * 0.2, 0.9, 0.45);
+            addVoxel(x, 0.3, z, color, 0.25);
+        }
+
+        // 7. dynamic soldier voxels (small, moving, with combat and logistics)
+        const soldiers = [];
+        const soldierColors = [0x8b5a2b, 0x4a6b3a, 0x6b4a2b, 0x3a5a3a, 0x7a5a3a];
+        for (let i = 0; i < 36; i++) {
+            const soldierGroup = new THREE.Group();
+            const bodyMat = new THREE.MeshStandardMaterial({ color: soldierColors[Math.floor(Math.random() * soldierColors.length)] });
+            const body = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.7, 0.35), bodyMat);
+            body.position.y = 0.35;
+            soldierGroup.add(body);
+            const headMat = new THREE.MeshStandardMaterial({ color: 0xd9b38c });
+            const head = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.28, 0.28), headMat);
+            head.position.y = 0.85;
+            soldierGroup.add(head);
+            // helmet
+            const helmetMat = new THREE.MeshStandardMaterial({ color: 0x3d4a2e });
+            const helmet = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.12, 0.3), helmetMat);
+            helmet.position.y = 1.05;
+            soldierGroup.add(helmet);
+            
+            const x = (Math.random() - 0.5) * 28;
+            const z = (Math.random() - 0.5) * 28;
+            soldierGroup.position.set(x, 0.1, z);
+            scene.add(soldierGroup);
+            
+            soldiers.push({
+                obj: soldierGroup,
+                speed: 0.005 + Math.random() * 0.015,
+                dir: Math.random() * Math.PI * 2,
+                state: Math.random() > 0.5 ? 'combat' : 'logistics',
+                pos: new THREE.Vector3(x, 0.1, z)
+            });
+        }
+
+        // 8. supply depot / logistics (crates)
+        for (let i = 0; i < 12; i++) {
+            const crateMat = new THREE.MeshStandardMaterial({ color: 0x7a5c3a });
+            const crate = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.8, 0.8), crateMat);
+            crate.position.set(-6 + Math.random() * 2, 0.4, 8 + Math.random() * 4);
+            crate.castShadow = true;
+            scene.add(crate);
+        }
+
+        // 9. ambulance (logistics)
+        const ambulanceGroup = new THREE.Group();
+        const ambMat = new THREE.MeshStandardMaterial({ color: 0xbfa76a });
+        const ambBody = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.8, 0.8), ambMat);
+        ambBody.position.y = 0.5;
+        ambulanceGroup.add(ambBody);
+        const crossMat = new THREE.MeshStandardMaterial({ color: 0xaa3333 });
+        const cross = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.2, 0.2), crossMat);
+        cross.position.set(0.4, 0.8, 0.41);
+        ambulanceGroup.add(cross);
+        ambulanceGroup.position.set(5, 0.3, 9);
+        scene.add(ambulanceGroup);
+
+        // 10. explosion / destruction particles (dynamic)
+        const explosionParticles = [];
+        function spawnExplosion(pos, count = 10) {
+            for (let i = 0; i < count; i++) {
+                const particle = addVoxel(pos.x, pos.y, pos.z, 0xff5500, 0.18, 0xff3300);
+                particle.userData = {
+                    vel: new THREE.Vector3((Math.random() - 0.5) * 0.15, Math.random() * 0.2, (Math.random() - 0.5) * 0.15),
+                    life: 1.0
+                };
+                explosionParticles.push(particle);
+            }
+        }
+
+        // initial random explosions
+        for (let i = 0; i < 5; i++) {
+            const ex = (Math.random() - 0.5) * 20;
+            const ez = (Math.random() - 0.5) * 20;
+            spawnExplosion(new THREE.Vector3(ex, 0.5, ez), 12);
+        }
+
+        // --- animation loop with destruction, combat, logistics ---
+        let clock = new THREE.Clock();
+
+        function animate() {
+            const delta = clock.getDelta();
+            const time = performance.now() * 0.001;
+
+            // move soldiers (combat + logistics)
+            soldiers.forEach((s) => {
+                s.dir += (Math.random() - 0.5) * 0.1;
+                // movement
+                const moveX = Math.sin(s.dir) * s.speed * delta * 30;
+                const moveZ = Math.cos(s.dir) * s.speed * delta * 30;
+                s.obj.position.x += moveX;
+                s.obj.position.z += moveZ;
+                // keep inside bounds
+                if (s.obj.position.x > 18) s.obj.position.x = -18;
+                if (s.obj.position.x < -18) s.obj.position.x = 18;
+                if (s.obj.position.z > 18) s.obj.position.z = -18;
+                if (s.obj.position.z < -18) s.obj.position.z = 18;
+                // combat: occasionally fire (visual)
+                if (Math.random() < 0.001) {
+                    // muzzle flash as small explosion
+                    spawnExplosion(s.obj.position.clone().add(new THREE.Vector3(0, 0.8, 0)), 3);
+                }
+                // logistics: occasionally carry crates (visual)
+                if (Math.random() < 0.0005) {
+                    const crate = addVoxel(s.obj.position.x, s.obj.position.y + 0.8, s.obj.position.z, 0x9c7a4e, 0.25);
+                    setTimeout(() => { scene.remove(crate); }, 500);
+                }
+            });
+
+            // animate planes (patrol)
+            plane1.position.x = -8 + Math.sin(time * 0.4) * 5;
+            plane1.position.z = -7 + Math.cos(time * 0.3) * 4;
+            plane1.rotation.y = time * 0.2;
+            plane2.position.x = 7 + Math.sin(time * 0.5) * 6;
+            plane2.position.z = -10 + Math.cos(time * 0.6) * 5;
+            plane2.rotation.y = time * 0.3;
+
+            // ships movement
+            ship1.position.x = -12 + Math.sin(time * 0.2) * 3;
+            ship1.position.z = -10 + Math.cos(time * 0.25) * 2;
+            ship2.position.x = 14 + Math.sin(time * 0.15 + 2) * 3;
+            ship2.position.z = -12 + Math.cos(time * 0.2) * 3;
+
+            // tanks slow patrol
+            tank1.position.x = 4 + Math.sin(time * 0.1) * 2;
+            tank1.position.z = -4 + Math.cos(time * 0.1) * 2;
+            tank2.position.x = -5 + Math.sin(time * 0.12 + 1) * 2;
+            tank2.position.z = 3.5 + Math.cos(time * 0.12) * 2;
+
+            // artillery slight rotation
+            art1.rotation.y = Math.sin(time * 0.3) * 0.2;
+            art2.rotation.y = Math.cos(time * 0.3) * 0.2;
+
+            // explosion particle physics (destruction)
+            for (let i = explosionParticles.length - 1; i >= 0; i--) {
+                const p = explosionParticles[i];
+                if (!p.parent) { explosionParticles.splice(i, 1); continue; }
+                if (p.userData.life <= 0) {
+                    scene.remove(p);
+                    explosionParticles.splice(i, 1);
+                    continue;
+                }
+                p.userData.life -= delta * 1.2;
+                p.position.add(p.userData.vel.clone().multiplyScalar(delta * 20));
+                p.userData.vel.y -= delta * 0.2;
+                p.material.opacity = p.userData.life;
+                p.material.transparent = true;
+                if (p.userData.life < 0.2) p.scale.setScalar(0.3);
+            }
+
+            // occasional random explosion (active warzone)
+            if (Math.random() < 0.01) {
+                const ex = (Math.random() - 0.5) * 24;
+                const ez = (Math.random() - 0.5) * 24;
+                spawnExplosion(new THREE.Vector3(ex, 0.8, ez), 8);
+            }
+
+            // update controls
+            controls.update();
+
+            // render
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        }
+
+        // resize handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // start
+        animate();
+    </script>
+</body>
+</html>
