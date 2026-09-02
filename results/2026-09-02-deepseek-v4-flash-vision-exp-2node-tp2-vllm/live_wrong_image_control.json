@@ -2,7 +2,7 @@
   "captured_utc": "2026-09-02T08:31:43Z",
   "note": "img01 question (expects red) sent with img02 (blue) attached; model should answer blue, not red",
   "request": {
-    "model": "apollo-deepseek-v4-flash-vision-exp",
+    "model": "deepseek-v4-flash-vision-exp",
     "messages": [
       {
         "role": "user",
@@ -27,7 +27,7 @@
     "id": "chatcmpl-a252162b863acb6f",
     "object": "chat.completion",
     "created": 1788337927,
-    "model": "apollo-deepseek-v4-flash-vision-exp",
+    "model": "deepseek-v4-flash-vision-exp",
     "choices": [
       {
         "index": 0,
