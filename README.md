@@ -60,6 +60,22 @@ Cross-platform views:
 | common failure and recovery lessons | model-specific patches and scripts |
 | links and status tracking | detailed positive and negative results |
 
+## Notebooks
+
+Each row links one executed Jupyter notebook, top to bottom, with committed
+outputs. The schema and the `LIVE`-replay convention are in
+[notebooks/README.md](notebooks/README.md).
+
+| Date | Experiment | Headline | Notebook |
+|---|---|---|---|
+| 2026-08-27 | GLM-5.3-Flash NVFP4, 2x DGX Spark, vLLM TP=2 | Backfilled from evidence-repo receipts: 82.12 tok/s aggregate @ c=7 and 26.55 tok/s @ c=1 (medians of 3, measured 2026-08-27); uncached prefill 1,277–1,372 input tok/s; all text gates pass; vision fails under UMA pressure; quality untested | [notebooks/2026-08-27-glm-5.3-flash-nvfp4-2node-tp2-vllm.ipynb](notebooks/2026-08-27-glm-5.3-flash-nvfp4-2node-tp2-vllm.ipynb) |
+
+Detailed evidence for this checkpoint on this hardware lives in
+[GLM-5.3-Flash-NVFP4-Dual-DGX-Spark](https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark)
+@ `3407023e0b8109a1dd12e8a5544e106ca6912afe`; this notebook is a backfill
+replay of those receipts and adds no new measurements. Sanitized receipts and
+the redaction log: [results/2026-08-27-glm-5.3-flash-nvfp4-2node/](results/2026-08-27-glm-5.3-flash-nvfp4-2node/README.md).
+
 ## Publication safety
 
 This is a public repository. Read [AGENTS.md](AGENTS.md) before adding live-system evidence. Do not publish credentials, private network details, hostnames, hardware identifiers, customer data, or unredacted logs.
