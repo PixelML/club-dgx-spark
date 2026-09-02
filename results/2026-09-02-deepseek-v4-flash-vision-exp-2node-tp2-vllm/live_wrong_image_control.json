@@ -1,0 +1,71 @@
+{
+  "captured_utc": "2026-09-02T08:31:43Z",
+  "note": "img01 question (expects red) sent with img02 (blue) attached; model should answer blue, not red",
+  "request": {
+    "model": "apollo-deepseek-v4-flash-vision-exp",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "What is the single dominant color in this image? Answer with exactly one color word."
+          },
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAYklEQVR4nO3PMQ0AIADAMEAD/pUhBhEcDcmqYJt7n/GzpQNeNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaBdQgMBhJzbtzUAAAAASUVORK5CYII="
+            }
+          }
+        ]
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 200
+  },
+  "response": {
+    "id": "chatcmpl-a252162b863acb6f",
+    "object": "chat.completion",
+    "created": 1788337927,
+    "model": "apollo-deepseek-v4-flash-vision-exp",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Blue",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": "The user wants me to identify the single dominant color in the image. The image is a solid blue square. The color is blue. I need to answer with exactly one color word."
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": null,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.25.2.dev0+g752a3a504.d20260714-tp2-6a9f4136",
+    "usage": {
+      "prompt_tokens": 231,
+      "total_tokens": 271,
+      "completion_tokens": 40,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "multimodal_tokens": {
+          "image": 117
+        }
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  },
+  "wall_time_s": 0.948,
+  "answered_blue_not_red": true
+}

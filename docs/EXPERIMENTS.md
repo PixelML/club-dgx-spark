@@ -20,6 +20,34 @@ Full-platform depth including context, memory, quality-evidence, and energy/cost
 | Hunyuan 3 (295B MoE) | [Hy3-NVFP4-Dual-DGX-Spark](https://github.com/PixelML/Hy3-NVFP4-Dual-DGX-Spark) | NVFP4/W4A16 (MARLIN) | vLLM + Ray TP=2 | 2× DGX Spark | — | **Untested** | Upstream-reported figures only; results/ intentionally empty | Awaiting dual-Spark validation |
 | Inkling-Small | [Inkling-Small-NVFP4-Dual-DGX-Spark](https://github.com/PixelML/Inkling-Small-NVFP4-Dual-DGX-Spark) | NVFP4, FP4 MX block16 KV | SGLang (drowzeys champion) + DSpark speculative | 2× DGX Spark | 1M | **Untested** | No PixelML hardware receipt; results/ intentionally empty | Awaiting dual-Spark validation |
 
+## Cross-platform cost and efficiency: CMP 170HX vs DGX Spark
+
+DeepSeek-V4-Flash-Vision-Exp ran on both a four-card CMP 170HX rig and a
+two-node DGX Spark kit at the same checkpoint and revision, using the same
+greedy/400-token/`ignore_eos` protocol. Full receipts, raw power logs, and
+the cost model live in
+[PixelML/club-170hx](https://github.com/PixelML/club-170hx/blob/main/docs/BENCHMARKS.md#cross-platform-4x-cmp-170hx-vs-2x-dgx-spark)
+(two-node DGX Spark evidence is
+[PixelML/DeepSeek-V4-Flash-Vision-Exp-DGX-Spark](https://github.com/PixelML/DeepSeek-V4-Flash-Vision-Exp-DGX-Spark)).
+
+| Concurrency | CMP 170HX tok/s | CMP 170HX tok/Wh | DGX Spark tok/s | DGX Spark tok/Wh |
+|---|---|---|---|---|
+| 1 | 97.4 | 681 | 37.7 | 1,862 |
+| 2 | 103.7 | 966 | 48.4 | 2,179 |
+| 4 | 165.5 | 1,151 | 73.5 | 3,002 |
+| 8 | 220.2 | 1,457 | 81.1 | 3,172 |
+
+At c=8 and an assumed $8,300 four-card CMP build vs. $8,000 for two DGX
+Spark units (3-year lifetime, 50% utilization, $0.15/kWh), the CMP rig
+comes out to about $0.90 per million output tokens and the DGX Spark pair
+to about $2.13. DGX Spark still wins on tokens per watt-hour by roughly
+2x, since GB10's unified memory draws far less than four discrete GPUs;
+its power reading is GPU-only, so it is a lower bound on whole-node draw.
+Hardware price, electricity rate, and the lifetime/utilization figures are
+assumed inputs, not measurements — throughput and GPU power are measured.
+
+![Tokens per Wh and dollars per million tokens, 4x CMP 170HX vs 2x DGX Spark](../assets/charts/2026-09-02-cross-platform-cmp170hx-vs-dgxspark.png)
+
 ## Known negative results and limitations
 
 These are measured findings preserved across repos:

@@ -1,0 +1,116 @@
+[
+  {
+    "id": "img01_solid_red",
+    "question": "What is the single dominant color in this image? Answer with exactly one color word.",
+    "expected_keywords": [
+      "red"
+    ],
+    "file": "images/img01_solid_red.png",
+    "sha256": "64505546ca21f0ef607985216e98ff671b10f0655bf0bb94fa264715a1d04da1",
+    "data_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAYklEQVR4nO3PMQ0AIADAMEAD/pUhBhEcDcmqYJtn7/GzpQNeNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaBdQ5MBhKWjHDQAAAAASUVORK5CYII=",
+    "bytes": 155
+  },
+  {
+    "id": "img02_solid_blue",
+    "question": "What is the single dominant color in this image? Answer with exactly one color word.",
+    "expected_keywords": [
+      "blue"
+    ],
+    "file": "images/img02_solid_blue.png",
+    "sha256": "db295f64c2c4e3f792e5b52ef5dec424a715fc4dbf9f26dfc47f4fa79abfeecb",
+    "data_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAYklEQVR4nO3PMQ0AIADAMEAD/pUhBhEcDcmqYJt7n/GzpQNeNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaBdQgMBhJzbtzUAAAAASUVORK5CYII=",
+    "bytes": 155
+  },
+  {
+    "id": "img03_gradient_red_green",
+    "question": "This image is a horizontal color gradient. Name the two colors it blends between, left color first, separated by a comma.",
+    "expected_keywords": [
+      "red",
+      "green"
+    ],
+    "file": "images/img03_gradient_red_green.png",
+    "sha256": "f5c3e01e53fcc052449b19d53e418d30271dfd1c12438e0294a0efd4828286eb",
+    "data_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAaElEQVR4nO3PMQqAQBAEwVXO/z9YQf9wSSF0MekEfbwz95pnexe+n/NzBWgFaAVoBWgFaAVoBWgFaAVoBWgFaAVoBWgFaAVoBWgFaAVoBWgFaAVoBWgFaAVoBWgFaAVoBWgFaAVoBWgf4opAfzhR4U8AAAAASUVORK5CYII=",
+    "bytes": 161
+  },
+  {
+    "id": "img04_gradient_blue_yellow",
+    "question": "This image is a horizontal color gradient. Name the two colors it blends between, left color first, separated by a comma.",
+    "expected_keywords": [
+      "blue",
+      "yellow"
+    ],
+    "file": "images/img04_gradient_blue_yellow.png",
+    "sha256": "5f12f84bfbeb1edd98c9ef173ae46fc57e44db46fa384e8370f27a12cf6dfa8e",
+    "data_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAa0lEQVR4nO3PMQqAQBAEwVP2/v9gBf2DSSF0MekEfaz1zFwz97ftfdv7uX6uAK0ArQCtAK0ArQCtAK0ArQCtAK0ArQCtAK0ArQCtAK0ArQCtAK0ArQCtAK0ArQCtAK0ArQCtAK0ArQCtAO0FFiFBfto4+VAAAAAASUVORK5CYII=",
+    "bytes": 164
+  },
+  {
+    "id": "img05_checkerboard",
+    "question": "This is an 8 by 8 checkerboard pattern. How many black squares does it contain? Answer with a number only.",
+    "expected_keywords": [
+      "32"
+    ],
+    "file": "images/img05_checkerboard.png",
+    "sha256": "a9503fd441d5e71eeef592864db74e74af38617179df3fd1f0b5c49e2febd33c",
+    "data_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAfElEQVR4nO3XwQnAIBQFwfz037NpwJxXYeYoXhZBePP8WGttz2fmqPvv9vQiAmoCagJqc8t//3f/+hcQUBNQE1Dbf67Pef+9PXAqATUBtesD7IGagJqAmoCaPVATUBNQE1CzB2oCagJqAmr2QE1ATUBNQM0eqAmoCagJqH0FAGBtyaEuEAAAAABJRU5ErkJggg==",
+    "bytes": 181
+  },
+  {
+    "id": "img06_three_circles",
+    "question": "How many circles are shown in this image? Answer with a number only.",
+    "expected_keywords": [
+      "3",
+      "three"
+    ],
+    "file": "images/img06_three_circles.png",
+    "sha256": "5d443b12f4e9e65e29810d31cef36e0dbdf44c380a1be1f410c757c21291a7a0",
+    "data_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAABACAIAAABdtOgoAAABL0lEQVR4nO2aURKCMAwFreOdvP+np4IDKISm1cWw+8lo8jprCmNpy7LchONOB7g6CoBRAIwCYBQAowAYBcAoAEYBMAqAUQCMAmAUAKMAGAXAKABGATAKgFEAzCPxnVdr7xefvz1bLpOhdR3Kf2w50j5BsQxHBYQtc+27KJnh0D2gq2vi81fOEAvIrWTu+gtnCASMrGHW+mtn8DEUZk/A+M/HCmEFJwBmU8D5d88aGZwAGAXAKABGATAKgFEAzKaAWf8mjtS5QgYnAGZPwLh8K4QVnACYQMCZd88aGeIJyPWeeyJYOMOhLai39zfOY6tm8K0IOEOfgJ32//hOzhkyZATIRHwMhVEAjAJgFACjABgFwCgARgEwCoBRAIwCYBQAowAYBcAoAEYBMAqAUQDMClVCmWviE9zlAAAAAElFTkSuQmCC",
+    "bytes": 360
+  },
+  {
+    "id": "img07_five_squares",
+    "question": "How many squares are shown in this image? Answer with a number only.",
+    "expected_keywords": [
+      "5",
+      "five"
+    ],
+    "file": "images/img07_five_squares.png",
+    "sha256": "aed6243498dcfbf6adaf39cd32a5427becd1523ed1a7d7b4eb51a521f1b57335",
+    "data_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAABACAIAAAAS6ev4AAAAyUlEQVR4nO3cMQoDMQwAwSjkT/l/ea/StQdpkxwsM51dCMOi1rO7D7qedz+A3xI4TuA4geMEjhM4TuA4geMEjhM4TuA4geMEjhM4TuA4geMEjhM4TuC41/Uwc3xr7u7789L8/8+3wXECxwkcJ3CcwHECxwkcJ3CcwHECxwkcJ3CcwHECxwkcJ3CcwHECxwkcJ3CcwHECxwkcJ3Dc+Iy0zQbHCRwncJzAcQLHCRwncJzAcQLHCRwncJzAcQLHCRwncJzAcQLHCRx3Ai5bFXtZkRukAAAAAElFTkSuQmCC",
+    "bytes": 258
+  },
+  {
+    "id": "img08_word_hello",
+    "question": "What single word is written in this image? Answer with just the word.",
+    "expected_keywords": [
+      "hello"
+    ],
+    "file": "images/img08_word_hello.png",
+    "sha256": "529fd8eb7aecb6e48eb9f389b95e2d4eb8afe9b55f3a3d93b2247b0187e07586",
+    "data_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAABACAIAAADQ2a98AAAEbUlEQVR4nO3cPUhybRzH8c6TWBCUaeLQy2JCVg6BZFRSQUND0ItTFAQFSuQQRJMNBQpBBE1mi4sQFDVEU1CLFgVFRNALSBRhi8eDRkMipM9wLzddombnf7Tn+X3Gy3Nd/OP+cvLtjkulUiUAYvun0APAfxPCAhIIC0ggLCCBsIAEwgISCAtIICwggbCABMICEggLSCAsIIGwgATCAhIIC0ggLCCBsIAEwgISCAtIiBPW8PAwx4hEIhm2KBSKL9e3trbmeHJWc3NzogxJdMjfBEHY2dmx2+0mk0mr1SoUCrlcrtFompubBwYGXC7XyclJMpnM+/xCkRV6gP+v5+fn1dVVr9cbj8e/PBQOh8Ph8P39/eHhYUlJiU6nW1hYmJyclMvlhZg0H/hVWBher1ev17vdbrYqVjAYtFqtJpPp8fFRgtlEgbAKYHZ2dnp6Opek/nZ9fW00GgOBANFU4kJYUltZWXG73fntjcViIyMjT09P4o5E4VeGxfN8KqP19fVCz5heIBBwOBzsukwmm5mZ8fv9kUgkHo+/vLz4fL729nb2SkEQRkdHi//p/K8M6/dyOBxsE0ql8uzszO12m81mlUpVVlZWX18/MTFxfn6etsLr6+vt7W1J5s0fwpKO3+9nnyFxHLe7u2s0GtnrOY5zOp3j4+PsQ06nk2RE8SAs6ezv77OLFoulr68vw661tTX2XYa7u7sif4WIsKRzfHzMLk5NTWXepdFoBgcHczyteBCGpVarM7w5/vb2RnRyXV2diD+FWD4/P29ubr4schzX1dWVdW93dze7eHV1Jc5kNHDHkoggCOxfjKqtra2srMy6V6/Xs4s8z4szGQ2EJZG0nycqFIpc9qa97CcfUEoAYRUSx3F5X1bkfzEPYUlEpVKxi7FYLJe90WiUXVSr1T8ciRRhWJnfH6+qqiI6ORQKifhTiEWlUrE3ntfX1/f396x7Hx4e2MWamhpxJqOBO5ZEZDIZ+4WzZDJ5enqade/JyQm72NbWJs5kNBCWdPr7+9lFr9ebeRfP8wcHBzmeVjwQlnSGhobYxd3dXb/fn2HX/Px8IpH4stjU1NTY2CjmcGJDWNLp6elh3w5NpVIWiyXtu52pVGppacnn87EPLS4ukowoHoQlKZfLxT6Fj0QiHR0ddrv99PQ0Go0mEolQKLS1tdXZ2bm8vMweYjAYxsbGJJn3BzJ/sSlHaW/y331V2NLSkuPJWVVUVBAd9fNDfvjFBKVSGQwG8/2Hkg7uWFJzOBxWqzW/vZWVlXt7e0X+7OoPhFUAm5ubHo+nrKzsW7sMBsPl5WVvby/NUCJDWIVhs9lub29tNlt5eXnWi7Va7cbGxsXFhU6nk2A2UeD/FRaMVqv1eDxOp/Po6Mjv919eXvI8LwjCx8dHdXW1UqlsaGgwm81/XkuWlpYWet7v4VLF/Vkm/FL4VQgkEBaQQFhAAmEBCYQFJBAWkEBYQAJhAQmEBSQQFpBAWEACYQEJhAUkEBaQQFhAAmEBCYQFJP4Fb1/o4e1k0VUAAAAASUVORK5CYII=",
+    "bytes": 1190
+  },
+  {
+    "id": "img09_split_red_blue",
+    "question": "This image is split into a left half and a right half, each a solid color. What color is the LEFT half? Answer with one word.",
+    "expected_keywords": [
+      "red"
+    ],
+    "file": "images/img09_split_red_blue.png",
+    "sha256": "6549e596ed446cfadce5ffaad3bd5afe9ebcfe36596a81460646315af6583c89",
+    "data_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAZklEQVR4nO3PQRHAQAwDsbSojv+rsIoitx8JgD37fLPrzO7Du7p+gYCagJqAmoCagJqAmoCagJqAmoCagJqAmoCagJqAmoCagJqAmoCagJqAmoCagJqAmoCagJqAmoCagJqAmoDaD9SXAkhNDAhXAAAAAElFTkSuQmCC",
+    "bytes": 159
+  },
+  {
+    "id": "img10_triangle",
+    "question": "What geometric shape is shown in this image? Answer with one word.",
+    "expected_keywords": [
+      "triangle"
+    ],
+    "file": "images/img10_triangle.png",
+    "sha256": "a6daf6b63185494ee3ab548dcde64c154743acb4d539ca69a1ba9179a71e1a9d",
+    "data_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAA8UlEQVR4nO2aSw7DIAwFofff97h0gSolSkDgD054bw5g8IwUtWlzKSW9mU/0BbRwgWi4QDRcIBr3BfI3u85ngS5Vv2sEFmhzFO8XgQUaXJU7RWCBO1qyPSKwwIW+ZvMILHBmRLBtBBY4MK7WMAIL/JmVahWBBVJKUp0mEVhAJ1IfAb6AXqFyAnYBq2e5Zg5wAdsPleJpqAU8vt3KZkIW8HvNJpiMV8D7ff/sfLAC3voFpyAVWKN/9iyYAiv1T52IUWC9/vFzAQpE6R88ffcCsfpH7rB1gSfor3Rusm+B5+ivNH975h9fg+EC0XCBaF6/wA/QbiPCqwC2SAAAAABJRU5ErkJggg==",
+    "bytes": 298
+  }
+]
