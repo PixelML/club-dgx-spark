@@ -49,6 +49,7 @@ Cross-platform views:
 - [Cross-cutting synthesis](docs/SYNTHESIS.md) - what all sources jointly teach about topology, runtimes, quant, KV memory, spec decode, eval, and ops on GB10.
 - [Migration proposal](docs/MIGRATION-PROPOSAL.md) - when legacy repository names should move to the canonical Model-DGX-Spark form (not yet).
 - [Cookbook (research preview)](docs/cookbook/glm-5.3-flash-dgx-spark.md) - GLM-5.3-Flash profile selector with measured speed and untested quality/cost clearly labeled.
+- [Cross-platform cost/watt](docs/EXPERIMENTS.md#cross-platform-cost-and-efficiency-cmp-170hx-vs-dgx-spark) - DGX Spark against a 4-card CMP 170HX rig on the same checkpoint, with tokens/Wh and $/M-token figures.
 
 ## Hugging Face
 
