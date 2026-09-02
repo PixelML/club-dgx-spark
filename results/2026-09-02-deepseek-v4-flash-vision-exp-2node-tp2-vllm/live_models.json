@@ -4,7 +4,7 @@
     "object": "list",
     "data": [
       {
-        "id": "apollo-deepseek-v4-flash-vision-exp",
+        "id": "deepseek-v4-flash-vision-exp",
         "object": "model",
         "created": 1788337903,
         "owned_by": "vllm",

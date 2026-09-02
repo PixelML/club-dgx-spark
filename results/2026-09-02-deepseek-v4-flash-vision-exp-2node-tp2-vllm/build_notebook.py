@@ -74,7 +74,7 @@ import os
 EXPERIMENT = "2026-09-02-deepseek-v4-flash-vision-exp-2node-tp2-vllm"
 RESULTS_DIR = os.path.join("..", "results", EXPERIMENT)
 LIVE = False
-MODEL_ID = "apollo-deepseek-v4-flash-vision-exp"
+MODEL_ID = "deepseek-v4-flash-vision-exp"
 VISION_ENDPOINT = os.environ.get("VISION_ENDPOINT", "").rstrip("/")
 
 print("LIVE =", LIVE)

@@ -12,7 +12,7 @@ import time
 import requests
 
 BASE = os.environ["VISION_ENDPOINT"].rstrip("/")
-MODEL = os.environ.get("MODEL_ID", "apollo-deepseek-v4-flash-vision-exp")
+MODEL = os.environ.get("MODEL_ID", "deepseek-v4-flash-vision-exp")
 HERE = os.path.dirname(os.path.abspath(__file__))
 TS = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
