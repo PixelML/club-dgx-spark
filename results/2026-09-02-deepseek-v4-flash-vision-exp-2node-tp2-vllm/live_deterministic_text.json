@@ -1,7 +1,7 @@
 {
   "captured_utc": "2026-09-02T08:31:43Z",
   "request": {
-    "model": "apollo-deepseek-v4-flash-vision-exp",
+    "model": "deepseek-v4-flash-vision-exp",
     "messages": [
       {
         "role": "user",
@@ -15,7 +15,7 @@
     "id": "chatcmpl-851d1686687a75fe",
     "object": "chat.completion",
     "created": 1788337903,
-    "model": "apollo-deepseek-v4-flash-vision-exp",
+    "model": "deepseek-v4-flash-vision-exp",
     "choices": [
       {
         "index": 0,

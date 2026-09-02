@@ -2,7 +2,7 @@
   "captured_utc": "2026-09-02T08:31:43Z",
   "note": "same color question as img01_solid_red, no image attached",
   "request": {
-    "model": "apollo-deepseek-v4-flash-vision-exp",
+    "model": "deepseek-v4-flash-vision-exp",
     "messages": [
       {
         "role": "user",
@@ -16,7 +16,7 @@
     "id": "chatcmpl-b161ed885824856d",
     "object": "chat.completion",
     "created": 1788337922,
-    "model": "apollo-deepseek-v4-flash-vision-exp",
+    "model": "deepseek-v4-flash-vision-exp",
     "choices": [
       {
         "index": 0,

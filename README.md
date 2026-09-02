@@ -55,6 +55,14 @@ Cross-platform views:
 
 Curated, verified artifacts from this club: [PixelML/club-dgx-spark: verified on DGX Spark (GB10)](https://huggingface.co/collections/PixelML/club-dgx-spark-verified-on-dgx-spark-gb10-6a97c6b97ebd12f082dac6ca).
 
+## Notebooks
+
+Executable, receipt-backed walkthroughs of experiments summarized here. Committed notebooks ship with `LIVE = False` — every number renders from committed receipts and no cell makes a network call. Flip `LIVE` only against your own authenticated deployment. Convention: [notebooks/README.md](notebooks/README.md).
+
+| Notebook | Model | Quant | Runtime | Topology | Evidence | LIVE default |
+|---|---|---|---|---|---|---|
+| [Qwen3.8-Flash-Next NVFP4 on 2× DGX Spark (SGLang)](notebooks/2026-08-26-qwen3-8-flash-next-nvfp4-2node-sglang.ipynb) | Qwen3.8-Flash-Next @ `b80180e3…` | NVFP4 | SGLang TP=2 + NEXTN/MTP | 2× Spark | [2026-08-26/27 receipts](results/2026-08-26-qwen3-8-flash-next-nvfp4-sglang-2node/) | `False` |
+
 ## What belongs here
 
 | Put in `club-dgx-spark` | Put in a model-family repository |
@@ -73,8 +81,16 @@ outputs. The schema and the `LIVE`-replay convention are in
 
 | Date | Experiment | Headline | Notebook |
 |---|---|---|---|
+| 2026-08-26 | Qwen3.8-Flash-Next NVFP4, 2x DGX Spark, SGLang TP=2 | Backfilled from evidence-repo receipts: 47.54 tok/s @ c=1 up to 275.37 tok/s @ c=16 aggregate decode (NEXTN/MTP, 3 steps); uncached prefill 2,960.12 tok/s at 16K prompt; text, tool-call, and vision functional checks pass | [notebooks/2026-08-26-qwen3-8-flash-next-nvfp4-2node-sglang.ipynb](notebooks/2026-08-26-qwen3-8-flash-next-nvfp4-2node-sglang.ipynb) |
 | 2026-08-27 | GLM-5.3-Flash NVFP4, 2x DGX Spark, vLLM TP=2 | Backfilled from evidence-repo receipts: 82.12 tok/s aggregate @ c=7 and 26.55 tok/s @ c=1 (medians of 3, measured 2026-08-27); uncached prefill 1,277–1,372 input tok/s; all text gates pass; vision fails under UMA pressure; quality untested | [notebooks/2026-08-27-glm-5.3-flash-nvfp4-2node-tp2-vllm.ipynb](notebooks/2026-08-27-glm-5.3-flash-nvfp4-2node-tp2-vllm.ipynb) |
 | 2026-09-02 | DeepSeek-V4-Flash-Vision-Exp, 2x DGX Spark, vLLM TP=2 | 10/10 golden vision fixtures pass keyword match; C1 31.9 tok/s and TTFT 0.323 s live re-measured today | [notebooks/2026-09-02-deepseek-v4-flash-vision-exp-2node-tp2-vllm.ipynb](notebooks/2026-09-02-deepseek-v4-flash-vision-exp-2node-tp2-vllm.ipynb) |
+
+Detailed evidence for the Qwen3.8-Flash-Next checkpoint on this hardware
+lives in
+[qwen3-8-flash-next-sglang-2x-dgx-spark](https://github.com/PixelML/qwen3-8-flash-next-sglang-2x-dgx-spark)
+@ `682504bec9e7e99206212f4e172b7ec823e4605c`; this notebook is a backfill
+replay of those receipts and adds no new measurements. Sanitized receipts:
+[results/2026-08-26-qwen3-8-flash-next-nvfp4-sglang-2node/](results/2026-08-26-qwen3-8-flash-next-nvfp4-sglang-2node/).
 
 Detailed evidence for the GLM-5.3-Flash checkpoint on this hardware lives in
 [GLM-5.3-Flash-NVFP4-Dual-DGX-Spark](https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark)
