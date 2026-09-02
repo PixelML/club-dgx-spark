@@ -49,6 +49,11 @@ Cross-platform views:
 - [Cross-cutting synthesis](docs/SYNTHESIS.md) - what all sources jointly teach about topology, runtimes, quant, KV memory, spec decode, eval, and ops on GB10.
 - [Migration proposal](docs/MIGRATION-PROPOSAL.md) - when legacy repository names should move to the canonical Model-DGX-Spark form (not yet).
 - [Cookbook (research preview)](docs/cookbook/glm-5.3-flash-dgx-spark.md) - GLM-5.3-Flash profile selector with measured speed and untested quality/cost clearly labeled.
+- [Cross-platform cost/watt](docs/EXPERIMENTS.md#cross-platform-cost-and-efficiency-cmp-170hx-vs-dgx-spark) - DGX Spark against a 4-card CMP 170HX rig on the same checkpoint, with tokens/Wh and $/M-token figures.
+
+## Hugging Face
+
+Curated, verified artifacts from this club: [PixelML/club-dgx-spark: verified on DGX Spark (GB10)](https://huggingface.co/collections/PixelML/club-dgx-spark-verified-on-dgx-spark-gb10-6a97c6b97ebd12f082dac6ca).
 
 ## What belongs here
 
@@ -69,12 +74,19 @@ outputs. The schema and the `LIVE`-replay convention are in
 | Date | Experiment | Headline | Notebook |
 |---|---|---|---|
 | 2026-08-27 | GLM-5.3-Flash NVFP4, 2x DGX Spark, vLLM TP=2 | Backfilled from evidence-repo receipts: 82.12 tok/s aggregate @ c=7 and 26.55 tok/s @ c=1 (medians of 3, measured 2026-08-27); uncached prefill 1,277–1,372 input tok/s; all text gates pass; vision fails under UMA pressure; quality untested | [notebooks/2026-08-27-glm-5.3-flash-nvfp4-2node-tp2-vllm.ipynb](notebooks/2026-08-27-glm-5.3-flash-nvfp4-2node-tp2-vllm.ipynb) |
+| 2026-09-02 | DeepSeek-V4-Flash-Vision-Exp, 2x DGX Spark, vLLM TP=2 | 10/10 golden vision fixtures pass keyword match; C1 31.9 tok/s and TTFT 0.323 s live re-measured today | [notebooks/2026-09-02-deepseek-v4-flash-vision-exp-2node-tp2-vllm.ipynb](notebooks/2026-09-02-deepseek-v4-flash-vision-exp-2node-tp2-vllm.ipynb) |
 
-Detailed evidence for this checkpoint on this hardware lives in
+Detailed evidence for the GLM-5.3-Flash checkpoint on this hardware lives in
 [GLM-5.3-Flash-NVFP4-Dual-DGX-Spark](https://github.com/PixelML/GLM-5.3-Flash-NVFP4-Dual-DGX-Spark)
 @ `3407023e0b8109a1dd12e8a5544e106ca6912afe`; this notebook is a backfill
 replay of those receipts and adds no new measurements. Sanitized receipts and
 the redaction log: [results/2026-08-27-glm-5.3-flash-nvfp4-2node/](results/2026-08-27-glm-5.3-flash-nvfp4-2node/README.md).
+
+Detailed evidence for the DeepSeek-V4-Flash-Vision-Exp checkpoint on this
+hardware lives in
+[DeepSeek-V4-Flash-Vision-Exp-DGX-Spark](https://github.com/PixelML/DeepSeek-V4-Flash-Vision-Exp-DGX-Spark);
+this notebook links back to it and adds a fresh live re-measurement plus a
+reproducible end-to-end vision demo.
 
 ## Publication safety
 

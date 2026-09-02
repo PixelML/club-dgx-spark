@@ -1,0 +1,33 @@
+{
+  "captured_utc": "2026-09-02T08:31:43Z",
+  "response": {
+    "object": "list",
+    "data": [
+      {
+        "id": "apollo-deepseek-v4-flash-vision-exp",
+        "object": "model",
+        "created": 1788337903,
+        "owned_by": "vllm",
+        "root": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
+        "parent": null,
+        "max_model_len": 1048576,
+        "permission": [
+          {
+            "id": "modelperm-a6e65a374e4c30e2",
+            "object": "model_permission",
+            "created": 1788337903,
+            "allow_create_engine": false,
+            "allow_sampling": true,
+            "allow_logprobs": true,
+            "allow_search_indices": false,
+            "allow_view": true,
+            "allow_fine_tuning": false,
+            "organization": "*",
+            "group": null,
+            "is_blocking": false
+          }
+        ]
+      }
+    ]
+  }
+}
