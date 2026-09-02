@@ -50,6 +50,14 @@ Cross-platform views:
 - [Migration proposal](docs/MIGRATION-PROPOSAL.md) - when legacy repository names should move to the canonical Model-DGX-Spark form (not yet).
 - [Cookbook (research preview)](docs/cookbook/glm-5.3-flash-dgx-spark.md) - GLM-5.3-Flash profile selector with measured speed and untested quality/cost clearly labeled.
 
+## Notebooks
+
+Executable, receipt-backed walkthroughs of experiments summarized here. Committed notebooks ship with `LIVE = False` — every number renders from committed receipts and no cell makes a network call. Flip `LIVE` only against your own authenticated deployment. Convention: [notebooks/README.md](notebooks/README.md).
+
+| Notebook | Model | Quant | Runtime | Topology | Evidence | LIVE default |
+|---|---|---|---|---|---|---|
+| [Qwen3.8-Flash-Next NVFP4 on 2× DGX Spark (SGLang)](notebooks/2026-08-26-qwen3-8-flash-next-nvfp4-2node-sglang.ipynb) | Qwen3.8-Flash-Next @ `b80180e3…` | NVFP4 | SGLang TP=2 + NEXTN/MTP | 2× Spark | [2026-08-26/27 receipts](results/2026-08-26-qwen3-8-flash-next-nvfp4-sglang-2node/) | `False` |
+
 ## What belongs here
 
 | Put in `club-dgx-spark` | Put in a model-family repository |
