@@ -1,0 +1,4 @@
+[Fri Sep  4 08:05:41 2026] oom_reaper: reaped process 814589 (sglang::schedul), now anon-rss:0kB, file-rss:0kB, shmem-rss:896kB
+[Fri Sep  4 08:18:13 2026] gloo_tcp_loop invoked oom-killer: gfp_mask=0x140cca(GFP_HIGHUSER_MOVABLE|__GFP_COMP), order=0, oom_score_adj=0
+[Fri Sep  4 08:18:13 2026] Out of memory: Killed process 815810 (sglang::schedul) total-vm:758302564kB, anon-rss:28109760kB, file-rss:112724kB, shmem-rss:1120kB, UID:0 pgtables:282664kB oom_score_adj:0
+[Fri Sep  4 08:18:17 2026] oom_reaper: reaped process 815810 (sglang::schedul), now anon-rss:0kB, file-rss:144kB, shmem-rss:288kB

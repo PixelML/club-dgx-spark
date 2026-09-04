@@ -1,0 +1,66 @@
+{
+  "experiment": "2026-09-04-deepseek-v4-flash-vision-exp-2node-tp2-sglang",
+  "verdict": "FAIL-TO-BOOT",
+  "date": "2026-09-04",
+  "source_cookbook": "https://docs.sglang.io/cookbook/autoregressive/DeepSeek/DeepSeek-V4",
+  "cookbook_cell": {"hw": "dgx-spark", "variant": "flash-vision", "quant": "fp4", "strategy": "balanced", "nodes": "multi-2", "verified_by_upstream": true},
+  "pins": {
+    "model": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
+    "model_revision_resolved": "6821d6ad3681a4b137b066b76094fa82ebd0a380 (tip of main; cookbook cell pins no revision)",
+    "image": "lmsysorg/sglang:dev-v4f-2dgx-v2",
+    "image_manifest_digest": "sha256:67873eb93b994736ab534111f79b5aa93d2575b973ebf9d276c40d548ff9afec",
+    "image_note": "Tag was silently repushed: first pull of the day resolved to a 33.3GB build (image id 7e333ce691e6), later pulls to a 48.8GB build (67873eb93b99). Same tag, two different builds. Pin by digest and record both if reproducing.",
+    "sglang_branch": "b12x-vision @ 452239a74f (per cookbook DGX Spark notes)",
+    "drivers": "apollo-1 580.173.02, apollo-2 580.159.03",
+    "topology": "2x DGX Spark GB10, TP=2 over ConnectX-7 RoCE (head 10.100.120.2 / worker 10.100.120.1)",
+    "mem_total_linux": "apollo-1 121.7 GiB, apollo-2 119.6 GiB",
+    "checkpoint_shards": "48/48 on both nodes, verified before boot"
+  },
+  "failure_classes": [
+    {
+      "id": 1,
+      "class": "compatibility",
+      "where": "rendezvous",
+      "error": "Gloo connectFullMesh failed ... SO_ERROR: Connection refused, remote=[127.0.0.1]:15269",
+      "cause": "Worker announced loopback: host /etc/hosts mapped hostname to 127.0.0.1 (Ubuntu default).",
+      "fix": "Host wiring fix (outside the recipe): map each hostname to its ConnectX-7 IP in /etc/hosts.",
+      "receipt": "docker log excerpt in notebook appendix"
+    },
+    {
+      "id": 2,
+      "class": "capacity",
+      "where": "weight loading",
+      "error": "kernel OOM killer terminated sglang::schedul (exit -9); scheduler anon-rss 39.3 GB at kill",
+      "cause": "Default multithread loader stages ~10 shards concurrently (~39 GB host buffers) on top of ~84 GB/rank of weights in 121 GB unified memory.",
+      "fix": "--model-loader-extra-config '{\"enable_multithread_load\": false}' + 64 GB swapfile per node. mmap load: 430-460 s, weights 74.9-75.5 GB/rank.",
+      "receipt": "receipt-kernel-oom-apollo1.txt / receipt-kernel-oom-apollo2.txt"
+    },
+    {
+      "id": 3,
+      "class": "capacity",
+      "where": "memory pool sizing",
+      "error": "ValueError: Loaded weights leave no GPU memory for the KV cache under --mem-fraction-static=0.8. Raise --mem-fraction-static above 0.825 (minimum viable = 1 - available/pre = 0.8244).",
+      "cause": "Cookbook pins 0.80; on this node pair the runtime computes minimum viable 0.8244 (weights 74.9-75.5 GB/rank + draft 3.24 GB).",
+      "fix": "--mem-fraction-static 0.83 (runtime-prescribed minimum plus margin).",
+      "receipt": "runtime error string captured verbatim in notebook appendix"
+    },
+    {
+      "id": 4,
+      "class": "stability",
+      "where": "verify CUDA graph capture",
+      "error": "Deadlock: 'Capture target verify CUDA graph begin. backend=full, num_tokens_per_req=6, bs=[1..32]' at 10:00:07, then 30+ minutes of silence with both GPUs at 0% / 13 W on both ranks.",
+      "cause": "Unknown - preview-build capture path. Corroborating evidence: containers dsv4-vision-sglang-head / dsv4-vision-sglang-worker Exited(1) from 2 days earlier on the older dev-dsv4-flash-vision image on the same nodes.",
+      "fix": "None found. Lane stopped after 10 boots. Reported upstream.",
+      "receipt": "docker log tail + nvidia-smi sampling in notebook appendix"
+    }
+  ],
+  "working_config_at_max_progress": {
+    "flags_delta_from_cookbook": [
+      "--model-loader-extra-config '{\"enable_multithread_load\": false}'",
+      "--mem-fraction-static 0.83 (instead of 0.80)"
+    ],
+    "host_prereqs": ["/etc/hosts hostname -> CX-7 IP on both nodes", "64 GB swapfile per node"],
+    "boot_stage_reached": "target + DSpark draft weights loaded (74.9 + 3.2 GB/rank), verify-graph capture hangs"
+  },
+  "comparison_context": "vLLM 0.25.2 Anemll stack on the same nodes serves the FP8 Vision-Exp checkpoint at 31.9-40 tok/s decode c=1 (this repo, 2026-09-02 and 2026-09-03 results)."
+}
