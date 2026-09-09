@@ -1,0 +1,79 @@
+{
+  "captured_utc": "2026-09-09",
+  "label_key": "measured = a boot or a run; source-supported = read at the cited file:line; inferred; untested",
+  "blockers": [
+    {
+      "id": "1.1",
+      "what": "V1 runner cannot prepare PLE inputs, so the target does not boot at all — with or without a drafter",
+      "error": "RuntimeError: PLE inputs were not prepared",
+      "where": "vllm/models/qwen4_exp/nvidia/model.py:300 (raised during profile_run)",
+      "why": "query_start_loc and ngram_context come only from Qwen4ExpModelState.prepare_inputs / prepare_dummy_inputs (qwen4_exp/nvidia/model_state.py:93,112), called only from the V2 runner (v1/worker/gpu/model_runner.py:1772, gpu/cudagraph_utils.py:572)",
+      "fix": "use the V2 runner; there is no V1 path",
+      "label": "measured (1 boot)"
+    },
+    {
+      "id": "1.2",
+      "what": "V2 runner dereferences a None MTP hidden-state getter",
+      "error": "TypeError: 'NoneType' object is not subscriptable",
+      "where": "vllm/v1/worker/gpu/model_runner.py:834 (and the mirrored site at :2016-2018)",
+      "why": "the runner overrides the drafter's input hidden states with the target's pre-HC MTP residual whenever the target exposes get_mtp_target_hidden_states(). Qwen4Exp exposes the accessor but returns None when no native MTP head is loaded (method=dflash), and the subscript is unguarded",
+      "fix": "PATCH 1 (control flow only, 2 sites): guard with `if pre_hc_hidden_states is not None`, taking the engine's own absent-attribute fallback",
+      "label": "measured (1 boot)"
+    },
+    {
+      "id": "1.3",
+      "what": "the DFlash speculator hard-rejects the anchor layout DeepSpec checkpoints train with",
+      "error": "ValueError: sample_from_anchor=True is not supported for DFlash",
+      "where": "vllm/v1/worker/gpu/spec_decode/dflash/speculator.py:69",
+      "why": "vLLM's DFlash path assumes the speculators-format 1+N layout (position 0 is the anchor, its output discarded). DeepSpec trains anchor-as-first-prediction: K query slots, every position predicts. DSparkSpeculator already selects our layout and the shared Triton _prepare_dflash_inputs_kernel already implements it behind a SAMPLE_FROM_ANCHOR constexpr — the raise is the only thing in the way",
+      "fix": "PATCH 2 (control flow only, :66-75): honour dflash_config.sample_from_anchor and set num_query_per_req = num_speculative_steps when it is set. NOT needed for DSpark, which sets both attributes itself after super().__init__",
+      "label": "measured (1 boot) + source-supported"
+    },
+    {
+      "id": "1.4",
+      "what": "the Qwen4Exp speculative-method allowlist omits our methods",
+      "error": "NotImplementedError, raised before weights load",
+      "where": "vllm/model_executor/models/config.py, Qwen4ExpForConditionalGenerationConfig.verify_and_update_config",
+      "why": "upstream the allowlist is {mtp, ngram, ngram_gpu}. EngineArgs.create_engine_config rejects the method before the weights load, so a five-file overlay was silently incomplete until a sixth guard was added",
+      "fix": "PATCH 3 (one line each): add \"dflash\" (and \"dspark\" if serving that checkpoint) to the allowlist",
+      "label": "measured"
+    }
+  ],
+  "overlay": {
+    "note": "The three patches above sit ON TOP OF a six-file adapter overlay that makes the target emit contracted taps at all and teaches the proposer the DeepSpec anchor convention. The patches alone serve nothing. Reproducing this needs the whole set.",
+    "size": "183 lines",
+    "files": [
+      {"file": "vllm/models/qwen4_exp/nvidia/model.py", "adds": "captures block_input (the native-width 2560 contracted residual, tuple slot [1]) at boundary layers; exposes set_dflash_aux_hidden_state_layers; declares supports_eagle3 / has_own_embed_tokens=False / has_own_lm_head=False; returns (sample_hidden_states, aux_hidden_states) and raises RuntimeError if fewer than 5 taps are collected"},
+      {"file": "vllm/v1/spec_decode/dflash.py", "adds": "query_zero_predicts_next, making num_query_per_req = K (DeepSpec) instead of K + 1 (legacy)"},
+      {"file": "vllm/v1/spec_decode/utils.py", "adds": "threads QUERY_ZERO_PREDICTS_NEXT into the Triton kernel: sample_offset = 0 instead of 1, so query 0's output is sampled rather than discarded"},
+      {"file": "vllm/v1/spec_decode/llm_base_proposer.py", "adds": "registers Qwen4ExpForConditionalGeneration in the target-sharing allowlist so the draft aliases the target's embedding and untied lm_head"},
+      {"file": "vllm/config/speculative.py", "adds": "returns num_draft_tokens - 1 additional scheduler slots when query_zero_predicts_next is set"},
+      {"file": "vllm/model_executor/models/config.py", "adds": "the dflash allowlist entry (blocker 1.4)"}
+    ],
+    "tap_mapping": "The vLLM aux boundary ids are the trained tap ids + 1: trained target_layer_ids [3,15,23,35,43] are captured at [4,16,24,36,44], each at layers[i].attn_hyper_connection.mix/combine_and_mix(...)[1], plus hyper_connection_mixer.combine_and_mix(...)[1] for the final hidden. There is no separate final norm to add, and the learned contraction must never be replaced by a raw HC-stream mean.",
+    "label": "source-supported (nvidia/model.py:276-331,548-561; nvidia/hyperconnection.py:128-188; DeepSpec modeling/dspark/qwen3/modeling.py:238-246,449-460) + measured (the boots)"
+  },
+  "related": [
+    {
+      "id": "adaptive-verification-vs-gdn",
+      "what": "vLLM's adaptive verification is structurally incompatible with GatedDeltaNet backends, so DSpark's confidence gate cannot run on this target at all",
+      "error": "ValueError: Adaptive verification trims verification requests on device, which the GDNAttentionBackend attention backend does not support.",
+      "where": "vllm/v1/worker/gpu/spec_decode/adaptive_verification.py:463 <- maybe_create_adaptive_verification_manager <- v1/worker/gpu/model_runner.py:614 initialize_kv_cache",
+      "why": "get_query_lens_mismatch_unsupported_backend (v1/worker/gpu/attn_utils.py:190-208) rejects any backend whose supports_device_cpu_query_lens_mismatch() is False. GDNAttentionBackend is one, and Qwen3.8-Flash-Next has 36 GatedDeltaNet layers, so the check can never pass. This generalises to every Mamba-class hybrid target, not just this model.",
+      "label": "measured (the boot) + source-supported (the mechanism)"
+    },
+    {
+      "id": "graph-capture-not-demonstrated",
+      "what": "graph capture was never demonstrated to fit under the 0.75 unified-memory policy",
+      "detail": "Attempt A (--no-eager, inductor): host MemAvailable fell 49.4 -> 0.7 GiB inside a single 10 s watcher sample during compile; the 12 GiB floor watcher stopped the container (exit 137, OOMKilled=false). Attempt B (--no-eager --compilation-config '{\"mode\":0,\"cudagraph_mode\":\"FULL_DECODE_ONLY\",...}') skipped inductor but failed inside profile_cudagraph_memory -> initialize_kv_cache, BEFORE any capture — on the GDN adaptive check above. Disabling compilation did not demonstrate graph memory fit.",
+      "label": "measured (2 boots)"
+    },
+    {
+      "id": "sglang-cannot-serve-this-class",
+      "what": "SGLang cannot serve a DeepSpec DFlash/DSpark drafter on this target either, and its blocker is larger than vLLM's",
+      "detail": "qwen4_exp cannot emit DFlash aux hidden states at all, and setup succeeds silently: _init_qwen4_exp_layer_extensions:1222-1228 deletes layer_communicator; neither decoder layer consumes captured_last_layer_outputs (the identifier occurs exactly once in the file, at the call site :1658); and Qwen4ExpModel.forward:1655-1662 returns (hidden_states, hc_hidden_states), leaving the aux return unreachable outside the idle branch. The DFlash worker then receives the HC-flattened 4 x 2560 = 10240-wide stream instead of concatenated per-layer taps. glm5_next.py:953-962 (sglang #36708) is the precedent to copy. Also: SGLang would SILENTLY shift every draft position by one on the anchor-layout mismatch where vLLM raises.",
+      "upstream": "https://github.com/sgl-project/sglang/issues/38589",
+      "label": "source-supported (SGLang main fetched 2026-09-08 and the pinned cookbook image d91c3682b0b429e4c70df63cd57f819588ce29b0; line numbers are main, the pinned image is +12 in models/qwen4_exp.py). Nothing measured."
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "captured_utc": "2026-09-09",
+  "tau_proxy_warning": "Every tau figure in this file is a PROXY, not a measured accepted length. The offline evaluator multiplies MARGINAL per-position agreement rates against corpus tokens; that product is not the joint probability of an accepted prefix. Its numerical closeness to a served accepted length does not validate it. Fix the evaluator to compute the joint accepted-prefix probability before quoting tau again.",
+  "training_curve": {
+    "held_out": "496 rows (corpus rows 99,457-99,956), cached identically, never trained on",
+    "definition": "tau_proxy = 1 + sum_k prod_{j<=k} p_j, where p_j are MARGINAL per-position agreement rates",
+    "rows": [
+      {"epoch": 1, "step": 192, "pos1": 0.6462, "pos2": 0.5075, "pos4": 0.3134, "pos7": 0.1684, "tau_proxy": 2.1585},
+      {"epoch": 2, "step": 384, "pos1": 0.7522, "pos2": 0.6226, "pos4": 0.4376, "pos7": 0.2640, "tau_proxy": 2.6254},
+      {"epoch": 3, "step": 576, "pos1": 0.7848, "pos2": 0.6629, "pos4": 0.4893, "pos7": 0.3121, "tau_proxy": 2.8360},
+      {"epoch": 4, "step": 768, "pos1": 0.7989, "pos2": 0.6798, "pos4": 0.5132, "pos7": 0.3405, "tau_proxy": 2.9383},
+      {"epoch": 5, "step": 960, "pos1": 0.8074, "pos2": 0.6898, "pos4": 0.5271, "pos7": 0.3572, "tau_proxy": 3.0039},
+      {"epoch": 6, "step": 1152, "pos1": 0.8131, "pos2": 0.6983, "pos4": 0.5370, "pos7": 0.3686, "tau_proxy": 3.0531},
+      {"epoch": 7, "step": 1344, "pos1": 0.8163, "pos2": 0.7020, "pos4": 0.5428, "pos7": 0.3752, "tau_proxy": 3.0795}
+    ],
+    "note": "Training stopped after epoch 7 of a planned 10: the last epoch delta was +0.026 proxy tau, epochs 8-10 were projected at about +0.01 for roughly $65, and a mid-run host slowdown pushed the 10-epoch cost past the ceiling. Two differently-trained proxy points cannot establish a data-scaling law; an earlier claim that more data was exhausted has been withdrawn as unsupported.",
+    "label": "measured (the agreement numbers) / proxy (what tau means)"
+  },
+  "served_accepted_length": {
+    "note": "This IS a measured accepted length, from the engine's own acceptance counters, and it is the number to cite rather than the proxy.",
+    "preliminary": {"DFlash block 7": 2.988, "native MTP k=3": 2.993},
+    "label": "measured, preliminary (single boot, 2026-09-08)"
+  },
+  "teacher_forced_agreement": {
+    "criterion": "replay each arm's emitted continuation as prompt_logprobs=2 over (prompt + emitted); an emitted token passes when it equals the target's argmax at that position. 25,600 tokens per arm.",
+    "arms": [
+      {"arm": "AR spec-off (control)", "agreement": 0.975586},
+      {"arm": "native MTP k=3", "agreement": 0.973984},
+      {"arm": "DFlash block 4", "agreement": 0.975820},
+      {"arm": "DFlash block 5", "agreement": 0.975039},
+      {"arm": "DFlash block 7", "agreement": 0.973320}
+    ],
+    "reference_control": "the AR arm scores 0.975586 against a spec-off server and 0.973203 against a spec-on server, so the reference itself moves 0.24 pp between boots and differences below about 0.3 pp are engine noise",
+    "not_a_certification": [
+      "The check covers ALL emitted tokens, including correction and bonus tokens — not only accepted drafts.",
+      "Replay used different prefixes across arms, and prefill versus decode execution differs.",
+      "Recorded maximum mismatch margins exceed 12 log units, so the earlier claim that 'all mismatches are near-ties' is false (the MEDIAN margin at mismatches is 0.25; the maximum is not).",
+      "The AR control itself mismatches at about 2.4%, so an accept-path bug touching under ~2% of emitted tokens is invisible to this check.",
+      "What is missing for a real certification: common-prefix controls, rejection/rollback coverage, mismatch rate broken out by position-within-block (a real bug concentrates at one offset, noise does not), and a pre-declared non-inferiority margin."
+    ],
+    "label": "measured, preliminary (single boot, 2026-09-08). Losslessness is NOT certified."
+  },
+  "engine_nondeterminism": {
+    "free_running_greedy_agreement": {"drafter on vs spec-off": 0.19984, "DFlash run A vs identical repeat B, same boot": 0.20383},
+    "reading": "The engine agrees with itself at 20.4% on a bit-identical rerun at c=1, temperature 0. Both comparisons diverge at the same median position (20.0 / 20.5) and share the same 9 requests diverging at position 0. The implied per-token argmax flip rate is about 2.7%, which caps the resolution of every fidelity check on this stack — including the teacher-forced one above. It was accepted as a noise floor and never investigated.",
+    "label": "measured, preliminary"
+  }
+}

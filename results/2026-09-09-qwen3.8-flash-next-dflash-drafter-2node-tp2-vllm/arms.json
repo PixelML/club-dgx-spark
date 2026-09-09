@@ -1,0 +1,56 @@
+{
+  "status": "pending_rebenchmark",
+  "status_note": "The measurement set for this notebook is being re-run on the Spark pair with two boots per arm, more arms, and paired per-workload statistics. Every value below is null until that lands. The preliminary block records what a single-boot session measured on 2026-09-08; it is superseded on landing and must not be quoted as the result.",
+  "protocol": {
+    "fixture": "eval100 — 100 held-out prompts, 33 code / 33 math / 34 chat, stratified from the training corpus held-out split, frozen and identical for every arm",
+    "concurrency": 1,
+    "max_tokens": 256,
+    "ignore_eos": true,
+    "temperature": 0,
+    "seed": 42,
+    "thinking": "off",
+    "context": 8192,
+    "topology": "TP2 + EP, eager, utilization 0.75",
+    "metric_definitions": {
+      "aggregate_tok_s": "sum of completion tokens over all requests / sum of wall time over all requests, counted from the final usage object",
+      "median_tok_s": "median of per-request tok/s across the 100 prompts",
+      "accepted_length": "engine acceptance counters: accepted draft tokens per engine pass, including the bonus token",
+      "ms_per_engine_pass": "group wall time / spec draft passes; includes sampling, scheduler and IPC. Never comparable with a target-forward-only figure."
+    },
+    "analysis": "paired stratified bootstrap over prompts (4000 resamples), averaging repeats within a prompt before differencing, stratified by workload; reported as a percentage difference in aggregate throughput with a conditional 95% CI. Pooled medians are NOT a paired difference test and were the source of an earlier wrong 'indistinguishable from zero' reading."
+  },
+  "planned_arms": [
+    {"arm": "AR (spec off)", "block": null, "boots": 2, "aggregate_tok_s": null, "median_tok_s": null, "ci95": null, "accepted_length": null, "ms_per_engine_pass": null},
+    {"arm": "native MTP", "k": 3, "boots": 2, "aggregate_tok_s": null, "median_tok_s": null, "ci95": null, "accepted_length": null, "ms_per_engine_pass": null},
+    {"arm": "native MTP", "k": 4, "boots": 2, "aggregate_tok_s": null, "median_tok_s": null, "ci95": null, "accepted_length": null, "ms_per_engine_pass": null},
+    {"arm": "DFlash", "block": 2, "boots": 2, "aggregate_tok_s": null, "median_tok_s": null, "ci95": null, "accepted_length": null, "ms_per_engine_pass": null},
+    {"arm": "DFlash", "block": 3, "boots": 2, "aggregate_tok_s": null, "median_tok_s": null, "ci95": null, "accepted_length": null, "ms_per_engine_pass": null},
+    {"arm": "DFlash", "block": 4, "boots": 2, "aggregate_tok_s": null, "median_tok_s": null, "ci95": null, "accepted_length": null, "ms_per_engine_pass": null},
+    {"arm": "DFlash", "block": 5, "boots": 2, "aggregate_tok_s": null, "median_tok_s": null, "ci95": null, "accepted_length": null, "ms_per_engine_pass": null},
+    {"arm": "DFlash", "block": 7, "boots": 2, "aggregate_tok_s": null, "median_tok_s": null, "ci95": null, "accepted_length": null, "ms_per_engine_pass": null}
+  ],
+  "planned_extras": [
+    "per-workload (code / math / chat) medians and paired bootstrap CIs for every arm above",
+    "a graph-mode vs eager A/B on one arm, if graph capture fits under the 0.75 unified-memory policy at all"
+  ],
+  "preliminary_2026_09_08": {
+    "label": "preliminary — single boot per arm, 2 runs x 100 prompts, eager only, superseded by the re-benchmark",
+    "arms": [
+      {"arm": "AR (spec off)", "block": null, "aggregate_tok_s": 24.302, "median_tok_s": 24.295, "ci95": [24.267, 24.341], "accepted_length": null, "ms_per_engine_pass": null, "boots": "2/2 clean"},
+      {"arm": "native MTP k=3", "block": null, "aggregate_tok_s": 49.947, "median_tok_s": 51.368, "ci95": [48.231, 54.320], "accepted_length": 2.993, "ms_per_engine_pass": 59.87, "boots": "1/1 clean"},
+      {"arm": "DFlash", "block": 4, "aggregate_tok_s": 51.664, "median_tok_s": 54.004, "ci95": [45.885, 60.208], "accepted_length": 2.739, "ms_per_engine_pass": 52.96, "boots": "1/1 clean"},
+      {"arm": "DFlash", "block": 5, "aggregate_tok_s": 52.239, "median_tok_s": 55.475, "ci95": [47.865, 59.970], "accepted_length": 2.879, "ms_per_engine_pass": 55.02, "boots": "1/1 clean"},
+      {"arm": "DFlash", "block": 7, "aggregate_tok_s": 50.657, "median_tok_s": 52.356, "ci95": [45.717, 59.643], "accepted_length": 2.988, "ms_per_engine_pass": 58.77, "boots": "1/1 clean"}
+    ],
+    "per_workload_median_tok_s": {
+      "native MTP k=3": {"code": 52.499, "math": 57.575, "chat": 43.730},
+      "DFlash block 4": {"code": 56.76, "math": 73.48, "chat": 40.86},
+      "DFlash block 5": {"code": 58.79, "math": 78.36, "chat": 37.83},
+      "DFlash block 7": {"code": 59.18, "math": 81.84, "chat": 36.42}
+    },
+    "paired_bootstrap": {
+      "DFlash block 5 vs native MTP k=3, aggregate": {"delta_pct": 4.59, "ci95_pct": [2.14, 7.06]},
+      "DFlash block 4 chat, aggregate": {"delta_pct": -7.47, "ci95_pct": [-9.78, -5.21]}
+    }
+  }
+}
