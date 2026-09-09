@@ -84,7 +84,7 @@ outputs. The schema and the `LIVE`-replay convention are in
 | 2026-08-26 | Qwen3.8-Flash-Next NVFP4, 2x DGX Spark, SGLang TP=2 | Backfilled from evidence-repo receipts: 47.54 tok/s @ c=1 up to 275.37 tok/s @ c=16 aggregate decode (NEXTN/MTP, 3 steps); uncached prefill 2,960.12 tok/s at 16K prompt; text, tool-call, and vision functional checks pass | [notebooks/2026-08-26-qwen3-8-flash-next-nvfp4-2node-sglang.ipynb](notebooks/2026-08-26-qwen3-8-flash-next-nvfp4-2node-sglang.ipynb) |
 | 2026-08-27 | GLM-5.3-Flash NVFP4, 2x DGX Spark, vLLM TP=2 | Backfilled from evidence-repo receipts: 82.12 tok/s aggregate @ c=7 and 26.55 tok/s @ c=1 (medians of 3, measured 2026-08-27); uncached prefill 1,277–1,372 input tok/s; all text gates pass; vision fails under UMA pressure; quality untested | [notebooks/2026-08-27-glm-5.3-flash-nvfp4-2node-tp2-vllm.ipynb](notebooks/2026-08-27-glm-5.3-flash-nvfp4-2node-tp2-vllm.ipynb) |
 | 2026-09-02 | DeepSeek-V4-Flash-Vision-Exp, 2x DGX Spark, vLLM TP=2 | 10/10 golden vision fixtures pass keyword match; C1 31.9 tok/s and TTFT 0.323 s live re-measured today | [notebooks/2026-09-02-deepseek-v4-flash-vision-exp-2node-tp2-vllm.ipynb](notebooks/2026-09-02-deepseek-v4-flash-vision-exp-2node-tp2-vllm.ipynb) |
-| 2026-09-09 | Qwen3.8-Flash-Next NVFP4 + DFlash drafter, 2x DGX Spark, vLLM TP=2 + EP | Experimental drafter release, partly negative: a math/code drafter that regresses chat, eager mode only, on an engine that needs three control-flow patches plus a six-file adapter overlay to serve this class of drafter at all. Throughput table pending a re-benchmark (2 boots/arm, blocks 2/3/4/5/7, MTP k=3 and k=4, paired per-workload CIs). Losslessness is **not** certified and every tau figure is a proxy | [notebooks/2026-09-09-qwen3.8-flash-next-dflash-drafter-2node-tp2-vllm.ipynb](notebooks/2026-09-09-qwen3.8-flash-next-dflash-drafter-2node-tp2-vllm.ipynb) |
+| 2026-09-09 | Qwen3.8-Flash-Next NVFP4 + DFlash drafter, 2x DGX Spark, vLLM TP=2 + EP | Experimental drafter release, partly negative: **+3.87 % [+2.10 %, +5.77 %]** aggregate over the *tuned* native MTP baseline (k=4) at block 5, which is a math win (+28 %), a code wash (CI spans zero) and a **chat regression at every servable block** (−3.9 % to −11.3 %, every CI excluding zero). Eager mode only, on an engine that needs three control-flow patches plus a six-file adapter overlay to serve this class of drafter at all. Losslessness of the accept path **is** certified at block 5 (0.784 % violation against a 0.844 % nondeterminism floor), every tau figure is still a proxy, and **boot-to-boot variance is not in any interval** and moves as much as the effect | [notebooks/2026-09-09-qwen3.8-flash-next-dflash-drafter-2node-tp2-vllm.ipynb](notebooks/2026-09-09-qwen3.8-flash-next-dflash-drafter-2node-tp2-vllm.ipynb) |
 
 Detailed evidence for the Qwen3.8-Flash-Next checkpoint on this hardware
 lives in
@@ -106,8 +106,8 @@ this notebook links back to it and adds a fresh live re-measurement plus a
 reproducible end-to-end vision demo.
 
 The Qwen3.8-Flash-Next DFlash drafter notebook is a research artifact, not a
-recipe: the drafter weights and the training corpus are private, and the
-notebook says so in place rather than implying reproducibility it does not
+recipe: the drafter weights are published but the training corpus is not, and
+the notebook says so in place rather than implying reproducibility it does not
 have. Its durable contribution is the engine analysis — what vLLM and SGLang
 each cannot do with a DeepSpec-trained drafter on a HyperConnection + PLE +
 GatedDeltaNet target, at file:line, including one finding (adaptive

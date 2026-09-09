@@ -1,52 +1,64 @@
 {
-  "experiment": "2026-09-09-qwen3.8-flash-next-dflash-drafter-2node-tp2-vllm",
-  "captured_utc": "2026-09-09",
-  "pins": {
-    "target_model": "nvidia/Qwen3.8-Flash-Next-NVFP4",
-    "target_revision": "fc694b54fb0174e0913e6adf86691ef85a4ead47",
-    "drafter_model": "PixelML/Qwen3.8-Flash-Next-NVFP4-DFlash",
-    "drafter_revision": "96758da7c04e40f843eda749b5a7b343d0eddf96",
-    "drafter_visibility": "private at time of writing",
-    "drafter_safetensors_sha256": "35a23c17c248ff2e3296e6b78882b6d955af3092498fb7b6c48be1af4bfa971a",
-    "engine": "vLLM source e962733e08d10f7ca65dac4df99e116460b8b174 (arm64 image vllm/vllm-openai@sha256:89dd8f44...6ee39), plus the patches and overlay in section 3",
-    "runner": "V2 model runner (VLLM_USE_V2_MODEL_RUNNER default); V1 cannot boot this target at all",
-    "topology": "2 nodes, TP=2 + expert parallel, direct RoCE link, GB10 (sm_121a, arm64), unified memory",
-    "quantization": "NVFP4 routed experts, BF16 attention/shared (target); BF16 drafter",
-    "kv_cache_dtype": "not overridden (engine default)",
-    "gpu_memory_utilization": "0.75 (policy ceiling for this hardware, never exceeded)",
-    "compilation": "--enforce-eager (graph capture never demonstrated to fit under the 0.75 policy)",
-    "max_model_len": "8192",
-    "speculative_method": "dflash, num_speculative_tokens swept over the served blocks in section 2",
-    "sampling": "temperature 0 (greedy), seed 42, thinking off, max_tokens 256, ignore_eos",
-    "trainer": "deepseek-ai/DeepSpec @ 005e03b81cec38b7da6399833d609ee89a2587f2 (MIT), fork with a qwen4_exp port"
-  },
-  "drafter_architecture": {
-    "draft_layers": 5,
-    "trained_block_size": 7,
-    "hidden_size": 2560,
-    "intermediate_size": 7680,
-    "q_heads": 24,
-    "kv_heads": 2,
-    "head_dim": 256,
-    "fc_shape": [2560, 12800],
-    "target_layer_ids": [3, 15, 23, 35, 43],
-    "mask_token_id": 248077,
-    "parameters": 498106880,
-    "tensors": 58,
-    "dtype": "bf16",
-    "stripped_tensors": ["embed_tokens.weight", "lm_head.weight"],
-    "note": "fc consumes five contracted 2560-wide taps (5 x 2560 = 12800). The final hidden state is the distillation target, not a sixth conditioning tap. embed_tokens and lm_head are bound from the target at load."
-  },
-  "training": {
-    "corpus_rows_regenerated": 99957,
-    "cached_samples": 98470,
-    "cached_tokens": 120776745,
-    "cache_bytes_per_token": 30720,
-    "cache_size_tb": 3.711,
-    "epochs_run": 7,
-    "epochs_planned": 10,
-    "best_checkpoint": "step_1344 (epoch 7)",
-    "on_policy": true,
-    "teacher_for_regeneration": "nvidia/Qwen3.8-Flash-Next-NVFP4 @ fc694b54, non-thinking, temp 1.0 / top-p 0.95 / top-k 20, max 4096 new tokens"
-  }
+ "experiment": "2026-09-09-qwen3.8-flash-next-dflash-drafter-2node-tp2-vllm",
+ "captured_utc": "2026-09-09",
+ "pins": {
+  "target_model": "nvidia/Qwen3.8-Flash-Next-NVFP4",
+  "target_revision": "fc694b54fb0174e0913e6adf86691ef85a4ead47",
+  "drafter_model": "PixelML/Qwen3.8-Flash-Next-NVFP4-DFlash",
+  "drafter_revision": "96758da7c04e40f843eda749b5a7b343d0eddf96",
+  "drafter_visibility": "public",
+  "drafter_safetensors_sha256": "35a23c17c248ff2e3296e6b78882b6d955af3092498fb7b6c48be1af4bfa971a",
+  "engine": "vLLM source e962733e08d10f7ca65dac4df99e116460b8b174 (arm64 image vllm/vllm-openai@sha256:89dd8f44...6ee39), plus the patches and overlay in section 3",
+  "runner": "V2 model runner (VLLM_USE_V2_MODEL_RUNNER default); V1 cannot boot this target at all",
+  "topology": "2 nodes, TP=2 + expert parallel, direct RoCE link, GB10 (sm_121a, arm64), unified memory",
+  "quantization": "NVFP4 routed experts, BF16 attention/shared (target); BF16 drafter",
+  "kv_cache_dtype": "not overridden (engine default)",
+  "gpu_memory_utilization": "0.75 (policy ceiling for this hardware, never exceeded)",
+  "compilation": "--enforce-eager (graph capture never demonstrated to fit under the 0.75 policy)",
+  "max_model_len": "8192",
+  "speculative_method": "dflash, num_speculative_tokens swept over the served blocks in section 2",
+  "sampling": "temperature 0 (greedy), seed 42, thinking off, max_tokens 256, ignore_eos",
+  "trainer": "deepseek-ai/DeepSpec @ 005e03b81cec38b7da6399833d609ee89a2587f2 (MIT), fork with a qwen4_exp port"
+ },
+ "drafter_architecture": {
+  "draft_layers": 5,
+  "trained_block_size": 7,
+  "hidden_size": 2560,
+  "intermediate_size": 7680,
+  "q_heads": 24,
+  "kv_heads": 2,
+  "head_dim": 256,
+  "fc_shape": [
+   2560,
+   12800
+  ],
+  "target_layer_ids": [
+   3,
+   15,
+   23,
+   35,
+   43
+  ],
+  "mask_token_id": 248077,
+  "parameters": 498106880,
+  "tensors": 58,
+  "dtype": "bf16",
+  "stripped_tensors": [
+   "embed_tokens.weight",
+   "lm_head.weight"
+  ],
+  "note": "fc consumes five contracted 2560-wide taps (5 x 2560 = 12800). The final hidden state is the distillation target, not a sixth conditioning tap. embed_tokens and lm_head are bound from the target at load."
+ },
+ "training": {
+  "corpus_rows_regenerated": 99957,
+  "cached_samples": 98470,
+  "cached_tokens": 120776745,
+  "cache_bytes_per_token": 30720,
+  "cache_size_tb": 3.711,
+  "epochs_run": 7,
+  "epochs_planned": 10,
+  "best_checkpoint": "step_1344 (epoch 7)",
+  "on_policy": true,
+  "teacher_for_regeneration": "nvidia/Qwen3.8-Flash-Next-NVFP4 @ fc694b54, non-thinking, temp 1.0 / top-p 0.95 / top-k 20, max 4096 new tokens"
+ }
 }
