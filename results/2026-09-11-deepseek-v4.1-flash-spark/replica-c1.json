@@ -1,0 +1,86 @@
+{
+ "label": "repc1",
+ "c": 1,
+ "osl": 512,
+ "bases": [
+  "http://127.0.0.1:8000"
+ ],
+ "reps": [
+  {
+   "rep": 0,
+   "wall_s": 24.59,
+   "total_tokens": 512,
+   "aggregate_tok_s": 20.82,
+   "per_stream": [
+    20.78
+   ],
+   "per_stream_median": 20.78,
+   "requests": {
+    "0": {
+     "base": "http://127.0.0.1:8000",
+     "idx": 0,
+     "wall_s": 24.586,
+     "prompt_tokens": 973,
+     "completion_tokens": 512,
+     "decode_tok_s": 20.78,
+     "finish": "length",
+     "engine_stats": {
+      "engine": "v41",
+      "arena_gb": 86.9,
+      "arena_slots": 4622,
+      "lru_slots": 4222,
+      "transient_slots": 400,
+      "resident_expert_pct": 30.1,
+      "max_seq": 32768,
+      "spec": true,
+      "trace_stats": "results/trace-20260911-local/stats/coverage.json",
+      "kernel": "triton-fp4",
+      "expert_format": "fp4",
+      "expert_mb": 18.8,
+      "dense_fp4": "off",
+      "head_fmt": "bf16",
+      "routed_topk": 6,
+      "sim_cb2_frac": 0.0,
+      "act_quant": false,
+      "swa_replay": true,
+      "prune_keep": 0.31,
+      "prune_select": "uniform",
+      "hot_profile": "mixed",
+      "prefill_chunk": 2048,
+      "io_threads": 12,
+      "read_threads": 24,
+      "read_chunk_mb": 4.0,
+      "prompt_tokens": 973,
+      "completion_tokens": 514,
+      "prefill_s": 5.382,
+      "prefill_tok_s": 180.79,
+      "decode_s": 19.159,
+      "decode_tok_s": 26.78,
+      "steps": 105,
+      "accept_len_mean": 4.89,
+      "expert_hit_rate": 0.9997,
+      "expert_misses": 28,
+      "prefill_expert_misses": 25,
+      "nvme_gb": 1.0,
+      "nvme_read_s": 0.47,
+      "engram_rows": 40848,
+      "engram_s": 0.671,
+      "engram_read_s": 1.965,
+      "attn_s": 0.2,
+      "moe_s": 4.64,
+      "route_s": 19.22,
+      "load_wait_s": 0.47,
+      "lease_s": 0.0,
+      "h2d_s": 0.03,
+      "kernel_s": -15.06,
+      "nvme_gb_per_token": 0.002,
+      "promoted": 28,
+      "server_completion_tok_per_s": 20.8
+     }
+    }
+   }
+  }
+ ],
+ "aggregate_tok_s_median": 20.82,
+ "per_stream_median_of_medians": 20.78
+}

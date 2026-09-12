@@ -1,0 +1,21 @@
+{
+ "arms": [
+  {
+   "c": 1,
+   "aggregate": 20.82,
+   "per_stream": 20.78
+  },
+  {
+   "c": 2,
+   "aggregate": 38.18,
+   "per_stream": 20.24
+  },
+  {
+   "c": 4,
+   "aggregate": 41.25,
+   "per_stream": 15.79
+  }
+ ],
+ "config": "keep-31% FP4 resident (PRUNE_KEEP=0.31, ARENA_GB=86.9), warm arena, filler-list prompts, 512 output tokens, ignore_eos, 3 reps, medians",
+ "protocol": "requests distributed round-robin across the two OpenAI endpoints; per-stream medians of medians; token counts from usage object"
+}
