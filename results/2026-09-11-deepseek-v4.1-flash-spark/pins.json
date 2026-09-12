@@ -1,0 +1,12 @@
+{
+ "pins": {
+  "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+  "revision": "dba1be0a40aa45a94ad051997016db3960a90277",
+  "engine_rev": "a8aae967d5b2a3f76008869772b47857dbbc35f1",
+  "engine_repo": "https://github.com/0xBakeer/deepseek-v41-flash-spark",
+  "python": "3.12.3 venv; torch 2.13.0+cu130; transformers 5.17.0; triton 3.7.1 (cu130 index)",
+  "nodes": "2x DGX Spark (GB10, SM121, ~121 GiB visible unified memory), matrix one node at a time",
+  "trace": "routing trace + corpus regenerated locally (matches upstream coverage within rounding)",
+  "floor_reference": "26.55 tok/s GLM-5.3-Flash NVFP4 TP2 c=1, receipted (club-dgx-spark GLM notebook)"
+ }
+}
