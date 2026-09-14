@@ -1,0 +1,180 @@
+{
+ "captured_utc": "2026-09-09 (definitive sweep; supersedes the 2026-09-08 preliminary fidelity block)",
+ "tau_proxy_warning": "Every tau figure in this file is a PROXY, not a measured accepted length. The offline evaluator multiplies MARGINAL per-position agreement rates against corpus tokens; that product is not the joint probability of an accepted prefix. Its numerical closeness to a served accepted length does not validate it. Fix the evaluator to compute the joint accepted-prefix probability before quoting tau again.",
+ "training_curve": {
+  "held_out": "496 rows (corpus rows 99,457-99,956), cached identically, never trained on",
+  "definition": "tau_proxy = 1 + sum_k prod_{j<=k} p_j, where p_j are MARGINAL per-position agreement rates",
+  "rows": [
+   {
+    "epoch": 1,
+    "step": 192,
+    "pos1": 0.6462,
+    "pos2": 0.5075,
+    "pos4": 0.3134,
+    "pos7": 0.1684,
+    "tau_proxy": 2.1585
+   },
+   {
+    "epoch": 2,
+    "step": 384,
+    "pos1": 0.7522,
+    "pos2": 0.6226,
+    "pos4": 0.4376,
+    "pos7": 0.264,
+    "tau_proxy": 2.6254
+   },
+   {
+    "epoch": 3,
+    "step": 576,
+    "pos1": 0.7848,
+    "pos2": 0.6629,
+    "pos4": 0.4893,
+    "pos7": 0.3121,
+    "tau_proxy": 2.836
+   },
+   {
+    "epoch": 4,
+    "step": 768,
+    "pos1": 0.7989,
+    "pos2": 0.6798,
+    "pos4": 0.5132,
+    "pos7": 0.3405,
+    "tau_proxy": 2.9383
+   },
+   {
+    "epoch": 5,
+    "step": 960,
+    "pos1": 0.8074,
+    "pos2": 0.6898,
+    "pos4": 0.5271,
+    "pos7": 0.3572,
+    "tau_proxy": 3.0039
+   },
+   {
+    "epoch": 6,
+    "step": 1152,
+    "pos1": 0.8131,
+    "pos2": 0.6983,
+    "pos4": 0.537,
+    "pos7": 0.3686,
+    "tau_proxy": 3.0531
+   },
+   {
+    "epoch": 7,
+    "step": 1344,
+    "pos1": 0.8163,
+    "pos2": 0.702,
+    "pos4": 0.5428,
+    "pos7": 0.3752,
+    "tau_proxy": 3.0795
+   }
+  ],
+  "note": "Training stopped after epoch 7 of a planned 10: the last epoch delta was +0.026 proxy tau, epochs 8-10 were projected at about +0.01 for roughly $65, and a mid-run host slowdown pushed the 10-epoch cost past the ceiling. Two differently-trained proxy points cannot establish a data-scaling law; an earlier claim that more data was exhausted has been withdrawn as unsupported.",
+  "label": "measured (the agreement numbers) / proxy (what tau means)"
+ },
+ "served_accepted_length": {
+  "note": "Measured accepted length from the engine own acceptance counters (1 + accepted/drafts). This is the number to cite rather than the proxy. Independently cross-checked for block 5 against the streaming block structure: 25,600 tokens in 8,889 engine steps = mean block 2.880, against the counter-derived 2.883.",
+  "by_arm": {
+   "DFlash block 2 (patched)": 2.2224,
+   "DFlash block 3 (patched)": 2.5531,
+   "DFlash block 4": 2.7562,
+   "DFlash block 5": 2.8826,
+   "DFlash block 7": 2.9837,
+   "native MTP k=1": 1.8436,
+   "native MTP k=3": 2.9965,
+   "native MTP k=4 (baseline)": 3.3669,
+   "native MTP k=6": 3.8252,
+   "native MTP k=4 graph": 3.3537
+  },
+  "per_workload_block5_vs_k4": {
+   "code": "2.99 vs 3.62",
+   "math": "4.24 vs 3.98",
+   "chat": "2.14 vs 2.76"
+  },
+  "reading": "The drafter only out-accepts the native head on math. On chat it accepts 2.14 against the head 2.76 while paying a cheaper pass (54.3 ms vs 66.0 ms) and loses anyway.",
+  "label": "measured (2026-09-09, two boots per arm)"
+ },
+ "engine_nondeterminism": {
+  "measurement": "Same-boot, free-running, identical prompts, with a common-prefix estimator: the rate at which two runs first disagree given they have agreed so far.",
+  "per_step_argmax_flip_hazard": {
+   "AR (spec off)": 0.02613,
+   "native MTP k=1": 0.01779,
+   "native MTP k=3": 0.02077,
+   "native MTP k=4": 0.00965,
+   "native MTP k=6": 0.01057,
+   "native MTP k=4 graph": 0.0115,
+   "DFlash block 2": 0.02356,
+   "DFlash block 3": 0.02507,
+   "DFlash block 4": 0.02291,
+   "DFlash block 5": 0.0215,
+   "DFlash block 7": 0.02267
+  },
+  "sequences_that_diverge_at_all": {
+   "AR (spec off)": 0.99,
+   "native MTP k=1": 0.98,
+   "native MTP k=3": 0.985,
+   "native MTP k=4": 0.81,
+   "native MTP k=6": 0.805,
+   "native MTP k=4 graph": 0.83,
+   "DFlash block 2": 0.985,
+   "DFlash block 3": 0.98,
+   "DFlash block 4": 1.0,
+   "DFlash block 5": 0.985,
+   "DFlash block 7": 0.98
+  },
+  "reading": "The engine is NOT run-to-run reproducible at c=1, temperature 0. At roughly 2% per step, almost every 256-token greedy generation differs somewhere between two runs of the same server: eight of the eleven arms diverge on 98% or more of requests, and the three best-behaved still diverge on about 81%. The consequence, which was never stated before: any gate written on free-running output identity cannot pass and never could, including the harness own token_agreement >= 0.99. A ~2.7% figure carried in earlier notes was a TEACHER-FORCED per-position rate, not this one. If you are building acceptance gates for speculative decoding, measure your engine against itself first.",
+  "label": "measured"
+ },
+ "losslessness": {
+  "verdict": "CERTIFIED for the accept path at block 5, greedy, against a measured nondeterminism floor.",
+  "method": "One continuation captured from the DFlash server at block 5 WITH engine-step block boundaries recovered from the streaming chunk boundaries, so every emitted position is labelled accepted-draft or block-final bonus/correction. That SAME continuation was then scored under teacher forcing on the DFlash server and TWICE on a spec-off (AR) server. Every arm therefore sees an IDENTICAL prefix, and AR-replay-1 vs AR-replay-2 gives the pure nondeterminism floor at exactly those positions.",
+  "all_emitted": {
+   "positions_checked": 25600,
+   "violation_rate": 0.023164,
+   "nondeterminism_floor_same_prefix": 0.022148
+  },
+  "accepted_draft_positions_only": {
+   "positions_checked": 16711,
+   "violation_rate": 0.007839,
+   "nondeterminism_floor_same_prefix": 0.008438,
+   "reading": "On the positions the accept path is actually responsible for, the drafter disagrees with the spec-off target LESS often than the target disagrees with itself: 0.784% vs a 0.844% floor. SE about 0.07 pp, so this check resolves to roughly 0.2 pp; the 2026-09-08 version was blind below about 2.5%."
+  },
+  "by_position_within_block": {
+   "0": {
+    "checked": 8889,
+    "violation_rate": 0.027,
+    "floor_rate": 0.028012
+   },
+   "1": {
+    "checked": 6252,
+    "violation_rate": 0.025112,
+    "floor_rate": 0.024152
+   },
+   "2": {
+    "checked": 4199,
+    "violation_rate": 0.021672,
+    "floor_rate": 0.017861
+   },
+   "3": {
+    "checked": 2805,
+    "violation_rate": 0.019251,
+    "floor_rate": 0.018538
+   },
+   "4": {
+    "checked": 1991,
+    "violation_rate": 0.017077,
+    "floor_rate": 0.015068
+   },
+   "5": {
+    "checked": 1464,
+    "violation_rate": 0.011612,
+    "floor_rate": 0.006831
+   }
+  },
+  "by_position_reading": "A real accept-path bug concentrates at one offset; noise does not. There is no concentration anywhere: violation tracks the floor at every offset and declines monotonically.",
+  "large_margin_mismatches_explained": "49 violations exceed 4 log units, maximum 12.0, and ALL 49 sit at the block-final position, the bonus and correction slot, with NONE at an accepted-draft position. The same tail appears when the DFlash server scores its own capture (53 cases, maximum 12.9), so it is a property of teacher-forced replay at the correction slot, not of the accept path. The earlier claim that \"all mismatches are near-ties\" was false; the correct statement is that the large-margin mismatches live at the slot the accept path does not own.",
+  "scope": "Certified at block 5 only, greedy, under teacher forcing, against a floor measured on this stack. NOT an absolute losslessness claim, and it says nothing about sampling, other block sizes, or long context.",
+  "supersedes": "The 2026-09-08 teacher-forced check, which compared all emitted tokens including correction and bonus tokens, replayed different prefixes across arms, and had a blind spot of about 2.5%. Its verdict was \"NOT certified\" and it is retired.",
+  "label": "measured"
+ }
+}

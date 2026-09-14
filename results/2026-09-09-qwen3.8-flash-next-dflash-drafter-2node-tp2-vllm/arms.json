@@ -1,0 +1,908 @@
+{
+ "status": "final",
+ "measured": "2026-09-09, definitive sweep on the 2x DGX Spark pair",
+ "status_note": "Final measurement set. Two boots per arm, two runs of 100 prompts per boot, one frozen fixture, one engine build, aggregate output throughput as the headline quantity and a paired stratified bootstrap over prompts for every interval. It supersedes the 2026-09-08 single-boot set, which is preserved below as preliminary_2026_09_08 and must not be quoted as the result.",
+ "baseline": "native MTP k=4. The baseline was swept (k=1/3/4/6) before the comparison was made. k=4 is the best native arm; k=3 is 0.60% behind it with a CI spanning zero, so the honest baseline is \"about 50.2 at k=3 or k=4\" and every figure here is quoted against k=4 because it is the harder number.",
+ "protocol": {
+  "fixture": "eval100 \u2014 100 held-out prompts, 33 code / 33 math / 34 chat, stratified from the training corpus held-out split, frozen and identical for every arm",
+  "concurrency": 1,
+  "max_tokens": 256,
+  "ignore_eos": true,
+  "temperature": 0,
+  "seed": 42,
+  "thinking": "off",
+  "context": 8192,
+  "topology": "TP2 + EP, eager, utilization 0.75 (never exceeded); the two graph-mode boots are the only non-eager arm",
+  "metric_definitions": {
+   "aggregate_tok_s": "sum of completion tokens over all requests / sum of wall time over all requests, counted from the final usage object",
+   "median_tok_s": "median of per-request tok/s across the 100 prompts",
+   "accepted_length": "engine acceptance counters: accepted draft tokens per engine pass, including the bonus token",
+   "ms_per_engine_pass": "group wall time / spec draft passes; includes sampling, scheduler and IPC. Never comparable with a target-forward-only figure."
+  },
+  "analysis": "paired stratified bootstrap over prompts (8,000 resamples), averaging repeats within a prompt before differencing, stratified by workload; reported as a percentage difference in aggregate throughput with a conditional 95% CI. Pooled medians are NOT a paired difference test and were the source of an earlier wrong \"indistinguishable from zero\" reading.",
+  "per_boot": "2 runs x 100 prompts (200 requests, 25,600 output tokens per run)",
+  "boots_per_arm": 2,
+  "deviation_from_brief": "The brief asked for >=5 runs x 30 prompts per boot; 2 runs x 100 prompts were run instead. The fixture is fixed-order, so --limit 30 would have measured the SAME 30 prompts every run (11 code / 10 math / 9 chat), giving per-workload intervals on 9-11 prompts. For a bootstrap that resamples PROMPTS and averages repeats within prompt, 100 prompts x 2 runs strictly dominates: 100 resampling units instead of 30, the full 33/33/34 strata, and 4 repeats per prompt across the two boots."
+ },
+ "boot_variance_disclosure": {
+  "statement": "The intervals below are paired over prompts and contain NO boot-to-boot variance component. Two boots per arm cannot estimate one, and the observed boot-to-boot movement is the same order as the effect being reported. This is the weakest part of the result and belongs next to the numbers, not in a footnote.",
+  "observed_movement": {
+   "AR": "24.304 -> 25.138 (+3.4%)",
+   "native MTP k=4": "50.876 -> 49.876 (-2.0%)",
+   "DFlash block 4": "51.677 -> 52.186 (+1.0%)"
+  },
+  "headline_effect_for_comparison": "+3.87% [+2.10, +5.77]"
+ },
+ "thin_and_patched_arms": {
+  "native MTP k=1": "ONE boot (2 runs). 18% off the pace, far outside any plausible boot variance, but do not present it as a two-boot arm.",
+  "DFlash block 4": "3 runs, not 4 (its first boot contributed one run).",
+  "DFlash blocks 2 and 3": "PATCHED arms. They required widening our own K allowlist in serving/plugin/dflash_epoch7.py:68 from (4,5,7) to (2,3,4,5,7). That guard is a Pixel ML scope marker, not a vLLM limit and not architectural: blocks 2 and 3 take the identical proposer path, and K < block_size (7) is already the served regime for K=4 and K=5. One line, nothing else in the file changed. The label travels with the arms."
+ },
+ "arms": [
+  {
+   "arm": "AR (spec off)",
+   "block": null,
+   "k": null,
+   "is_baseline": false,
+   "patched": false,
+   "aggregate_tok_s": 24.853,
+   "vs_baseline_pct": -50.659,
+   "ci95": [
+    -51.718,
+    -49.575
+   ],
+   "boots": 2,
+   "runs": 3,
+   "per_boot_aggregate_tok_s": {
+    "bootB": 25.138,
+    "q2boot1": 24.304
+   },
+   "accepted_length": null,
+   "ms_per_engine_pass": null,
+   "per_workload": {
+    "code": {
+     "aggregate_tok_s": 24.886,
+     "vs_baseline_pct": -53.82,
+     "ci95": [
+      -55.986,
+      -51.53
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": null
+    },
+    "math": {
+     "aggregate_tok_s": 24.828,
+     "vs_baseline_pct": -57.831,
+     "ci95": [
+      -58.934,
+      -56.68
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": null
+    },
+    "chat": {
+     "aggregate_tok_s": 24.847,
+     "vs_baseline_pct": -40.63,
+     "ci95": [
+      -42.619,
+      -38.633
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": null
+    }
+   },
+   "reproducibility": {
+    "argmax_flip_hazard_common_prefix": 0.02613,
+    "hazard_positions_compared": 3789,
+    "free_running_divergence_rate": 0.99,
+    "raw_positional_mismatch_post_divergence": 0.82793,
+    "run_pairs": 100
+   }
+  },
+  {
+   "arm": "native MTP",
+   "block": null,
+   "k": 1,
+   "is_baseline": false,
+   "patched": false,
+   "aggregate_tok_s": 41.321,
+   "vs_baseline_pct": -17.968,
+   "ci95": [
+    -19.321,
+    -16.593
+   ],
+   "boots": 1,
+   "runs": 2,
+   "per_boot_aggregate_tok_s": {
+    "bootA": 41.321
+   },
+   "accepted_length": 1.8436,
+   "ms_per_engine_pass": 44.721,
+   "per_workload": {
+    "code": {
+     "aggregate_tok_s": 42.116,
+     "vs_baseline_pct": -21.846,
+     "ci95": [
+      -24.686,
+      -18.958
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 1.8749
+    },
+    "math": {
+     "aggregate_tok_s": 43.135,
+     "vs_baseline_pct": -26.739,
+     "ci95": [
+      -28.251,
+      -25.193
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 1.9191
+    },
+    "chat": {
+     "aggregate_tok_s": 39.013,
+     "vs_baseline_pct": -6.781,
+     "ci95": [
+      -9.201,
+      -4.391
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 1.7485
+    }
+   },
+   "reproducibility": {
+    "argmax_flip_hazard_common_prefix": 0.01779,
+    "hazard_positions_compared": 5508,
+    "free_running_divergence_rate": 0.98,
+    "raw_positional_mismatch_post_divergence": 0.75734,
+    "run_pairs": 100
+   }
+  },
+  {
+   "arm": "native MTP",
+   "block": null,
+   "k": 3,
+   "is_baseline": false,
+   "patched": false,
+   "aggregate_tok_s": 50.071,
+   "vs_baseline_pct": -0.596,
+   "ci95": [
+    -1.466,
+    0.254
+   ],
+   "boots": 2,
+   "runs": 4,
+   "per_boot_aggregate_tok_s": {
+    "bootB": 50.184,
+    "q2boot1": 49.959
+   },
+   "accepted_length": 2.9965,
+   "ms_per_engine_pass": 59.81,
+   "per_workload": {
+    "code": {
+     "aggregate_tok_s": 52.351,
+     "vs_baseline_pct": -2.852,
+     "ci95": [
+      -4.576,
+      -1.193
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 3.1737
+    },
+    "math": {
+     "aggregate_tok_s": 56.774,
+     "vs_baseline_pct": -3.574,
+     "ci95": [
+      -4.872,
+      -2.259
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 3.4126
+    },
+    "chat": {
+     "aggregate_tok_s": 43.281,
+     "vs_baseline_pct": 3.418,
+     "ci95": [
+      2.0,
+      4.82
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 2.5551
+    }
+   },
+   "reproducibility": {
+    "argmax_flip_hazard_common_prefix": 0.02077,
+    "hazard_positions_compared": 9487,
+    "free_running_divergence_rate": 0.985,
+    "raw_positional_mismatch_post_divergence": 0.76469,
+    "run_pairs": 200
+   }
+  },
+  {
+   "arm": "native MTP",
+   "block": null,
+   "k": 4,
+   "is_baseline": true,
+   "patched": false,
+   "aggregate_tok_s": 50.371,
+   "vs_baseline_pct": null,
+   "ci95": null,
+   "boots": 2,
+   "runs": 4,
+   "per_boot_aggregate_tok_s": {
+    "bootA": 50.876,
+    "bootB": 49.876
+   },
+   "accepted_length": 3.3669,
+   "ms_per_engine_pass": 66.731,
+   "per_workload": {
+    "code": {
+     "aggregate_tok_s": 53.888,
+     "vs_baseline_pct": null,
+     "ci95": null,
+     "ci_excludes_zero": null,
+     "accepted_length": 3.6235
+    },
+    "math": {
+     "aggregate_tok_s": 58.878,
+     "vs_baseline_pct": null,
+     "ci95": null,
+     "ci_excludes_zero": null,
+     "accepted_length": 3.9778
+    },
+    "chat": {
+     "aggregate_tok_s": 41.851,
+     "vs_baseline_pct": null,
+     "ci95": null,
+     "ci_excludes_zero": null,
+     "accepted_length": 2.7639
+    }
+   },
+   "reproducibility": {
+    "argmax_flip_hazard_common_prefix": 0.00965,
+    "hazard_positions_compared": 16791,
+    "free_running_divergence_rate": 0.81,
+    "raw_positional_mismatch_post_divergence": 0.63799,
+    "run_pairs": 200
+   }
+  },
+  {
+   "arm": "native MTP",
+   "block": null,
+   "k": 6,
+   "is_baseline": false,
+   "patched": false,
+   "aggregate_tok_s": 46.987,
+   "vs_baseline_pct": -6.717,
+   "ci95": [
+    -7.592,
+    -5.797
+   ],
+   "boots": 2,
+   "runs": 4,
+   "per_boot_aggregate_tok_s": {
+    "bootA": 46.926,
+    "bootB": 47.049
+   },
+   "accepted_length": 3.8252,
+   "ms_per_engine_pass": 80.971,
+   "per_workload": {
+    "code": {
+     "aggregate_tok_s": 52.169,
+     "vs_baseline_pct": -3.19,
+     "ci95": [
+      -5.053,
+      -1.166
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 4.2937
+    },
+    "math": {
+     "aggregate_tok_s": 58.525,
+     "vs_baseline_pct": -0.599,
+     "ci95": [
+      -2.141,
+      1.02
+     ],
+     "ci_excludes_zero": false,
+     "accepted_length": 4.8292
+    },
+    "chat": {
+     "aggregate_tok_s": 36.488,
+     "vs_baseline_pct": -12.814,
+     "ci95": [
+      -14.004,
+      -11.506
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 2.9233
+    }
+   },
+   "reproducibility": {
+    "argmax_flip_hazard_common_prefix": 0.01057,
+    "hazard_positions_compared": 15230,
+    "free_running_divergence_rate": 0.805,
+    "raw_positional_mismatch_post_divergence": 0.65564,
+    "run_pairs": 200
+   }
+  },
+  {
+   "arm": "native MTP, graph mode",
+   "block": null,
+   "k": 4,
+   "is_baseline": false,
+   "patched": false,
+   "aggregate_tok_s": 48.37,
+   "vs_baseline_pct": -3.972,
+   "ci95": [
+    -4.682,
+    -3.26
+   ],
+   "boots": 2,
+   "runs": 4,
+   "per_boot_aggregate_tok_s": {
+    "graphA": 48.318,
+    "graphB": 48.422
+   },
+   "accepted_length": 3.3537,
+   "ms_per_engine_pass": 69.189,
+   "per_workload": {
+    "code": {
+     "aggregate_tok_s": 51.741,
+     "vs_baseline_pct": -3.984,
+     "ci95": [
+      -5.019,
+      -2.998
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 3.6171
+    },
+    "math": {
+     "aggregate_tok_s": 56.595,
+     "vs_baseline_pct": -3.878,
+     "ci95": [
+      -5.109,
+      -2.64
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 3.9596
+    },
+    "chat": {
+     "aggregate_tok_s": 40.165,
+     "vs_baseline_pct": -4.029,
+     "ci95": [
+      -5.368,
+      -2.688
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 2.7499
+    }
+   },
+   "reproducibility": {
+    "argmax_flip_hazard_common_prefix": 0.0115,
+    "hazard_positions_compared": 14439,
+    "free_running_divergence_rate": 0.83,
+    "raw_positional_mismatch_post_divergence": 0.69402,
+    "run_pairs": 200
+   }
+  },
+  {
+   "arm": "DFlash",
+   "block": 2,
+   "k": null,
+   "is_baseline": false,
+   "patched": true,
+   "aggregate_tok_s": 46.115,
+   "vs_baseline_pct": -8.449,
+   "ci95": [
+    -9.47,
+    -7.457
+   ],
+   "boots": 2,
+   "runs": 4,
+   "per_boot_aggregate_tok_s": {
+    "bootA": 46.08,
+    "bootB": 46.15
+   },
+   "accepted_length": 2.2224,
+   "ms_per_engine_pass": 48.247,
+   "per_workload": {
+    "code": {
+     "aggregate_tok_s": 47.243,
+     "vs_baseline_pct": -12.331,
+     "ci95": [
+      -13.734,
+      -10.938
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 2.2887
+    },
+    "math": {
+     "aggregate_tok_s": 54.592,
+     "vs_baseline_pct": -7.28,
+     "ci95": [
+      -8.715,
+      -5.941
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 2.648
+    },
+    "chat": {
+     "aggregate_tok_s": 39.284,
+     "vs_baseline_pct": -6.133,
+     "ci95": [
+      -8.098,
+      -4.13
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 1.8763
+    }
+   },
+   "reproducibility": {
+    "argmax_flip_hazard_common_prefix": 0.02356,
+    "hazard_positions_compared": 8361,
+    "free_running_divergence_rate": 0.985,
+    "raw_positional_mismatch_post_divergence": 0.79848,
+    "run_pairs": 200
+   }
+  },
+  {
+   "arm": "DFlash",
+   "block": 3,
+   "k": null,
+   "is_baseline": false,
+   "patched": true,
+   "aggregate_tok_s": 49.959,
+   "vs_baseline_pct": -0.818,
+   "ci95": [
+    -1.918,
+    0.252
+   ],
+   "boots": 2,
+   "runs": 4,
+   "per_boot_aggregate_tok_s": {
+    "bootA": 49.721,
+    "bootB": 50.199
+   },
+   "accepted_length": 2.5531,
+   "ms_per_engine_pass": 51.098,
+   "per_workload": {
+    "code": {
+     "aggregate_tok_s": 51.564,
+     "vs_baseline_pct": -4.313,
+     "ci95": [
+      -5.791,
+      -2.81
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 2.6436
+    },
+    "math": {
+     "aggregate_tok_s": 63.881,
+     "vs_baseline_pct": 8.498,
+     "ci95": [
+      6.217,
+      10.691
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 3.2979
+    },
+    "chat": {
+     "aggregate_tok_s": 40.233,
+     "vs_baseline_pct": -3.866,
+     "ci95": [
+      -5.742,
+      -2.043
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 2.0375
+    }
+   },
+   "reproducibility": {
+    "argmax_flip_hazard_common_prefix": 0.02507,
+    "hazard_positions_compared": 7818,
+    "free_running_divergence_rate": 0.98,
+    "raw_positional_mismatch_post_divergence": 0.80258,
+    "run_pairs": 200
+   }
+  },
+  {
+   "arm": "DFlash",
+   "block": 4,
+   "k": null,
+   "is_baseline": false,
+   "patched": false,
+   "aggregate_tok_s": 52.015,
+   "vs_baseline_pct": 3.264,
+   "ci95": [
+    1.84,
+    4.789
+   ],
+   "boots": 2,
+   "runs": 3,
+   "per_boot_aggregate_tok_s": {
+    "bootB": 52.186,
+    "q2boot1": 51.677
+   },
+   "accepted_length": 2.7562,
+   "ms_per_engine_pass": 52.931,
+   "per_workload": {
+    "code": {
+     "aggregate_tok_s": 54.44,
+     "vs_baseline_pct": 1.024,
+     "ci95": [
+      -1.629,
+      3.948
+     ],
+     "ci_excludes_zero": false,
+     "accepted_length": 2.8969
+    },
+    "math": {
+     "aggregate_tok_s": 70.07,
+     "vs_baseline_pct": 19.009,
+     "ci95": [
+      15.489,
+      22.624
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 3.7727
+    },
+    "chat": {
+     "aggregate_tok_s": 40.218,
+     "vs_baseline_pct": -3.901,
+     "ci95": [
+      -5.854,
+      -1.926
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 2.1042
+    }
+   },
+   "reproducibility": {
+    "argmax_flip_hazard_common_prefix": 0.02291,
+    "hazard_positions_compared": 4364,
+    "free_running_divergence_rate": 1.0,
+    "raw_positional_mismatch_post_divergence": 0.79605,
+    "run_pairs": 100
+   }
+  },
+  {
+   "arm": "DFlash",
+   "block": 5,
+   "k": null,
+   "is_baseline": false,
+   "patched": false,
+   "aggregate_tok_s": 52.322,
+   "vs_baseline_pct": 3.873,
+   "ci95": [
+    2.095,
+    5.768
+   ],
+   "boots": 2,
+   "runs": 4,
+   "per_boot_aggregate_tok_s": {
+    "bootB": 52.391,
+    "q2boot1": 52.253
+   },
+   "accepted_length": 2.8826,
+   "ms_per_engine_pass": 55.0,
+   "per_workload": {
+    "code": {
+     "aggregate_tok_s": 54.085,
+     "vs_baseline_pct": 0.365,
+     "ci95": [
+      -3.169,
+      4.207
+     ],
+     "ci_excludes_zero": false,
+     "accepted_length": 2.9905
+    },
+    "math": {
+     "aggregate_tok_s": 75.385,
+     "vs_baseline_pct": 28.037,
+     "ci95": [
+      22.798,
+      33.37
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 4.2427
+    },
+    "chat": {
+     "aggregate_tok_s": 39.382,
+     "vs_baseline_pct": -5.899,
+     "ci95": [
+      -7.961,
+      -3.894
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 2.1391
+    }
+   },
+   "reproducibility": {
+    "argmax_flip_hazard_common_prefix": 0.0215,
+    "hazard_positions_compared": 9164,
+    "free_running_divergence_rate": 0.985,
+    "raw_positional_mismatch_post_divergence": 0.7765,
+    "run_pairs": 200
+   }
+  },
+  {
+   "arm": "DFlash",
+   "block": 7,
+   "k": null,
+   "is_baseline": false,
+   "patched": false,
+   "aggregate_tok_s": 50.536,
+   "vs_baseline_pct": 0.327,
+   "ci95": [
+    -1.805,
+    2.583
+   ],
+   "boots": 2,
+   "runs": 4,
+   "per_boot_aggregate_tok_s": {
+    "bootB": 50.403,
+    "q2boot1": 50.669
+   },
+   "accepted_length": 2.9837,
+   "ms_per_engine_pass": 58.882,
+   "per_workload": {
+    "code": {
+     "aggregate_tok_s": 52.525,
+     "vs_baseline_pct": -2.529,
+     "ci95": [
+      -6.532,
+      2.254
+     ],
+     "ci_excludes_zero": false,
+     "accepted_length": 3.1077
+    },
+    "math": {
+     "aggregate_tok_s": 75.961,
+     "vs_baseline_pct": 29.015,
+     "ci95": [
+      20.953,
+      37.71
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 4.6247
+    },
+    "chat": {
+     "aggregate_tok_s": 37.114,
+     "vs_baseline_pct": -11.319,
+     "ci95": [
+      -13.174,
+      -9.407
+     ],
+     "ci_excludes_zero": true,
+     "accepted_length": 2.1537
+    }
+   },
+   "reproducibility": {
+    "argmax_flip_hazard_common_prefix": 0.02267,
+    "hazard_positions_compared": 8644,
+    "free_running_divergence_rate": 0.98,
+    "raw_positional_mismatch_post_divergence": 0.79193,
+    "run_pairs": 200
+   }
+  }
+ ],
+ "headline": {
+  "claim": "DFlash block 5 beats the tuned native MTP baseline (k=4) by +3.87% in aggregate output throughput, 95% CI [+2.10%, +5.77%].",
+  "second_best": "DFlash block 4, +3.26% [+1.84%, +4.79%].",
+  "both_exclude_zero": true,
+  "against_the_softer_k3_baseline": "block 5 +4.50% [+2.35%, +6.80%]; the 2026-09-08 single-boot set read +4.59% [+2.14%, +7.06%] against the same baseline.",
+  "workload_shape": "a math win (+28.0% at block 5), a code wash (+0.37%, CI spans zero), and a chat regression at every servable block.",
+  "caveat": "boot-to-boot variance is not in the interval; see boot_variance_disclosure."
+ },
+ "chat_regression_by_block_vs_mtp_k4": {
+  "note": "Chat regresses at EVERY block that can be served and every interval excludes zero. It does not improve monotonically as the block shrinks: it bottoms out at blocks 3 and 4 near -3.9% and gets worse again at block 2, which also gives up most of the math gain (-7.28%). The \"untested where it could pass\" possibility is closed: the narrow math-and-code-only release fails on measurement, not on assumption.",
+  "blocks": {
+   "2": {
+    "chat_pct": -6.133,
+    "ci95": [
+     -8.098,
+     -4.13
+    ]
+   },
+   "3": {
+    "chat_pct": -3.866,
+    "ci95": [
+     -5.742,
+     -2.043
+    ]
+   },
+   "4": {
+    "chat_pct": -3.901,
+    "ci95": [
+     -5.854,
+     -1.926
+    ]
+   },
+   "5": {
+    "chat_pct": -5.899,
+    "ci95": [
+     -7.961,
+     -3.894
+    ]
+   },
+   "7": {
+    "chat_pct": -11.319,
+    "ci95": [
+     -13.174,
+     -9.407
+    ]
+   }
+  },
+  "best_native_chat_arm": "native MTP k=3 at 43.281 tok/s on chat; the drafter tops out near 40.2 and never approaches it."
+ },
+ "vs_native_mtp_k3": {
+  "DFlash block 3": {
+   "aggregate_pct": -0.224,
+   "ci95": [
+    -1.444,
+    1.027
+   ],
+   "chat_pct": -7.043,
+   "chat_ci95": [
+    -8.679,
+    -5.449
+   ],
+   "math_pct": 12.519,
+   "code_pct": -1.504
+  },
+  "DFlash block 4": {
+   "aggregate_pct": 3.883,
+   "ci95": [
+    2.189,
+    5.768
+   ],
+   "chat_pct": -7.077,
+   "chat_ci95": [
+    -9.014,
+    -5.015
+   ],
+   "math_pct": 23.42,
+   "code_pct": 3.989
+  },
+  "DFlash block 5": {
+   "aggregate_pct": 4.496,
+   "ci95": [
+    2.352,
+    6.804
+   ],
+   "chat_pct": -9.009,
+   "chat_ci95": [
+    -11.123,
+    -6.768
+   ],
+   "math_pct": 32.782,
+   "code_pct": 3.311
+  }
+ },
+ "graph_mode": {
+  "memory_fit_under_0.75": true,
+  "evidence": "native MTP k=4 booted TWICE with {\"mode\":0,\"cudagraph_mode\":\"FULL_DECODE_ONLY\",\"cudagraph_capture_sizes\":[1,2,4,8,16]} at utilization 0.75 and served 4 full runs. This is the FIRST demonstration that graph memory fits under the policy; the earlier attempt died inside profile_cudagraph_memory -> initialize_kv_cache, before capture.",
+  "mtp_k4_graph_vs_eager_pct": -3.972,
+  "mtp_k4_graph_ci95": [
+   -4.682,
+   -3.26
+  ],
+  "reading": "Graphs make the BASELINE slower, consistently across both boots and all three workloads. So the eager-only protocol was NOT flattering the drafter; the earlier speculation that eager inflates per-pass overhead and favours a one-parallel-pass drafter is not supported, and if anything graphs would widen the drafter margin.",
+  "dflash_graph": "BLOCKED",
+  "dflash_graph_error": "ValueError(\"HC attachment requires enforce_eager\")",
+  "dflash_graph_code_path": "serving/plugin/dflash_epoch7.py:80, raised in the draft model __init__ during load",
+  "dflash_graph_note": "This is OUR OWN adapter's assertion, written as a correctness guard on the HC tap. It is not a vLLM limit and not a memory failure. The graph A/B is therefore ONE-SIDED, baseline only, and removing the guard is our work to do.",
+  "label": "measured"
+ },
+ "preliminary_2026_09_08": {
+  "label": "SUPERSEDED 2026-09-09 by the definitive sweep above. Preliminary: single boot per arm, 2 runs x 100 prompts, eager only, untuned baseline (native MTP k=3 only, never swept), measured 2026-09-08. Preserved because this repository keeps superseded results rather than deleting them. NOT the result of this notebook.",
+  "arms": [
+   {
+    "arm": "AR (spec off)",
+    "block": null,
+    "aggregate_tok_s": 24.302,
+    "median_tok_s": 24.295,
+    "ci95": [
+     24.267,
+     24.341
+    ],
+    "accepted_length": null,
+    "ms_per_engine_pass": null,
+    "boots": "2/2 clean"
+   },
+   {
+    "arm": "native MTP k=3",
+    "block": null,
+    "aggregate_tok_s": 49.947,
+    "median_tok_s": 51.368,
+    "ci95": [
+     48.231,
+     54.32
+    ],
+    "accepted_length": 2.993,
+    "ms_per_engine_pass": 59.87,
+    "boots": "1/1 clean"
+   },
+   {
+    "arm": "DFlash",
+    "block": 4,
+    "aggregate_tok_s": 51.664,
+    "median_tok_s": 54.004,
+    "ci95": [
+     45.885,
+     60.208
+    ],
+    "accepted_length": 2.739,
+    "ms_per_engine_pass": 52.96,
+    "boots": "1/1 clean"
+   },
+   {
+    "arm": "DFlash",
+    "block": 5,
+    "aggregate_tok_s": 52.239,
+    "median_tok_s": 55.475,
+    "ci95": [
+     47.865,
+     59.97
+    ],
+    "accepted_length": 2.879,
+    "ms_per_engine_pass": 55.02,
+    "boots": "1/1 clean"
+   },
+   {
+    "arm": "DFlash",
+    "block": 7,
+    "aggregate_tok_s": 50.657,
+    "median_tok_s": 52.356,
+    "ci95": [
+     45.717,
+     59.643
+    ],
+    "accepted_length": 2.988,
+    "ms_per_engine_pass": 58.77,
+    "boots": "1/1 clean"
+   }
+  ],
+  "per_workload_median_tok_s": {
+   "native MTP k=3": {
+    "code": 52.499,
+    "math": 57.575,
+    "chat": 43.73
+   },
+   "DFlash block 4": {
+    "code": 56.76,
+    "math": 73.48,
+    "chat": 40.86
+   },
+   "DFlash block 5": {
+    "code": 58.79,
+    "math": 78.36,
+    "chat": 37.83
+   },
+   "DFlash block 7": {
+    "code": 59.18,
+    "math": 81.84,
+    "chat": 36.42
+   }
+  },
+  "paired_bootstrap": {
+   "DFlash block 5 vs native MTP k=3, aggregate": {
+    "delta_pct": 4.59,
+    "ci95_pct": [
+     2.14,
+     7.06
+    ]
+   },
+   "DFlash block 4 chat, aggregate": {
+    "delta_pct": -7.47,
+    "ci95_pct": [
+     -9.78,
+     -5.21
+    ]
+   }
+  },
+  "superseded_by": "the 2026-09-09 definitive sweep in \"arms\" above",
+  "what_moved": "headline +4.59% [+2.14, +7.06] vs native MTP k=3 -> +3.87% [+2.10, +5.77] vs the tuned k=4 baseline (and +4.50% [+2.35, +6.80] vs k=3 on the new data); one boot per arm -> two; per-workload medians -> per-workload aggregate throughput with paired CIs; blocks 2 and 3 untested -> tested and still regressing chat."
+ }
+}
