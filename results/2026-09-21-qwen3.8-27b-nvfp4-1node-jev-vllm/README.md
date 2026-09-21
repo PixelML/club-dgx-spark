@@ -59,12 +59,41 @@ The cross-card comparison is NVFP4-on-GB10 vs W4A16-on-CMP-170HX of the same
 contract and pool — platform and quantization change together. Every 170HX
 number comes from that bundle's committed receipts.
 
+## Positioning vs TypeSafe Jev
+
+TypeSafe's Jev (jev-1.13.0) is a hosted System One model trained with RLCD —
+probabilities optimized against outcomes. That calibration is their product.
+This bundle replicates the **contract and the read mechanic** (kishida's
+`jev` contract on vLLM) and explicitly does **not** claim the calibration.
+
+| Claim | Status | Evidence |
+|---|---|---|
+| Contract shape (state + questions, choice/noul/score, probabilities, confidence, usage, 422s) | **measured** | the 170HX bundle's probe receipts (`negatives.json`, `mask-processed_logprobs.json`) |
+| Read mechanic (one evaluation, no generation, bit-identical at c=1) | **measured** | 170HX `determinism.json`; this bundle's production run |
+| No-train production operation on GB10 | **measured** | `receipts/load/` |
+| Calibrated probabilities | **not claimed** — T=1 reads; 170HX n=42: acc 0.571, ECE 0.274 | 170HX `metrics.json` |
+| Confidence numeric parity with jev-1.13 | **not claimed** — ours is `1 − normalized entropy`; theirs undocumented | — |
+| >62 Choice options (Jev: 255), 64k context (deployed: 8k), multi-question single-call latency | **untested / not supported** | — |
+
+**Measured alignment, self-hostable options** (n=42, the 170HX bundle's
+labelled set; receipts in the 170HX bundle `positioning-bench/`): our raw
+read 0.571 vs Laya (421M RLCD encoder, zero-shot) 0.643 vs GLiNER 2.5 Multi
+0.476 — choice: 0.60 / **0.90** / 0.60. On the classification judgment
+itself the trained-decision direction wins even zero-shot; our raw read's
+edge is scale, context and zero training. Closing calibration (temperature
+fit, trained heads, fine-tune) is future work. The jev-1.13 leg of the bench
+is pending API access.
+
 ## Credits
 
 Jev contract: [kishida's `jev` branch docs](https://github.com/kishida/llama.cpp/blob/jev/docs/jev.md).
 Serving-recipe lineage (`processed_logprobs`, prefix caching, label-masked
 reads): the CMP 170HX bundle and Kis's
 [DFlash2 notebook](https://github.com/PixelML/club-170hx/blob/main/notebooks/2026-08-30-qwen3.8-27b-w4a16-dflash2-1card-vllm.ipynb).
+Related self-hosted judges: [Solomon](https://huggingface.co/DoccyHealth/Solomon)
+(trained heads on the same base), [Laya](https://huggingface.co/convaiinnovations/laya)
+(421M RLCD encoder), [GLiNER 2.5](https://huggingface.co/fastino/gliner2.5-multi-v1)
+(schema extraction).
 
 ## Limitations
 

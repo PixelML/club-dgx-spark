@@ -304,8 +304,37 @@ minutes of that run; the run itself continued past the freeze.
   this driver/build — thermals are recorded as untested, not as "fine".
 - `--gpu-memory-utilization 0.35` sizes the engine into the unified-memory
   budget alongside other node residents; weights are 19.95 GiB.
+"""),
 
-### What this does not show
+    ("md", r"""### Positioning vs TypeSafe Jev
+
+[TypeSafe's Jev](https://docs.typesafe.ai/) (jev-1.13.0) is a hosted System
+One model **trained with RLCD** — probabilities optimized against outcomes.
+That calibration is their product. This bundle replicates the **contract and
+the read mechanic** (kishida's `jev` contract on vLLM) and explicitly does
+**not** claim the calibration:
+
+| Claim | Status | Evidence |
+|---|---|---|
+| Contract shape (state + questions, choice/noul/score, probabilities, confidence, usage, 422s) | **measured** | 170HX bundle probe receipts (`negatives.json`, `mask-processed_logprobs.json`) |
+| Read mechanic (one evaluation, no generation, bit-identical at c=1) | **measured** | 170HX `determinism.json`; this bundle's production run |
+| No-train production operation on GB10 | **measured** | `receipts/load/` |
+| Calibrated probabilities | **not claimed** — T=1 reads; 170HX n=42: acc 0.571, ECE 0.274 | 170HX `metrics.json` |
+| Confidence numeric parity with jev-1.13 | **not claimed** — ours is `1 − normalized entropy`; theirs undocumented | — |
+| >62 Choice options (Jev: 255), 64k context (deployed: 8k), multi-question single-call latency | **untested / not supported** | — |
+
+**Measured alignment, self-hostable options** (n=42, the 170HX bundle's
+labelled set; receipts in that bundle's `positioning-bench/`): our raw read
+0.571 vs Laya (421M RLCD encoder, zero-shot) 0.643 vs GLiNER 2.5 Multi
+0.476 — choice: 0.60 / **0.90** / 0.60, noul: 0.50 / 0.64 / 0.29. On the
+classification judgment itself the trained-decision direction wins even
+zero-shot; our raw read's edge is scale, context and zero training. Related
+self-hosted judges: [Solomon](https://huggingface.co/DoccyHealth/Solomon)
+(trained heads on the same base), [Laya](https://huggingface.co/convaiinnovations/laya),
+[GLiNER 2.5](https://huggingface.co/fastino/gliner2.5-multi-v1) (schema
+extraction). The jev-1.13 leg of the bench is pending API access.
+"""),
+    ("md", r"""### What this does not show
 
 - **Decode.** Judge reads generate no answer token. Generation throughput,
   TTFT and speculative decoding on GB10 are untested here.
