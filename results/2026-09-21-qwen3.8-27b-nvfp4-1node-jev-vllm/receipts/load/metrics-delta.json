@@ -1,0 +1,22 @@
+{
+ "window_s": 94.0,
+ "requests": 796.0,
+ "req_per_s": 8.47,
+ "e2e_mean_ms": 6862.5,
+ "e2e_bounds": {
+  "within_5s": 0.0,
+  "within_10s": 796.0,
+  "within_15s": 796.0,
+  "within_20s": 796.0,
+  "within_30s": 796.0,
+  "within_60s": 796.0
+ },
+ "prompt_tokens": 241840.0,
+ "prompt_tok_s": 2572.8,
+ "prefix_hit_pct": 0.0,
+ "gen_per_req": 1.0,
+ "running_t1": 5.0,
+ "waiting_t1": 44.0,
+ "requests_per_annotation": 5.1,
+ "ledger_annotations_in_window": 156
+}

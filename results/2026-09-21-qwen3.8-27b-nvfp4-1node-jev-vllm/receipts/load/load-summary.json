@@ -1,0 +1,89 @@
+{
+ "kind": "production-load-aggregate",
+ "workload": "LLM-as-judge annotation pilot speaking the Jev contract: five permutation reads per annotation, 12 client workers, one continuous run on one DGX Spark (GB10)",
+ "source": "aggregate of the pilot's per-annotation ledger and the engine's /metrics deltas; the raw ledger stays outside this repository",
+ "ledger": {
+  "annotations": 4295,
+  "failed": 0,
+  "start_utc": "2026-09-21T16:25:52+00:00",
+  "end_utc": "2026-09-21T17:08:40+00:00",
+  "span_h": 0.7133333333333334,
+  "input_tokens_total": 6631535,
+  "input_tokens_mean": 1544.0,
+  "input_tokens_p95": 1846,
+  "usd_billed": 0.2785,
+  "annotations_per_h_avg": 6021.0,
+  "steady_last30_annotations_per_min": 99.4,
+  "steady_last30_input_tokens_per_s": 2580.3
+ },
+ "per_hour_utc": [
+  {
+   "hour_utc": "16",
+   "annotations": 3442,
+   "mean_input_tokens": 1536
+  },
+  {
+   "hour_utc": "17",
+   "annotations": 853,
+   "mean_input_tokens": 1576
+  }
+ ],
+ "gpu_window": {
+  "samples": 46,
+  "sample_period_s": 2,
+  "power_w_mean": 83.4,
+  "power_w_min": 82.29,
+  "power_w_max": 85.09,
+  "sm_util_pct_mean": 96.0,
+  "sm_clock_mhz_range": [
+   2385.0,
+   2424.0
+  ],
+  "temperature_note": "GB10 does not expose GPU/memory temperature via nvidia-smi query (N/A); power, SM util and clocks recorded"
+ },
+ "engine_window": {
+  "window_s": 94.0,
+  "requests": 796.0,
+  "req_per_s": 8.47,
+  "e2e_mean_ms": 6862.5,
+  "e2e_bounds": {
+   "within_5s": 0.0,
+   "within_10s": 796.0,
+   "within_15s": 796.0,
+   "within_20s": 796.0,
+   "within_30s": 796.0,
+   "within_60s": 796.0
+  },
+  "prompt_tokens": 241840.0,
+  "prompt_tok_s": 2572.8,
+  "prefix_hit_pct": 0.0,
+  "gen_per_req": 1.0,
+  "running_t1": 5.0,
+  "waiting_t1": 44.0,
+  "requests_per_annotation": 5.1,
+  "ledger_annotations_in_window": 156
+ },
+ "probe_single_client": {
+  "kind": "synthetic-length prompt (~1,520 tokens) under production load, sequential, n=15, max_tokens=1",
+  "latencies_ms": [
+   7960,
+   6743,
+   5809,
+   7072,
+   7165,
+   7346,
+   6482,
+   6472,
+   7324,
+   7211,
+   7357,
+   6630,
+   7142,
+   7414,
+   7556
+  ],
+  "mean_ms": 7045.5,
+  "min_ms": 5809,
+  "max_ms": 7960
+ }
+}
