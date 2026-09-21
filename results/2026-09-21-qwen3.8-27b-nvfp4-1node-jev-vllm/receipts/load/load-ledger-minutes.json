@@ -1,0 +1,225 @@
+{
+ "unit": "UTC minute; aggregate of the pilot ledger, no per-item data",
+ "minutes": [
+  {
+   "minute_utc": "16:25",
+   "reads": 21,
+   "input_tokens": 31111
+  },
+  {
+   "minute_utc": "16:26",
+   "reads": 104,
+   "input_tokens": 156054
+  },
+  {
+   "minute_utc": "16:27",
+   "reads": 107,
+   "input_tokens": 153542
+  },
+  {
+   "minute_utc": "16:28",
+   "reads": 103,
+   "input_tokens": 152758
+  },
+  {
+   "minute_utc": "16:29",
+   "reads": 101,
+   "input_tokens": 156016
+  },
+  {
+   "minute_utc": "16:30",
+   "reads": 102,
+   "input_tokens": 153552
+  },
+  {
+   "minute_utc": "16:31",
+   "reads": 100,
+   "input_tokens": 155860
+  },
+  {
+   "minute_utc": "16:32",
+   "reads": 101,
+   "input_tokens": 155081
+  },
+  {
+   "minute_utc": "16:33",
+   "reads": 99,
+   "input_tokens": 154649
+  },
+  {
+   "minute_utc": "16:34",
+   "reads": 99,
+   "input_tokens": 154594
+  },
+  {
+   "minute_utc": "16:35",
+   "reads": 102,
+   "input_tokens": 155267
+  },
+  {
+   "minute_utc": "16:36",
+   "reads": 102,
+   "input_tokens": 154357
+  },
+  {
+   "minute_utc": "16:37",
+   "reads": 103,
+   "input_tokens": 151293
+  },
+  {
+   "minute_utc": "16:38",
+   "reads": 103,
+   "input_tokens": 154188
+  },
+  {
+   "minute_utc": "16:39",
+   "reads": 98,
+   "input_tokens": 154333
+  },
+  {
+   "minute_utc": "16:40",
+   "reads": 100,
+   "input_tokens": 154550
+  },
+  {
+   "minute_utc": "16:41",
+   "reads": 102,
+   "input_tokens": 156562
+  },
+  {
+   "minute_utc": "16:42",
+   "reads": 103,
+   "input_tokens": 153023
+  },
+  {
+   "minute_utc": "16:43",
+   "reads": 104,
+   "input_tokens": 154179
+  },
+  {
+   "minute_utc": "16:44",
+   "reads": 102,
+   "input_tokens": 156137
+  },
+  {
+   "minute_utc": "16:45",
+   "reads": 98,
+   "input_tokens": 152133
+  },
+  {
+   "minute_utc": "16:46",
+   "reads": 99,
+   "input_tokens": 155199
+  },
+  {
+   "minute_utc": "16:47",
+   "reads": 99,
+   "input_tokens": 155409
+  },
+  {
+   "minute_utc": "16:48",
+   "reads": 99,
+   "input_tokens": 155009
+  },
+  {
+   "minute_utc": "16:49",
+   "reads": 101,
+   "input_tokens": 153521
+  },
+  {
+   "minute_utc": "16:50",
+   "reads": 103,
+   "input_tokens": 155808
+  },
+  {
+   "minute_utc": "16:51",
+   "reads": 97,
+   "input_tokens": 155142
+  },
+  {
+   "minute_utc": "16:52",
+   "reads": 98,
+   "input_tokens": 153803
+  },
+  {
+   "minute_utc": "16:53",
+   "reads": 101,
+   "input_tokens": 155146
+  },
+  {
+   "minute_utc": "16:54",
+   "reads": 98,
+   "input_tokens": 155868
+  },
+  {
+   "minute_utc": "16:55",
+   "reads": 98,
+   "input_tokens": 154663
+  },
+  {
+   "minute_utc": "16:56",
+   "reads": 99,
+   "input_tokens": 153264
+  },
+  {
+   "minute_utc": "16:57",
+   "reads": 100,
+   "input_tokens": 156345
+  },
+  {
+   "minute_utc": "16:58",
+   "reads": 99,
+   "input_tokens": 154894
+  },
+  {
+   "minute_utc": "16:59",
+   "reads": 97,
+   "input_tokens": 154187
+  },
+  {
+   "minute_utc": "17:00",
+   "reads": 102,
+   "input_tokens": 155267
+  },
+  {
+   "minute_utc": "17:01",
+   "reads": 101,
+   "input_tokens": 155051
+  },
+  {
+   "minute_utc": "17:02",
+   "reads": 98,
+   "input_tokens": 154103
+  },
+  {
+   "minute_utc": "17:03",
+   "reads": 97,
+   "input_tokens": 155402
+  },
+  {
+   "minute_utc": "17:04",
+   "reads": 97,
+   "input_tokens": 155087
+  },
+  {
+   "minute_utc": "17:05",
+   "reads": 97,
+   "input_tokens": 154662
+  },
+  {
+   "minute_utc": "17:06",
+   "reads": 94,
+   "input_tokens": 152979
+  },
+  {
+   "minute_utc": "17:07",
+   "reads": 99,
+   "input_tokens": 155524
+  },
+  {
+   "minute_utc": "17:08",
+   "reads": 68,
+   "input_tokens": 105963
+  }
+ ]
+}

@@ -62,6 +62,7 @@ Executable, receipt-backed walkthroughs of experiments summarized here. Committe
 | Notebook | Model | Quant | Runtime | Topology | Evidence | LIVE default |
 |---|---|---|---|---|---|---|
 | [Qwen3.8-Flash-Next NVFP4 on 2× DGX Spark (SGLang)](notebooks/2026-08-26-qwen3-8-flash-next-nvfp4-2node-sglang.ipynb) | Qwen3.8-Flash-Next @ `b80180e3…` | NVFP4 | SGLang TP=2 + NEXTN/MTP | 2× Spark | [2026-08-26/27 receipts](results/2026-08-26-qwen3-8-flash-next-nvfp4-sglang-2node/) | `False` |
+| [Qwen3.8-27B NVFP4 no-train Jev endpoint on 1× DGX Spark (vLLM)](notebooks/2026-09-21-qwen3.8-27b-nvfp4-1node-jev-vllm.ipynb) | Qwen3.8-27B @ `482ca0f3…` | NVFP4 | vLLM TP=1 | 1× Spark | [2026-09-21 receipts](results/2026-09-21-qwen3.8-27b-nvfp4-1node-jev-vllm/) | `False` |
 
 ## What belongs here
 

@@ -98,3 +98,32 @@ Examples from measured runs:
 ## Adding a new entry
 
 Open a PR to this repo with the symptom, root cause, fix, and a link to the detailed receipt in the model-family repository. Label the fix **measured** only if you reproduced it on your own DGX Spark hardware.
+
+## SGLang engine dies every 10-15 minutes with "pool memory leak detected"
+
+**Image:** `lmsysorg/sglang` `0.0.0.dev1+gd91c3682b` (measured; likely wider).
+
+**Symptom:** during a long benchmark or unattended session the scheduler raises
+
+```
+ValueError: pool memory leak detected! [full] total=..., available=..., evictable=...
+[mamba] total=130, available=126, ..., leaked_full_pages={...}
+```
+
+and the process is SIGQUIT'd. With `--restart unless-stopped` this becomes a
+reload loop costing ~10 minutes each time. Preceding decode lines show a rising
+`mamba num:` while `#running-req` is 1 -- linear-attention states retained
+alongside the radix cache.
+
+**Cause:** this build defaults `SGLANG_ENABLE_STRICT_MEM_CHECK_DURING_IDLE=True`,
+so `invariant_checker._report_leak` calls `raise_error_or_warn(..., strict=True)`
+and a few-thousand-token accounting drift out of ~570k becomes fatal.
+
+**Fix:** set `SGLANG_ENABLE_STRICT_MEM_CHECK_DURING_IDLE=0` to demote it to a
+warning. Measured: four deaths in the first 40 minutes with the default; hours of
+clean running with it set to 0.
+
+**Related traps on the same image:** `ignore_eos` and `min_tokens` trip the same
+check on the first request that uses them; `/flush_cache` between blocks does not
+prevent it; and `/v1/completions` rejects `echo` + `logprobs` ("use the native
+`/generate` API") if you need teacher-forced input logprobs.
