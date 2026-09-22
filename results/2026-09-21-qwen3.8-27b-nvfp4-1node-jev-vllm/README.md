@@ -106,8 +106,9 @@ Related self-hosted judges: [Solomon](https://huggingface.co/DoccyHealth/Solomon
 
 **Measured vs jev-1.13.0** (n=42, the 170HX bundle's labelled set;
 `receipts/positioning-bench/` there): jev-1.13.0 (live API) **0.881** —
-choice 0.95, noul 0.93, score 0.63 — vs our raw read 0.571, Laya 0.643
-(choice 0.90), GLiNER 0.476. Jev agrees with our read on only 61.9% of
+choice 0.95, noul 0.93, score 0.63 — vs our raw read 0.571, Laya base (zero-shot) **0.786** (choice 0.90;
+Jev-agreement 78.6%; typed-decisions checkpoint 0.786 / 81.0% Jev-agreement),
+GLiNER 0.476. Jev agrees with our read on only 61.9% of
 reads, diverges from our choice distributions (JS 0.254), and its
 confidence is unrelated to our entropy confidence (mean |Δ| 0.649, r
 −0.23): the RLCD calibration is the product, and we do not claim it.

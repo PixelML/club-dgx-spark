@@ -325,8 +325,10 @@ the read mechanic** (kishida's `jev` contract on vLLM) and explicitly does
 
 **Measured alignment, self-hostable options** (n=42, the 170HX bundle's
 labelled set; receipts in that bundle's `positioning-bench/`): our raw read
-0.571 vs Laya (421M RLCD encoder, zero-shot) 0.643 vs GLiNER 2.5 Multi
-0.476 — choice: 0.60 / **0.90** / 0.60, noul: 0.50 / 0.64 / 0.29. On the
+0.571 vs Laya base (421M RLCD encoder, zero-shot) **0.786** — choice 0.90,
+noul 0.64, score 0.75; Laya typed-decisions 0.786 (Jev-agreement 81.0%);
+Laya multilingual 0.595; GLiNER 2.5 Multi 0.476 — choice 0.60 / 0.90 /
+0.60, noul 0.50 / 0.64 / 0.29. On the
 classification judgment itself the trained-decision direction wins even
 zero-shot; our raw read's edge is scale, context and zero training. Related
 self-hosted judges: [Solomon](https://huggingface.co/DoccyHealth/Solomon)
@@ -336,8 +338,9 @@ extraction).
 
 **Measured vs jev-1.13.0** (n=42, the 170HX bundle's labelled set;
 `positioning-bench/` in that bundle): jev-1.13.0 (live API) **0.881** —
-choice 0.95, noul 0.93, score 0.63 — vs our raw read 0.571, Laya 0.643
-(choice 0.90), GLiNER 0.476. Jev agrees with our read on only 61.9% of
+choice 0.95, noul 0.93, score 0.63 — vs our raw read 0.571, Laya base (zero-shot) **0.786** (choice 0.90;
+Jev-agreement 78.6%; typed-decisions checkpoint 0.786 / 81.0% Jev-agreement),
+GLiNER 0.476. Jev agrees with our read on only 61.9% of
 reads, diverges from our choice distributions (JS 0.254), and its
 confidence is unrelated to our entropy confidence (mean |Δ| 0.649, r
 −0.23): the RLCD calibration is the product, and we do not claim it.
