@@ -72,7 +72,7 @@ This bundle replicates the **contract and the read mechanic** (kishida's
 | Read mechanic (one evaluation, no generation, bit-identical at c=1) | **measured** | 170HX `determinism.json`; this bundle's production run |
 | No-train production operation on GB10 | **measured** | `receipts/load/` |
 | Calibrated probabilities | **not claimed** — T=1 reads; 170HX n=42: acc 0.571, ECE 0.274 | 170HX `metrics.json` |
-| Confidence numeric parity with jev-1.13 | **not claimed** — ours is `1 − normalized entropy`; theirs undocumented | — |
+| Confidence numeric parity with jev-1.13 | **measured: no parity** — mean |Δ| 0.649, Pearson r −0.23 on the same 28 reads | 170HX bundle `positioning-bench/jev-leg.json` |
 | >62 Choice options (Jev: 255), 64k context (deployed: 8k), multi-question single-call latency | **untested / not supported** | — |
 
 **Measured alignment, self-hostable options** (n=42, the 170HX bundle's
@@ -82,7 +82,7 @@ read 0.571 vs Laya (421M RLCD encoder, zero-shot) 0.643 vs GLiNER 2.5 Multi
 itself the trained-decision direction wins even zero-shot; our raw read's
 edge is scale, context and zero training. Closing calibration (temperature
 fit, trained heads, fine-tune) is future work. The jev-1.13 leg of the bench
-is pending API access.
+
 
 ## Credits
 
@@ -103,3 +103,13 @@ Related self-hosted judges: [Solomon](https://huggingface.co/DoccyHealth/Solomon
   here certifies calibration.
 - Thermals untested: GB10 reports temperature as N/A through `nvidia-smi` on
   this driver.
+
+**Measured vs jev-1.13.0** (n=42, the 170HX bundle's labelled set;
+`receipts/positioning-bench/` there): jev-1.13.0 (live API) **0.881** —
+choice 0.95, noul 0.93, score 0.63 — vs our raw read 0.571, Laya 0.643
+(choice 0.90), GLiNER 0.476. Jev agrees with our read on only 61.9% of
+reads, diverges from our choice distributions (JS 0.254), and its
+confidence is unrelated to our entropy confidence (mean |Δ| 0.649, r
+−0.23): the RLCD calibration is the product, and we do not claim it.
+Closing the gap (temperature fit, trained heads, task fine-tune) is
+future work.
