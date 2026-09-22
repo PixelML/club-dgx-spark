@@ -320,7 +320,7 @@ the read mechanic** (kishida's `jev` contract on vLLM) and explicitly does
 | Read mechanic (one evaluation, no generation, bit-identical at c=1) | **measured** | 170HX `determinism.json`; this bundle's production run |
 | No-train production operation on GB10 | **measured** | `receipts/load/` |
 | Calibrated probabilities | **not claimed** — T=1 reads; 170HX n=42: acc 0.571, ECE 0.274 | 170HX `metrics.json` |
-| Confidence numeric parity with jev-1.13 | **not claimed** — ours is `1 − normalized entropy`; theirs undocumented | — |
+| Confidence numeric parity with jev-1.13 | **measured: no parity** — mean |Δ| 0.649, Pearson r −0.23 on the same 28 reads | 170HX bundle `positioning-bench/jev-leg.json` |
 | >62 Choice options (Jev: 255), 64k context (deployed: 8k), multi-question single-call latency | **untested / not supported** | — |
 
 **Measured alignment, self-hostable options** (n=42, the 170HX bundle's
@@ -332,7 +332,17 @@ zero-shot; our raw read's edge is scale, context and zero training. Related
 self-hosted judges: [Solomon](https://huggingface.co/DoccyHealth/Solomon)
 (trained heads on the same base), [Laya](https://huggingface.co/convaiinnovations/laya),
 [GLiNER 2.5](https://huggingface.co/fastino/gliner2.5-multi-v1) (schema
-extraction). The jev-1.13 leg of the bench is pending API access.
+extraction).
+
+**Measured vs jev-1.13.0** (n=42, the 170HX bundle's labelled set;
+`positioning-bench/` in that bundle): jev-1.13.0 (live API) **0.881** —
+choice 0.95, noul 0.93, score 0.63 — vs our raw read 0.571, Laya 0.643
+(choice 0.90), GLiNER 0.476. Jev agrees with our read on only 61.9% of
+reads, diverges from our choice distributions (JS 0.254), and its
+confidence is unrelated to our entropy confidence (mean |Δ| 0.649, r
+−0.23): the RLCD calibration is the product, and we do not claim it.
+Closing the gap (temperature fit, trained heads, task fine-tune) is
+future work.
 """),
     ("md", r"""### What this does not show
 
