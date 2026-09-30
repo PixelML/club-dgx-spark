@@ -63,6 +63,7 @@ Executable, receipt-backed walkthroughs of experiments summarized here. Committe
 |---|---|---|---|---|---|---|
 | [Qwen3.8-Flash-Next NVFP4 on 2× DGX Spark (SGLang)](notebooks/2026-08-26-qwen3-8-flash-next-nvfp4-2node-sglang.ipynb) | Qwen3.8-Flash-Next @ `b80180e3…` | NVFP4 | SGLang TP=2 + NEXTN/MTP | 2× Spark | [2026-08-26/27 receipts](results/2026-08-26-qwen3-8-flash-next-nvfp4-sglang-2node/) | `False` |
 | [Qwen3.8-27B NVFP4 no-train Jev endpoint on 1× DGX Spark (vLLM)](notebooks/2026-09-21-qwen3.8-27b-nvfp4-1node-jev-vllm.ipynb) | Qwen3.8-27B @ `482ca0f3…` | NVFP4 | vLLM TP=1 | 1× Spark | [2026-09-21 receipts](results/2026-09-21-qwen3.8-27b-nvfp4-1node-jev-vllm/) | `False` |
+| [GLM-5.3-Flash UD-IQ2_XXS on 1× DGX Spark, 262k context (llama.cpp)](notebooks/2026-10-01-glm-5.3-flash-ud-iq2xxs-1node-llamacpp.ipynb) | GLM-5.3-Flash GGUF @ `621d456e…` | UD-IQ2_XXS (2-bit) | llama.cpp (PR #27754 branch), q8_0 KV | 1× Spark | [2026-10-01 receipts](results/2026-10-01-glm-5.3-flash-ud-iq2xxs-1node-llamacpp/) | False |
 
 ## What belongs here
 
