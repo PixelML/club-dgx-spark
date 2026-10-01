@@ -1,0 +1,43 @@
+{
+ "method": "C parallel streams, unique prose prompt each, thinking off, ignore_eos, 512 output tokens, temperature 0, median of 3 rounds; aggregate = total tokens / wall time",
+ "c1": {
+  "aggregate_tok_s": 51.084687781689,
+  "per_request_tok_s": 52.24253038032706,
+  "ttft_s": 0.1808009147644043,
+  "completion_tokens": 512,
+  "aggregate_range": [
+   50.58116369501147,
+   51.6132203914511
+  ]
+ },
+ "c2": {
+  "aggregate_tok_s": 68.04958896071675,
+  "per_request_tok_s": 35.20377994631757,
+  "ttft_s": 0.28868651390075684,
+  "completion_tokens": 1024,
+  "aggregate_range": [
+   65.92920307089054,
+   68.12978024068413
+  ]
+ },
+ "c3": {
+  "aggregate_tok_s": 79.94702253614834,
+  "per_request_tok_s": 27.54699367995958,
+  "ttft_s": 0.33631451924641925,
+  "completion_tokens": 1536,
+  "aggregate_range": [
+   77.66228046134627,
+   81.1902190352986
+  ]
+ },
+ "c4": {
+  "aggregate_tok_s": 89.15900077138173,
+  "per_request_tok_s": 23.19855766327199,
+  "ttft_s": 0.37502455711364746,
+  "completion_tokens": 2048,
+  "aggregate_range": [
+   88.99033165001504,
+   89.53650125545931
+  ]
+ }
+}
