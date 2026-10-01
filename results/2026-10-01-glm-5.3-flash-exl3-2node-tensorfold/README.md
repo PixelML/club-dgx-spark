@@ -31,6 +31,20 @@ Measured 2026-10-01 on two DGX Sparks (GB10, SM121, arm64) linked by one Connect
 far more tokens than in normal chat. Treat those decode rows as an upper bound; the short-prompt rows are the
 single-request decode figure. Every prompt had a unique random prefix (no cache hits).
 
+## Concurrency (1–4 requests, measured)
+
+| Concurrent requests | Aggregate tok/s | Per request tok/s | TTFT |
+|---:|---:|---:|---:|
+| 1 | 51.1 (50.6–51.6) | 52.2 | 0.18 s |
+| 2 | 68.0 (65.9–68.1) | 35.2 | 0.29 s |
+| 3 | 79.9 (77.7–81.2) | 27.5 | 0.34 s |
+| 4 | 89.2 (89.0–89.5) | 23.2 | 0.38 s |
+
+Unique prose prompt per request, thinking off, `ignore_eos`, 512 output tokens, temperature 0, median of 3 rounds;
+aggregate = total completion tokens / wall time from first send to last finish. Four requests give **1.75×** one
+request's throughput. The recipe reports 108.8 aggregate / 27.9 per request at 4 (prose); this run is ~18% lower,
+with GPU clocks not capped and one RoCE rail cabled instead of two. Harness: [`harness/conc.py`](harness/conc.py).
+
 ## Correctness gates
 
 - [x] Coherent text; reasoning returned separately as `reasoning_content`; `enable_thinking=false` honored
@@ -38,7 +52,7 @@ single-request decode figure. Every prompt had a unique random prefix (no cache 
 - [x] Container restart count 0 on both ranks after all tests
 - [ ] Multimodal: vision tower loaded, not tested here
 - [ ] Quality: not scored here (the recipe reports GSM8K 98.0%, HumanEval 97.6%)
-- [ ] Concurrency (2–4 requests): not measured here
+- [x] Concurrency: 1–4 requests measured (above)
 
 ## Setup note
 
