@@ -11,6 +11,7 @@ Only PixelML-measured results appear here. Community-reported and untested entri
 | Qwen3.8-Flash-Next @ `b80180e371f13348ec49641a6e66999e7854b179` | NVFP4 (community, RadixArk) | SGLang TP=2 | 2× Spark | Decode ×1, prompts 327→258k, thinking off/on | 40.6–62.2 (×1) | — | [official-vs-community 2026-09-05](2026-09-05-qwen38-nvfp4-official-vs-community/README.md) |
 | Qwen3.8-Flash-Next @ `fab0aecb760cec45227f6656abcaafa11abca87a` | NVFP4 (official NVIDIA, `MIXED_PRECISION`) | SGLang TP=2 | 2× Spark | **did not load** — host OOM during weight load at mem-fraction 0.80 and 0.70 | — | — | [official-vs-community 2026-09-05](2026-09-05-qwen38-nvfp4-official-vs-community/README.md) |
 | GLM-5.3-Flash GGUF @ `621d456e93e926e4b52f85cff5f634358c1828f9` | UD-IQ2_XXS (2-bit), q8_0 KV | llama.cpp (unsloth PR #27754 branch) | 1× Spark | Decode ×1 at 33 tokens → 245k context, 262,144 served | 15.1 (8.3 at 245k) | 346–378 (141 at 245k) | [2026-10-01](./2026-10-01-glm-5.3-flash-ud-iq2xxs-1node-llamacpp/README.md) |
+| GLM-5.3-Flash EXL3 @ `9eaebb7c4e96d983dcd538e18624622ba5b820a8` | EXL3 4bpw + DFlash2, FP8 KV | TensorFold v0.5.0 (Mia recipe `ed026ef9`) TP=2 | 2× Spark | Decode ×1 at 30 tokens → 245k context, 1,048,576 served | 54.4 (67.2 thinking on) | 1,494–1,865 (1,553 at 245k) | [2026-10-01](./2026-10-01-glm-5.3-flash-exl3-2node-tensorfold/README.md) |
 
 Notes:
 
