@@ -1,0 +1,69 @@
+{
+ "method": "temperature 0; median of 3 (n=1 for 128k and 245k); unique random prefix per prompt; tokens from the final usage object; client on a separate machine over the network; thinking off unless the label says on; one request at a time",
+ "short_and_mid": {
+  "decode_short_think_off": {
+   "ttft_s": 0.16972804069519043,
+   "prompt_tokens": 30,
+   "completion_tokens": 256,
+   "decode_tok_s": 54.3825075148461,
+   "decode_range": [
+    53.52510816515978,
+    55.92251546415807
+   ]
+  },
+  "prefill_7k": {
+   "prompt_tokens": 7433,
+   "ttft_s": 4.973473072052002,
+   "prefill_tok_s": 1494.1269194273627,
+   "range": [
+    1136.675044555494,
+    1833.4036486775449
+   ]
+  },
+  "prefill_28k": {
+   "prompt_tokens": 27783,
+   "ttft_s": 14.900345802307129,
+   "prefill_tok_s": 1864.5875987454033,
+   "range": [
+    1807.7101471319916,
+    1891.9347023127837
+   ]
+  },
+  "decode_at_28k_think_off": {
+   "ttft_s": 14.980215072631836,
+   "prompt_tokens": 27717,
+   "completion_tokens": 256,
+   "decode_tok_s": 114.33675329279046,
+   "decode_range": [
+    105.04029214874699,
+    117.27098579587714
+   ]
+  },
+  "decode_short_think_on": {
+   "ttft_s": 0.15320825576782227,
+   "prompt_tokens": 22,
+   "completion_tokens": 256,
+   "decode_tok_s": 67.22918743821755,
+   "decode_range": [
+    66.73209459392271,
+    68.03062367592707
+   ]
+  }
+ },
+ "long": {
+  "ctx_128k": {
+   "prompt_tokens": 127724,
+   "ttft_s": 73.91417908668518,
+   "prefill_tok_s": 1728.0040389842882,
+   "completion_tokens": 128,
+   "decode_tok_s": 56.6312538125848
+  },
+  "ctx_245k": {
+   "prompt_tokens": 244136,
+   "ttft_s": 157.23484706878662,
+   "prefill_tok_s": 1552.6838010227855,
+   "completion_tokens": 128,
+   "decode_tok_s": 65.96989378382231
+  }
+ }
+}
