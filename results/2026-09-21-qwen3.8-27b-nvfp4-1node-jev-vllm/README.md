@@ -87,8 +87,8 @@ fit, trained heads, fine-tune) is future work. The jev-1.13 leg of the bench
 ## Credits
 
 Jev contract: [kishida's `jev` branch docs](https://github.com/kishida/llama.cpp/blob/jev/docs/jev.md).
-Serving-recipe lineage (`processed_logprobs`, prefix caching, label-masked
-reads): the CMP 170HX bundle and Kis's
+The serving recipe (`processed_logprobs`, prefix caching, label-masked
+reads) comes from the CMP 170HX bundle and Kis's
 [DFlash2 notebook](https://github.com/PixelML/club-170hx/blob/main/notebooks/2026-08-30-qwen3.8-27b-w4a16-dflash2-1card-vllm.ipynb).
 Related self-hosted judges: [Solomon](https://huggingface.co/DoccyHealth/Solomon)
 (trained heads on the same base), [Laya](https://huggingface.co/convaiinnovations/laya)

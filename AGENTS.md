@@ -78,3 +78,4 @@ experiments. When you find novel, useful external work:
 3. Update [docs/SYNTHESIS.md](docs/SYNTHESIS.md) when a source changes a cross-cutting conclusion (topology limits, runtime compatibility, KV math, spec-decode behavior, ops hazards).
 4. Detailed evidence stays in the canonical model repo; the club gets links and reusable guidance only. Do not mirror third-party weights or copy entire recipes.
 5. Preserve attribution: name the upstream authors and link the pinned revision in every receipt that uses their work.
+6. Keep the README `## Credits` section on the first screen, above the setup steps. A new result that uses someone's work adds the author (person or org + handle, linked) there and in its own receipt. Write "authored by"; never "inspired by", "informed by" or "lineage" without a name. Never remove an existing credit.

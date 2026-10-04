@@ -2,6 +2,25 @@
 
 Community-tested recipes, diagnostics, and reproducible benchmarks for NVIDIA DGX Spark workloads.
 
+## Credits
+
+This club runs other people's work. The authors:
+
+- **Mia's AI Lab** ([@MiaAI-Lab](https://github.com/MiaAI-Lab), [x.com/MiaAI_lab](https://x.com/MiaAI_lab)) authored the GLM-5.3-Flash EXL3 2x-Spark TensorFold recipe ([repo](https://github.com/MiaAI-Lab/GLM-5.3-Flash-EXL3-2x-DGX-Sparks-TensorFold)), the [`Mia-AiLab/GLM-5.3-Flash-EXL3-4bpw-TensorFold`](https://huggingface.co/Mia-AiLab/GLM-5.3-Flash-EXL3-4bpw-TensorFold) quantization, the SM121 QSA fallback / token-0 guard and DSpark work, tool-eval-bench and sparkDash.
+- **Ash** ([@ashhart](https://github.com/ashhart)) authored the [TensorFold](https://github.com/ashhart/TensorFold) engine.
+- **Turboderp** ([@turboderp-org](https://github.com/turboderp-org)) authored [ExLlamaV3 / EXL3](https://github.com/turboderp-org/exllamav3).
+- **Tech2wild** ([@tonyd2wild](https://github.com/tonyd2wild)) authored the vLLM/SM121 DFlash2 port, image, KV-layout patches and the original benchmark method we reuse.
+- **Inco AI** ([@incoai](https://github.com/incoai)) authored the `incoai/GLM-5.3-Flash-DFlash2` drafter (CC BY-NC-ND 4.0).
+- **brandonmusic** ([Hugging Face](https://huggingface.co/brandonmusic)) authored the GLM-5.3-Flash EXL3 TR3 4bpw weights.
+- **Unsloth AI** ([@unslothai](https://github.com/unslothai)) authored the llama.cpp `glm5next` branch (PR #27754) and GGUFs, on [llama.cpp](https://github.com/ggml-org/llama.cpp) by ggml-org.
+- **Naoki Kishida** ([@kishida](https://github.com/kishida)) authored the llama.cpp `jev` branch and Jev contract.
+- **0xBakeer** ([@0xBakeer](https://github.com/0xBakeer)) authored the [deepseek-v41-flash-spark](https://github.com/0xBakeer/deepseek-v41-flash-spark) engine, harness and recipe.
+- **RadixArk** ([@radixark](https://github.com/radixark)) authored the community Qwen3.8-Flash-Next NVFP4 conversion; **NVIDIA** the official NVFP4 checkpoint, containers and dgx-spark-playbooks.
+- Engines: [vLLM](https://github.com/vllm-project/vllm) (vllm-project), [SGLang](https://github.com/sgl-project/sglang) (sgl-project), [FlashInfer](https://github.com/flashinfer-ai/flashinfer) (flashinfer-ai). Models: GLM by [zai-org](https://huggingface.co/zai-org), DeepSeek by [deepseek-ai](https://huggingface.co/deepseek-ai), Qwen by [Qwen](https://huggingface.co/Qwen).
+- Ecosystem sources: jvr0x, jasonacox and dataforgex (see [docs/sources](docs/sources/)).
+
+Each result folder pins the exact commit or revision it used.
+
 This repository is the platform-wide index for our DGX Spark experiments. It consolidates:
 
 - system setup, networking, storage, cooling, and operations;
