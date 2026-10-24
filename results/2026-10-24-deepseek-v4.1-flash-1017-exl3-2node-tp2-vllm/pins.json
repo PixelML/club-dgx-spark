@@ -1,0 +1,19 @@
+{
+ "pins": {
+  "model": "PixelML/DeepSeek-V4.1-Flash-1017-EXL3-3bpw (routed experts EXL3 K=3 mul1, uncalibrated; non-expert tensors DeepSeek FP8 ue8m0 32x32 as released; DSpark drafter MXFP4 as released); MIT",
+  "model_revision": "3d095b724ed4f3abb519cc1cda64c290a0e0b0c5",
+  "engram_tables": "deepseek-ai/DeepSeek-V4.1-Flash-1017 model-00047/00048-of-00048.safetensors @ 1bae0e1088993b9b82de08f59de5be5a34e42170 (read from NVMe at lookup time)",
+  "recipe": "https://github.com/sudoingX/dgx-spark-deepseek-v41 @ f8f20b370e41a3a220bc7d1ab96a61e4daa84964 (v2.0, Apache-2.0): patches 0001-0038, vllm_exl3_moe plugin, launcher scripts/launch/dsv41_tp2.sh, scripts/bench/depth_sweep.sh",
+  "vllm": "https://github.com/vllm-project/vllm @ 6e517b15c1833cf72a7f557ee32524d98682e617 (wheel 0.31.1.dev0+g6e517b15.dsv41gb10, built for sm_121 by the recipe's scripts/build/run_build_gb10.sh)",
+  "exllamav3": "https://github.com/turboderp-org/exllamav3 v1.6.0 @ 151539c77abc7ab7425d30da7a4e8e3c5c154e7b (MIT), extension only",
+  "build_env_image": "vllm/vllm-openai@sha256:c1c9f6fd5c109ba7f0546a59f5b2f15fb87f64c77782e90a27b648b42a8e67c3 (toolchain only, per the recipe)",
+  "serving_image": "dsv41-serve:v5 built by the recipe's install.sh on one node (local image id sha256:bba1eecc6caac22cb1c144f3f235883e5f4a2ce5c55541bb91a9f5ebb5d9a13b; 50 layers, same layer digests on both nodes); NOT pushed to a registry, rebuild from the pins above",
+  "bench_client": "bertholomus/TensorFold tools/dsv41/kit_bench.py @ fe6f9f7b373db76422ddfa121577238474c0a1b7, sha256 83a4fbeb987032f906cf00d3f6c9dd2fad47dd675e75dd498c4c4188d63a6c0d, run on the head node against localhost",
+  "nodes": "2x NVIDIA DGX Spark (GB10, sm_121, 128 GB unified LPDDR5X, ~119-121 GiB visible), DGX OS, CUDA 13.0, drivers 580.173.02 (head) / 580.159.03 (worker), ConnectX-7 RoCE v2 200 Gb/s, tensor parallel 2 (one rank per node)",
+  "model_dir_assembly": "hardlinks of the 48 HF shards + index + tokenizer files; exl3_moe_plan.json = plugin tools/make_plan.py --uniform 3 (95.46 GiB experts per rank at TP2); config.json quantization_config.quant_method deepseek_v41_exl3 + exl3_moe block {plan_file, decode_kernel coop, coop_max_tokens 32, fused_rows 256, tp_layout channels, exllamav3_version 1.6.0}; fmt/activation_scheme/scale_fmt/weight_block_size/expert_dtype copied from the pack's non_routed_quantization block",
+  "launcher_env_final": "HEAD=<node-a> WORKER=<node-b> FAB_IF=<fabric-if> FAB_HCA=<fabric-rdma-dev> MODEL_DIR=<model-dir> MAX_LEN=32768 MAX_SEQS=1 MAX_BATCH=512 KV_BYTES=1073741824 INDEXER_LOGITS_MB=128 EXPANDABLE_SEGMENTS=1 DOCKER_ENV=\"VLLM_EXL3_HEAD=mxfp8 VLLM_DSPARK_ROUND_MS=37.7,42.1,46.3,49.9,53.0,55.6\" ./scripts/launch/dsv41_tp2.sh up  (RECIPE_ENV = launcher default; depth policy falls back to conf because the pack ships no dspark_conf_feat_head.npz; TEXT_ONLY=1 default)",
+  "host_prep": "gb10-mem-guard and k3s agent stopped; sync; echo 3 > /proc/sys/vm/drop_caches; echo 1 > /proc/sys/vm/compact_memory (both nodes, before the first boot). No power cap or clock change; stock DGX OS power mode",
+  "metric": "kit_bench.py decode --set b --tokens 384: greedy, thinking off, 64-token warm-up then N reps per prompt, decode tok/s = completion tokens / decode seconds from the stream, median over reps; prefill: 8,192-token prompt, prompt tokens / TTFT. Acceptance = delta of vLLM /metrics spec_decode counters around the run",
+  "measurement_date": "2026-10-24"
+ }
+}
