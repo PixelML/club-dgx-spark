@@ -1,0 +1,6 @@
+vllm:spec_decode_num_drafts_total 9417.0
+vllm:spec_decode_num_draft_tokens_total 47085.0
+vllm:spec_decode_num_accepted_tokens_total 11593.0
+vllm:spec_decode_num_drafts_total 12758.0
+vllm:spec_decode_num_draft_tokens_total 63790.0
+vllm:spec_decode_num_accepted_tokens_total 18756.0
