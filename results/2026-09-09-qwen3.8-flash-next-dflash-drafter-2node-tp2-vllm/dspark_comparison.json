@@ -1,0 +1,18 @@
+{
+  "captured_utc": "2026-09-09",
+  "label": "measured, preliminary (single boot, same harness/fixture/protocol as the DFlash arms, 2026-09-08)",
+  "scope_warning": "These numbers describe THIS DSpark configuration in vLLM today. They are not evidence that the DSpark method loses. The cost mechanism is unprofiled, and an earlier published explanation ('five sequential full-vocab projections, just batch them') was WRONG: the pinned implementation already batches the main vocabulary projection, and the sequential part is the rank-256 Markov bias, which depends on previously sampled tokens.",
+  "aggregate": {"DSpark block 5 tok/s": 44.446, "second run": 44.221, "median_tok_s": 46.895, "ci95": [40.525, 50.845], "vs_native_mtp_k3_pct": -11.0},
+  "per_workload_median_tok_s": {
+    "native MTP k=3": {"math": 57.575, "code": 52.499, "chat": 43.730},
+    "DSpark block 5": {"math": 69.506, "code": 48.604, "chat": 32.300}
+  },
+  "per_workload_vs_mtp_pct": {"math": 20.7, "code": -7.4, "chat": -26.1},
+  "accepted_length_by_workload": {"math": 3.940, "code": 2.653, "chat": 1.896},
+  "held_out_proxy": {"DSpark best (epoch 6, step 1152)": 3.0642, "DFlash best (epoch 7, step 1344)": 3.0795, "note": "the reference +16-18% accepted-length gain over DFlash did not reproduce on this target and corpus; proxy tau is a wash. DSpark leads DFlash at every position from pos-3 onward and trails at pos-1 (0.7659 vs 0.8163), consistent with its 10% CE / 90% L1 loss mix."},
+  "confidence_head": {
+    "tensors": {"confidence_head.proj.weight": [1, 2816], "confidence_head.proj.bias": [1], "markov_head.markov_w1.weight": [248320, 256], "markov_head.markov_w2.weight": [248320, 256]},
+    "contract": "2816 = hidden_size(2560) + markov_rank(256); input is concat(draft_hidden_state, markov_head.get_prev_embeddings(prev_token_id)). One raw logit per draft position per anchor per request; sigmoid is trained by BCE-with-logits against the empirical accept rate. No extra target forward pass at inference.",
+    "status": "real, trained, and correctly wired in vLLM end to end — and unreachable on this target, because adaptive verification cannot run on a GatedDeltaNet backend. Never calibrated (no predicted-vs-realised curve, no chat-vs-math distribution)."
+  }
+}
