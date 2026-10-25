@@ -4,10 +4,12 @@
 
 Do not put every experiment in one giant repository, and do not create one repository per run. Use two layers:
 
-1. A hardware club repository for shared platform knowledge and the comparison index.
+1. A hardware club repository for shared platform knowledge, the comparison index, and one runnable canonical notebook per published recipe.
 2. A dedicated repository for each model family on that hardware platform.
 
 This keeps the club browsable without fragmenting one model's evidence across dozens of repositories.
+
+The club notebook is a thin executable entry point: it pins and invokes the detailed model repository, preserves clean headline outputs, regenerates its chart from committed summary data, and ends with an editable API request. Raw logs, patches, attempt history, and large receipts remain in the model repository.
 
 ## Naming
 

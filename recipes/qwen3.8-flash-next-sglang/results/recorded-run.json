@@ -1,0 +1,73 @@
+{
+  "decode": [
+    {
+      "aggregate_tps": 47.54,
+      "completion_tokens": 192,
+      "concurrency": 1,
+      "request_count": 1,
+      "wall_seconds": 4.038
+    },
+    {
+      "aggregate_tps": 87.55,
+      "completion_tokens": 750,
+      "concurrency": 4,
+      "request_count": 4,
+      "wall_seconds": 8.567
+    },
+    {
+      "aggregate_tps": 158.17,
+      "completion_tokens": 1536,
+      "concurrency": 8,
+      "request_count": 8,
+      "wall_seconds": 9.711
+    },
+    {
+      "aggregate_tps": 275.37,
+      "completion_tokens": 3072,
+      "concurrency": 16,
+      "request_count": 16,
+      "wall_seconds": 11.156
+    }
+  ],
+  "evidence": {
+    "decode": "https://github.com/PixelML/qwen3-8-flash-next-sglang-2x-dgx-spark/blob/682504bec9e7e99206212f4e172b7ec823e4605c/results/RESULTS-2026-08-26.md",
+    "prefill": "https://github.com/PixelML/qwen3-8-flash-next-sglang-2x-dgx-spark/blob/682504bec9e7e99206212f4e172b7ec823e4605c/results/PREFILL-2026-08-27.md"
+  },
+  "evidence_class": "MEASURED",
+  "protocol": {
+    "decode": "identical coding prompt, 192 maximum output tokens, reasoning_effort=low",
+    "prefill": "unique randomized prefix, one output token, three measured samples per target",
+    "runtime": "SGLang TP=2 across two DGX Spark nodes with NEXTN/MTP"
+  },
+  "prefill": [
+    {
+      "samples": [
+        {"client_prefill_tps": 2281.64, "prompt_tokens": 1046, "ttft_seconds": 0.4584},
+        {"client_prefill_tps": 2327.78, "prompt_tokens": 1053, "ttft_seconds": 0.4524},
+        {"client_prefill_tps": 2384.69, "prompt_tokens": 1039, "ttft_seconds": 0.4357}
+      ],
+      "target_prompt_tokens": 1024
+    },
+    {
+      "samples": [
+        {"client_prefill_tps": 2622.26, "prompt_tokens": 4103, "ttft_seconds": 1.5647},
+        {"client_prefill_tps": 2758.65, "prompt_tokens": 4117, "ttft_seconds": 1.4924},
+        {"client_prefill_tps": 2959.58, "prompt_tokens": 4091, "ttft_seconds": 1.3823}
+      ],
+      "target_prompt_tokens": 4096
+    },
+    {
+      "samples": [
+        {"client_prefill_tps": 2960.12, "prompt_tokens": 16407, "ttft_seconds": 5.5427},
+        {"client_prefill_tps": 2940.77, "prompt_tokens": 16471, "ttft_seconds": 5.6009},
+        {"client_prefill_tps": 2960.96, "prompt_tokens": 16501, "ttft_seconds": 5.5729}
+      ],
+      "target_prompt_tokens": 16384
+    }
+  ],
+  "schema_version": 1,
+  "token_accounting": {
+    "decode": "final API usage.completion_tokens",
+    "prefill": "final streamed API usage.prompt_tokens"
+  }
+}
